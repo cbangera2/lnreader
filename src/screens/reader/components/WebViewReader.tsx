@@ -2,8 +2,10 @@ import React, { memo, useEffect, useMemo, useRef, useState } from 'react';
 import {
   NativeEventEmitter,
   NativeModules,
+  Platform,
   StatusBar,
   StyleSheet,
+  View,
 } from 'react-native';
 import WebView from 'react-native-webview';
 import * as Linking from 'expo-linking';
@@ -37,6 +39,11 @@ import {
   isChapterRefreshUrl,
   isPluginIssueReportUrl,
 } from '../utils/sanitizeChapterText';
+import {
+  READER_CSS_ASSETS,
+  READER_JS_ASSETS,
+  loadReaderAssetsText,
+} from '../utils/readerAssets';
 
 export type WebViewPostEvent = {
   type: string;
@@ -199,6 +206,44 @@ const WebViewReader: React.FC<WebViewReaderProps> = ({
       initialChapterReaderSettings,
   );
 
+  /**
+   * WKWebView cannot load the reader assets the way Android does: an
+   * https-origin page blocks http://localhost subresources as mixed content,
+   * and file:// URLs never resolve inside a loadHTMLString document. On iOS
+   * the CSS/JS is therefore inlined into the document (dev: fetched from the
+   * Metro middleware so edits hot-reload; release: read from the bundled
+   * resources installed by withIosReaderAssets).
+   */
+  const inlineReaderAssets = Platform.OS === 'ios';
+  const [inlineAssets, setInlineAssets] = useState<{
+    css: string;
+    js: string;
+  } | null>(null);
+
+  useEffect(() => {
+    if (!inlineReaderAssets) {
+      return;
+    }
+    let cancelled = false;
+    void Promise.all([
+      loadReaderAssetsText(READER_CSS_ASSETS),
+      loadReaderAssetsText(READER_JS_ASSETS),
+    ])
+      .then(([css, js]) => {
+        if (!cancelled) {
+          setInlineAssets({ css, js });
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setInlineAssets({ css: '', js: '' });
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [inlineReaderAssets]);
+
   const readerSettingsRef = useRef<ChapterReaderSettings>(readerSettings);
 
   useEffect(() => {
@@ -325,10 +370,14 @@ const WebViewReader: React.FC<WebViewReaderProps> = ({
           <html dir="${readerDir}">
             <head>
               <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-              <link rel="stylesheet" href="${assetsUriPrefix}/css/index.css">
+              ${
+                inlineReaderAssets
+                  ? `<style>${inlineAssets?.css ?? ''}</style>`
+                  : `<link rel="stylesheet" href="${assetsUriPrefix}/css/index.css">
               <link rel="stylesheet" href="${assetsUriPrefix}/css/pageReader.css">
               <link rel="stylesheet" href="${assetsUriPrefix}/css/toolWrapper.css">
-              <link rel="stylesheet" href="${assetsUriPrefix}/css/tts.css">
+              <link rel="stylesheet" href="${assetsUriPrefix}/css/tts.css">`
+              }
               <style>
               :root {
                 --StatusBar-currentHeight: ${StatusBar.currentHeight}px;
@@ -362,11 +411,19 @@ const WebViewReader: React.FC<WebViewReaderProps> = ({
                 }
                 </style>
                 <style id="ln-font">
-                @font-face {
+                ${
+                  // TODO(iOS): file:// @font-face sources do not resolve in a
+                  // loadHTMLString document, so custom reader fonts fall back
+                  // to system fonts on iOS until fonts are embedded as data
+                  // URIs or served from the bundle over http(s).
+                  inlineReaderAssets
+                    ? ''
+                    : `@font-face {
                   font-family: ${initialReaderSettings.fontFamily};
                   src: url("file:///android_asset/fonts/${
                     initialReaderSettings.fontFamily
                   }.ttf");
+                }`
                 }
 				</style>
               <link rel="stylesheet" href="${pluginCustomCSS}">
@@ -414,14 +471,18 @@ const WebViewReader: React.FC<WebViewReaderProps> = ({
                   },
                 })}
               </script>
-              <script src="${assetsUriPrefix}/js/polyfill-onscrollend.js"></script>
+              ${
+                inlineReaderAssets
+                  ? `<script>${inlineAssets?.js ?? ''}</script>`
+                  : `<script src="${assetsUriPrefix}/js/polyfill-onscrollend.js"></script>
               <script src="${assetsUriPrefix}/js/icons.js"></script>
               <script src="${assetsUriPrefix}/js/van.js"></script>
               <script src="${assetsUriPrefix}/js/text-vibe.js"></script>
               <script src="${assetsUriPrefix}/js/core.js"></script>
               <script src="${assetsUriPrefix}/js/search.js"></script>
               <script src="${assetsUriPrefix}/js/index.js"></script>
-              <script src="${assetsUriPrefix}/js/textRemover.js"></script>
+              <script src="${assetsUriPrefix}/js/textRemover.js"></script>`
+              }
               <script src="${pluginCustomJS}"></script>
               <script id="ln-custom-js">
               function fn(){
@@ -442,6 +503,8 @@ const WebViewReader: React.FC<WebViewReaderProps> = ({
     customJS,
     customCSS,
     initialReaderSettings,
+    inlineAssets,
+    inlineReaderAssets,
     novel,
     plugin,
     pluginCustomCSS,
@@ -449,6 +512,10 @@ const WebViewReader: React.FC<WebViewReaderProps> = ({
     readerDir,
     theme,
   ]);
+
+  if (inlineReaderAssets && !inlineAssets) {
+    return <View style={{ flex: 1, backgroundColor: readerSettings.theme }} />;
+  }
 
   return (
     <>

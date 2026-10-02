@@ -1,6 +1,8 @@
  
 import { getUserAgent } from '@hooks/persisted/useUserAgent';
 import NativeFile from '@modules/native-file'
+import { File } from 'expo-file-system';
+import { Platform } from 'react-native';
 import { parse as parseProto } from 'protobufjs';
 
 type FetchInit = {
@@ -57,6 +59,17 @@ export const downloadFile = async (
   init?: FetchInit,
 ): Promise<void> => {
   init = makeInit(init);
+  if (Platform.OS !== 'android') {
+    // NativeFile.downloadFile is Android-only (OkHttp). On iOS, downloads
+    // (covers, chapter images, plugin files) go through expo-file-system.
+    // NOTE: only GET downloads are supported by this fallback; the native
+    // module additionally supports POST-with-body.
+    await File.downloadFileAsync(url, new File(destPath), {
+      headers: init.headers as Record<string, string>,
+      idempotent: true,
+    });
+    return;
+  }
   return NativeFile.downloadFile(
     url,
     destPath,
