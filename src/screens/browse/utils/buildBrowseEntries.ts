@@ -1,6 +1,25 @@
-import { PluginItem } from '@plugins/types';
+import { PluginItem, NovelItem } from '@plugins/types';
 import { getString } from '@i18n/translations';
 import { getLocaleLanguageName } from '@utils/constants/languages';
+
+/**
+ * Sources may repeat the same novel within or across pages (e.g. "latest"
+ * listings that surface one novel per recent chapter). Lists key novels by
+ * path, so repeats corrupt the grid (LegendList overlapping-key errors,
+ * missing items). Drop repeats, keeping the first occurrence.
+ */
+export const dedupeNovelsByPath = <T extends Pick<NovelItem, 'path'>>(
+  novels: readonly T[],
+): T[] => {
+  const seen = new Set<string>();
+  return novels.filter(novel => {
+    if (seen.has(novel.path)) {
+      return false;
+    }
+    seen.add(novel.path);
+    return true;
+  });
+};
 
 export type SourceEntry =
   | {

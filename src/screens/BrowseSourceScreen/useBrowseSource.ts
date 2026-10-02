@@ -3,6 +3,7 @@ import { NovelItem } from '@plugins/types';
 
 import { getPlugin } from '@plugins/pluginManager';
 import { FilterToValues, Filters } from '@plugins/types/filterTypes';
+import { dedupeNovelsByPath } from '@screens/browse/utils/buildBrowseEntries';
 
 export const useBrowseSource = (
   pluginId: string,
@@ -58,7 +59,9 @@ export const useBrowseSource = (
           if (generation !== generationRef.current) {
             return;
           }
-          setNovels(prevState => (page === 1 ? res : [...prevState, ...res]));
+          setNovels(prevState =>
+            dedupeNovelsByPath(page === 1 ? res : [...prevState, ...res]),
+          );
           lastLoadedPageRef.current = Math.max(lastLoadedPageRef.current, page);
           if (!res.length) {
             setHasNextPage(false);
@@ -203,7 +206,7 @@ export const useSearchSource = (pluginId: string) => {
             return;
           }
           setSearchResults(prevState =>
-            page === 1 ? res : [...prevState, ...res],
+            dedupeNovelsByPath(page === 1 ? res : [...prevState, ...res]),
           );
           lastLoadedPageRef.current = Math.max(lastLoadedPageRef.current, page);
           if (!res.length) {

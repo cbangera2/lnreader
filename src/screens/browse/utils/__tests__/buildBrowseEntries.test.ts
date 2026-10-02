@@ -1,6 +1,10 @@
-import { PluginItem } from '@plugins/types';
+import { PluginItem, NovelItem } from '@plugins/types';
 
-import { buildPluginEntries, buildSourceEntries } from '../buildBrowseEntries';
+import {
+  buildPluginEntries,
+  buildSourceEntries,
+  dedupeNovelsByPath,
+} from '../buildBrowseEntries';
 
 const plugin = (
   id: string,
@@ -104,5 +108,30 @@ describe('buildPluginEntries', () => {
         searchText: 'missing',
       }),
     ).toEqual([]);
+  });
+});
+
+describe('dedupeNovelsByPath', () => {
+  const novel = (path: string): NovelItem => ({
+    cover: `${path}.png`,
+    id: undefined,
+    name: path,
+    path,
+  });
+
+  it('drops novels whose path was already seen, keeping the first', () => {
+    expect(
+      dedupeNovelsByPath([
+        novel('a.html'),
+        novel('b.html'),
+        novel('a.html'),
+        novel('c.html'),
+        novel('b.html'),
+      ]).map(item => item.path),
+    ).toEqual(['a.html', 'b.html', 'c.html']);
+  });
+
+  it('returns an empty array unchanged', () => {
+    expect(dedupeNovelsByPath([])).toEqual([]);
   });
 });
