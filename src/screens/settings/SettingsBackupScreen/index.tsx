@@ -11,7 +11,7 @@ import {
 } from '@services/backgroundTasks';
 import { ScrollView } from 'react-native-gesture-handler';
 import { getString } from '@i18n/translations';
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import dayjs from 'dayjs';
 import NativeFile from '@modules/native-file';
 import { useState } from 'react';
@@ -151,12 +151,17 @@ const BackupSettings = ({ navigation }: BackupSettingsScreenProps) => {
             onPress={openSelfHostModal}
           />
 
-          <List.Item
-            title={getString('backupScreen.googeDrive')}
-            description={getString('backupScreen.googeDriveDesc')}
-            theme={theme}
-            onPress={openGoogleDriveModal}
-          />
+          {/* Google Drive backup needs GoogleService-Info.plist and the
+              reversed-client-id URL scheme in the iOS project before it can
+              sign in on iOS. Hidden until that native config exists. */}
+          {Platform.OS === 'android' && (
+            <List.Item
+              title={getString('backupScreen.googeDrive')}
+              description={getString('backupScreen.googeDriveDesc')}
+              theme={theme}
+              onPress={openGoogleDriveModal}
+            />
+          )}
           <List.SubHeader theme={theme}>
             {getString('backupScreen.localBackup')}
           </List.SubHeader>
@@ -172,23 +177,27 @@ const BackupSettings = ({ navigation }: BackupSettingsScreenProps) => {
             onPress={restoreLocalBackup}
             theme={theme}
           />
-          <List.Item
-            title={getString('backupScreen.automaticBackupFrequency')}
-            description={getString(
-              AUTOMATIC_BACKUP_LABELS[automaticBackupIntervalHours],
-            )}
-            onPress={automaticBackupDialog.setTrue}
-            theme={theme}
-          />
-          <List.Item
-            title={getString('backupScreen.automaticBackupLocation')}
-            description={
-              automaticBackupDirectoryName ??
-              `${NativeFile.ExternalDirectoryPath}/Backups`
-            }
-            onPress={selectAutomaticBackupDirectory}
-            theme={theme}
-          />
+          {Platform.OS === 'android' && (
+            <>
+              <List.Item
+                title={getString('backupScreen.automaticBackupFrequency')}
+                description={getString(
+                  AUTOMATIC_BACKUP_LABELS[automaticBackupIntervalHours],
+                )}
+                onPress={automaticBackupDialog.setTrue}
+                theme={theme}
+              />
+              <List.Item
+                title={getString('backupScreen.automaticBackupLocation')}
+                description={
+                  automaticBackupDirectoryName ??
+                  `${NativeFile.ExternalDirectoryPath}/Backups`
+                }
+                onPress={selectAutomaticBackupDirectory}
+                theme={theme}
+              />
+            </>
+          )}
           {lastAutomaticBackupAt ? (
             <List.InfoItem
               title={getString('backupScreen.lastAutomaticBackup', {
