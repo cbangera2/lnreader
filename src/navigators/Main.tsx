@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { Platform } from 'react-native';
 
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -36,13 +37,19 @@ import { useMMKVBoolean } from 'react-native-mmkv';
 import OnboardingScreen from '@screens/onboarding/OnboardingScreen';
 import { backgroundTasks } from '@services/backgroundTasks';
 import ReaderStack from './ReaderStack';
-import ShareIntentHandler, {
-  flushPendingShare,
-  navigationRef,
-} from './ShareIntentHandler';
+import { flushPendingShare, navigationRef } from './shareIntent';
 import { LibraryContextProvider } from '@components/Context/LibraryContext';
 import { UpdateContextProvider } from '@components/Context/UpdateContext';
 import { useReactNavigationDevTools } from '@rozenite/react-navigation-plugin';
+
+// ShareIntentHandler pulls in the Android-only share-receiver native module,
+// so the component must never be statically imported: the import itself
+// throws on iOS where the module isn't linked.
+const ShareIntentHandler =
+  Platform.OS === 'android'
+    ? require('./ShareIntentHandler').default
+    : () => null;
+
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const MainNavigator = () => {

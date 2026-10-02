@@ -1,4 +1,4 @@
-import { requireNativeModule } from 'expo-modules-core';
+import { requireOptionalNativeModule } from 'expo-modules-core';
 
 export type NativeBackgroundTaskSummary = {
   id: string;
@@ -56,6 +56,6 @@ type NativeBackgroundTasksModule = {
   cancelAutomaticBackups(): Promise<void>;
 };
 
-export default requireNativeModule<NativeBackgroundTasksModule>(
+export default requireOptionalNativeModule<NativeBackgroundTasksModule>(
   'NativeBackgroundTasks',
 );

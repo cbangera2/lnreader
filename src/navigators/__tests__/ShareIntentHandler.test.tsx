@@ -3,10 +3,8 @@ import { act, render, waitFor } from '@test-utils';
 import NativeShareReceiver from '@modules/native-share-receiver';
 import { getMMKVObject } from '@utils/mmkv/mmkv';
 import type { PluginItem } from '@plugins/types';
-import ShareIntentHandler, {
-  flushPendingShare,
-  navigationRef,
-} from '../ShareIntentHandler';
+import ShareIntentHandler from '../ShareIntentHandler';
+import { flushPendingShare, navigationRef } from '../shareIntent';
 
 jest.mock('@hooks/persisted/useTheme', () => ({
   ThemeProvider: ({ children }: { children: ReactNode }) => children,

@@ -28,6 +28,8 @@ jest.mock('../backgroundTasks', () => ({
   },
 }));
 
+const mockNativeBackgroundTasks = jest.mocked(NativeBackgroundTasks!);
+
 const createRecord = (
   payload: string,
   checkpoint?: string,
@@ -53,13 +55,13 @@ describe('runHeadlessBackgroundTask', () => {
       name: 'LOCAL_RESTORE' as const,
       data: { sourceUri: 'file://backup.zip' },
     };
-    jest
-      .mocked(NativeBackgroundTasks.getTask)
-      .mockResolvedValue(createRecord(JSON.stringify(task), 'checkpoint-1'));
+    mockNativeBackgroundTasks.getTask.mockResolvedValue(
+      createRecord(JSON.stringify(task), 'checkpoint-1'),
+    );
 
     await runHeadlessBackgroundTask({ taskId: 'task-1' });
 
-    expect(NativeBackgroundTasks.getTask).toHaveBeenCalledWith('task-1');
+    expect(mockNativeBackgroundTasks.getTask).toHaveBeenCalledWith('task-1');
     expect(initializeDatabase).toHaveBeenCalledTimes(1);
     expect(initializeInstalledPlugins).toHaveBeenCalledTimes(1);
     expect(backgroundTasks.run).toHaveBeenCalledWith(
@@ -86,9 +88,7 @@ describe('runHeadlessBackgroundTask', () => {
     };
     const payload = JSON.stringify(task);
     expect(payload.length).toBeGreaterThan(1024 * 1024);
-    jest
-      .mocked(NativeBackgroundTasks.getTask)
-      .mockResolvedValue(createRecord(payload));
+    mockNativeBackgroundTasks.getTask.mockResolvedValue(createRecord(payload));
 
     await runHeadlessBackgroundTask({ taskId: 'task-1' });
 
@@ -96,13 +96,13 @@ describe('runHeadlessBackgroundTask', () => {
   });
 
   it('fails the native execution when task preparation fails', async () => {
-    jest.mocked(NativeBackgroundTasks.getTask).mockResolvedValue(null);
+    mockNativeBackgroundTasks.getTask.mockResolvedValue(null);
 
     await expect(
       runHeadlessBackgroundTask({ taskId: 'missing-task' }),
     ).rejects.toThrow('Unknown background task: missing-task');
 
-    expect(NativeBackgroundTasks.fail).toHaveBeenCalledWith(
+    expect(mockNativeBackgroundTasks.fail).toHaveBeenCalledWith(
       'missing-task',
       'Unknown background task: missing-task',
       false,

@@ -21,7 +21,7 @@ jest.mock('@i18n/translations', () => ({
   getString: (key: string) => key,
 }));
 
-const mockNativeBackgroundTasks = jest.mocked(NativeBackgroundTasks);
+const mockNativeBackgroundTasks = jest.mocked(NativeBackgroundTasks!);
 const mockAskForPostNotificationsPermission = jest.mocked(
   askForPostNotificationsPermission,
 );

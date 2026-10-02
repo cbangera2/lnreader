@@ -50,6 +50,9 @@ export class BackgroundTaskQueue {
   }
 
   async refresh() {
+    if (!NativeBackgroundTasks) {
+      return this.getSnapshot();
+    }
     const summaries = await NativeBackgroundTasks.getTasks();
     const queue: QueuedBackgroundTask[] = [];
 
@@ -85,20 +88,26 @@ export class BackgroundTaskQueue {
       task => task.state === 'running' || task.state === 'queued',
     );
     tasks.forEach(task => this.interruptedTasks.set(task.id, 'pause'));
-    await Promise.all(tasks.map(task => NativeBackgroundTasks.pause(task.id)));
+    const nativeModule = NativeBackgroundTasks;
+    if (nativeModule) {
+      await Promise.all(tasks.map(task => nativeModule.pause(task.id)));
+    }
     await this.refresh();
   }
 
   async resumeAll() {
     const tasks = this.getSnapshot().filter(task => task.state === 'paused');
-    const results = await Promise.allSettled(
-      tasks.map(task => NativeBackgroundTasks.resume(task.id)),
-    );
-    results.forEach((result, index) => {
-      if (result.status === 'fulfilled') {
-        this.interruptedTasks.delete(tasks[index].id);
-      }
-    });
+    const nativeModule = NativeBackgroundTasks;
+    if (nativeModule) {
+      const results = await Promise.allSettled(
+        tasks.map(task => nativeModule.resume(task.id)),
+      );
+      results.forEach((result, index) => {
+        if (result.status === 'fulfilled') {
+          this.interruptedTasks.delete(tasks[index].id);
+        }
+      });
+    }
     await this.refresh();
   }
 
@@ -121,7 +130,7 @@ export class BackgroundTaskQueue {
     if (task.state === 'running') {
       this.interruptedTasks.set(taskId, 'cancel');
     }
-    await NativeBackgroundTasks.cancel(taskId);
+    await NativeBackgroundTasks?.cancel(taskId);
     this.store(this.getSnapshot().filter(item => item.id !== taskId));
   }
 
@@ -154,19 +163,22 @@ export class BackgroundTaskQueue {
             if (this.interruptedTasks.get(taskId) === 'cancel') {
               this.throwIfInterrupted(taskId);
             }
-            return NativeBackgroundTasks.updateCheckpoint(taskId, value);
+            return (
+              NativeBackgroundTasks?.updateCheckpoint(taskId, value) ??
+              Promise.resolve()
+            );
           },
         },
       );
       this.throwIfInterrupted(taskId);
       const completedTask = this.getSnapshot().find(item => item.id === taskId);
-      await NativeBackgroundTasks.complete(
+      await NativeBackgroundTasks?.complete(
         taskId,
         completedTask?.meta.completionText ??
           getString('notifications.taskCompleted'),
       );
     } catch (error) {
-      await NativeBackgroundTasks.fail(
+      await NativeBackgroundTasks?.fail(
         taskId,
         getString('notifications.taskFailed', {
           error: error instanceof Error ? error.message : String(error),
@@ -204,6 +216,13 @@ export class BackgroundTaskQueue {
     this.store([...current, pending]);
 
     try {
+      if (!NativeBackgroundTasks) {
+        // No native scheduler on this platform: run the task in the
+        // foreground instead of leaving it queued with no runner.
+        this.store(this.getSnapshot().filter(item => item.id !== pending.id));
+        await this.run(pending.id, task);
+        return;
+      }
       const id = await NativeBackgroundTasks.enqueue(
         task.name,
         JSON.stringify(task),
@@ -249,11 +268,11 @@ export class BackgroundTaskQueue {
     const meta = transformer(queue[index].meta);
     queue[index] = { ...queue[index], meta, state: 'running' };
     this.store(queue);
-    NativeBackgroundTasks.updateProgress(
+    NativeBackgroundTasks?.updateProgress(
       taskId,
       meta.progress ?? -1,
       meta.progressText ?? '',
-    ).catch(() => undefined);
+    )?.catch(() => undefined);
   }
 
   private throwIfInterrupted(taskId: string) {

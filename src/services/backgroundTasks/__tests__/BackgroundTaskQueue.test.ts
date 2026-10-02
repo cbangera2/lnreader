@@ -52,6 +52,8 @@ jest.mock('@utils/showToast', () => ({
   showToast: jest.fn(),
 }));
 
+const mockNativeBackgroundTasks = jest.mocked(NativeBackgroundTasks!);
+
 const task = {
   name: 'LOCAL_RESTORE' as const,
   data: { sourceUri: 'file://backup.zip' },
@@ -75,7 +77,7 @@ describe('BackgroundTaskQueue completion notifications', () => {
 
     await new BackgroundTaskQueue().run('restore-1', task);
 
-    expect(NativeBackgroundTasks.complete).toHaveBeenCalledWith(
+    expect(mockNativeBackgroundTasks.complete).toHaveBeenCalledWith(
       'restore-1',
       'Backup restored with warnings',
     );
@@ -89,7 +91,7 @@ describe('BackgroundTaskQueue completion notifications', () => {
     await expect(
       new BackgroundTaskQueue().run('restore-2', task),
     ).rejects.toThrow('Invalid backup');
-    expect(NativeBackgroundTasks.fail).toHaveBeenCalledWith(
+    expect(mockNativeBackgroundTasks.fail).toHaveBeenCalledWith(
       'restore-2',
       'Failed: Invalid backup',
       false,
@@ -124,7 +126,7 @@ describe('BackgroundTaskQueue completion notifications', () => {
     await Promise.resolve();
     await Promise.resolve();
 
-    expect(NativeBackgroundTasks.enqueue).toHaveBeenCalledWith(
+    expect(mockNativeBackgroundTasks.enqueue).toHaveBeenCalledWith(
       downloadTask.name,
       JSON.stringify(downloadTask),
       'Download: Example Novel',
@@ -140,7 +142,7 @@ describe('BackgroundTaskQueue completion notifications', () => {
     await Promise.resolve();
     await Promise.resolve();
 
-    expect(NativeBackgroundTasks.enqueue).toHaveBeenCalled();
+    expect(mockNativeBackgroundTasks.enqueue).toHaveBeenCalled();
     expect(showToast).not.toHaveBeenCalled();
   });
 
@@ -162,14 +164,14 @@ describe('BackgroundTaskQueue completion notifications', () => {
 
     await new BackgroundTaskQueue().cancel('second');
 
-    expect(NativeBackgroundTasks.cancel).toHaveBeenCalledWith('second');
+    expect(mockNativeBackgroundTasks.cancel).toHaveBeenCalledWith('second');
     expect(mockStoredTasks).toEqual([expect.objectContaining({ id: 'first' })]);
   });
 
   it('cancels an enqueue that is selected before its native id is ready', async () => {
     const queue = new BackgroundTaskQueue();
     let resolveEnqueue!: (id: string) => void;
-    jest.mocked(NativeBackgroundTasks.enqueue).mockReturnValueOnce(
+    mockNativeBackgroundTasks.enqueue.mockReturnValueOnce(
       new Promise(resolve => {
         resolveEnqueue = resolve;
       }),
@@ -185,7 +187,9 @@ describe('BackgroundTaskQueue completion notifications', () => {
     await Promise.resolve();
     await Promise.resolve();
 
-    expect(NativeBackgroundTasks.cancel).toHaveBeenCalledWith('native-task-2');
+    expect(mockNativeBackgroundTasks.cancel).toHaveBeenCalledWith(
+      'native-task-2',
+    );
     expect(mockStoredTasks).toEqual([]);
   });
 
@@ -217,12 +221,12 @@ describe('BackgroundTaskQueue completion notifications', () => {
     const secondRun = new BackgroundTaskQueue().run('second', secondTask);
     await Promise.resolve();
 
-    expect(NativeBackgroundTasks.updateProgress).toHaveBeenCalledWith(
+    expect(mockNativeBackgroundTasks.updateProgress).toHaveBeenCalledWith(
       'first',
       -1,
       'file://first.zip',
     );
-    expect(NativeBackgroundTasks.updateProgress).toHaveBeenCalledWith(
+    expect(mockNativeBackgroundTasks.updateProgress).toHaveBeenCalledWith(
       'second',
       -1,
       'file://second.zip',
@@ -246,15 +250,15 @@ describe('BackgroundTaskQueue completion notifications', () => {
       payload: JSON.stringify(task),
       checkpoint: undefined,
     };
-    jest.mocked(NativeBackgroundTasks.getTasks).mockResolvedValue([summary]);
-    jest
-      .mocked(NativeBackgroundTasks.getTask)
-      .mockResolvedValueOnce(activeTask);
+    mockNativeBackgroundTasks.getTasks.mockResolvedValue([summary]);
+    mockNativeBackgroundTasks.getTask.mockResolvedValueOnce(activeTask);
 
     const queue = new BackgroundTaskQueue();
     await queue.refresh();
 
-    expect(NativeBackgroundTasks.getTask).toHaveBeenCalledWith('active-task');
+    expect(mockNativeBackgroundTasks.getTask).toHaveBeenCalledWith(
+      'active-task',
+    );
     expect(mockStoredTasks).toEqual([
       expect.objectContaining({
         id: 'active-task',

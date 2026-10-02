@@ -12,6 +12,9 @@ export type AutomaticLibraryUpdateInterval =
 export const configureAutomaticLibraryUpdates = async (
   intervalHours: AutomaticLibraryUpdateInterval,
 ) => {
+  if (!NativeBackgroundTasks) {
+    return;
+  }
   if (intervalHours === 0) {
     await NativeBackgroundTasks.cancelLibraryUpdates();
     return;

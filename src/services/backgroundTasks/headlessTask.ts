@@ -11,7 +11,7 @@ export const runHeadlessBackgroundTask = async ({
   let checkpoint: string | undefined;
 
   try {
-    const record = await NativeBackgroundTasks.getTask(taskId);
+    const record = await NativeBackgroundTasks?.getTask(taskId);
     if (!record) {
       throw new Error(`Unknown background task: ${taskId}`);
     }
@@ -22,7 +22,7 @@ export const runHeadlessBackgroundTask = async ({
     await initializeInstalledPlugins();
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    await NativeBackgroundTasks.fail(taskId, message, false);
+    await NativeBackgroundTasks?.fail(taskId, message, false);
     throw error;
   }
 

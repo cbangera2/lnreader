@@ -11,6 +11,9 @@ export const configureAutomaticBackups = async (
   intervalHours: AutomaticBackupInterval,
   directoryUri?: string,
 ) => {
+  if (!NativeBackgroundTasks) {
+    return;
+  }
   if (intervalHours === 0) {
     await NativeBackgroundTasks.cancelAutomaticBackups();
     return;

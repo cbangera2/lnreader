@@ -23,7 +23,7 @@ import { useSearch } from '@hooks';
 import { useTheme } from '@hooks/persisted';
 
 import { getString } from '@i18n/translations';
-import { navigationRef } from '@navigators/ShareIntentHandler';
+import { navigationRef } from '@navigators/shareIntent';
 import { resolveSharedUrl } from '@services/share/resolveSharedUrl';
 import { showToast } from '@utils/showToast';
 import { useGlobalSearch } from './hooks/useGlobalSearch';
