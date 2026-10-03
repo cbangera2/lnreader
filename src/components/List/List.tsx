@@ -11,6 +11,7 @@ import {
 import MaterialIcon from '@react-native-vector-icons/material-design-icons';
 
 import { List as PaperList, Divider as PaperDivider } from 'react-native-paper';
+import { useTheme } from '@hooks/persisted';
 import { ThemeColors } from '../../theme/types';
 import { ColorInstance } from 'color';
 
@@ -24,9 +25,31 @@ interface ListItemProps {
   right?: string;
 }
 
-const Section = ({ children }: { children: ReactNode }) => (
-  <PaperList.Section style={styles.listSection}>{children}</PaperList.Section>
-);
+const Section = ({
+  children,
+  theme: themeProp,
+  style,
+}: {
+  children: ReactNode;
+  theme?: ThemeColors;
+  style?: StyleProp<ViewStyle>;
+}) => {
+  const hookTheme = useTheme();
+  const theme = themeProp ?? hookTheme;
+  const backgroundColor = theme?.surfaceContainerLow ?? theme?.surface;
+  return (
+    <PaperList.Section
+      style={[
+        styles.listSection,
+        Platform.select({ ios: styles.sectionIOS, default: undefined }),
+        Platform.OS === 'ios' ? { backgroundColor } : undefined,
+        style,
+      ]}
+    >
+      {children}
+    </PaperList.Section>
+  );
+};
 
 const SubHeader = ({
   children,
@@ -35,7 +58,14 @@ const SubHeader = ({
   children: ReactNode;
   theme: ThemeColors;
 }) => (
-  <PaperList.Subheader style={{ color: theme.primary }}>
+  <PaperList.Subheader
+    style={[
+      Platform.select({ ios: styles.subHeaderIOS, default: undefined }),
+      {
+        color: Platform.OS === 'ios' ? theme.onSurfaceVariant : theme.primary,
+      },
+    ]}
+  >
     {children}
   </PaperList.Subheader>
 );
@@ -216,6 +246,16 @@ const styles = StyleSheet.create({
   listSection: {
     flex: 1,
     marginVertical: 0,
+  },
+  sectionIOS: {
+    marginHorizontal: 16,
+    marginVertical: 8,
+    borderRadius: 10,
+    overflow: 'hidden',
+  },
+  subHeaderIOS: {
+    fontSize: 13,
+    textTransform: 'uppercase',
   },
   pressable: {
     padding: 16,

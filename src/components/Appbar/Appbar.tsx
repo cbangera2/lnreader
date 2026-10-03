@@ -16,28 +16,38 @@ const Appbar: React.FC<AppbarProps> = ({
   title,
   handleGoBack,
   theme,
-  mode = 'large',
+  mode,
   children,
-}) => (
-  <PaperAppbar.Header
-    style={{ backgroundColor: theme.surface }}
-    statusBarHeight={
-      Platform.OS === 'android' ? StatusBar.currentHeight : undefined
-    }
-    mode={mode}
-  >
-    {handleGoBack && (
-      <PaperAppbar.BackAction
-        onPress={handleGoBack}
-        iconColor={theme.onSurface}
+}) => {
+  const resolvedMode =
+    mode ??
+    Platform.select({
+      ios: 'center-aligned',
+      default: 'large',
+    } as const) ??
+    'large';
+
+  return (
+    <PaperAppbar.Header
+      style={{ backgroundColor: theme.surface }}
+      statusBarHeight={
+        Platform.OS === 'android' ? StatusBar.currentHeight : undefined
+      }
+      mode={resolvedMode}
+    >
+      {handleGoBack && (
+        <PaperAppbar.BackAction
+          onPress={handleGoBack}
+          iconColor={theme.onSurface}
+        />
+      )}
+      <PaperAppbar.Content
+        title={title}
+        titleStyle={{ color: theme.onSurface }}
       />
-    )}
-    <PaperAppbar.Content
-      title={title}
-      titleStyle={{ color: theme.onSurface }}
-    />
-    {children}
-  </PaperAppbar.Header>
-);
+      {children}
+    </PaperAppbar.Header>
+  );
+};
 
 export default Appbar;

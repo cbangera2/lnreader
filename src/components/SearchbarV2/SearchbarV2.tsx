@@ -1,5 +1,5 @@
 import React, { memo, useRef, useState } from 'react';
-import { StyleSheet, View, TextInput } from 'react-native';
+import { Platform, StyleSheet, View, TextInput } from 'react-native';
 
 import IconButtonV2 from '../IconButtonV2/IconButtonV2';
 import { ThemeColors } from '../../theme/types';
@@ -52,14 +52,22 @@ const Searchbar: React.FC<SearcbarProps> = ({
   const [extraMenu, showExtraMenu] = useState(false);
 
   const marginTop = 8;
+  const containerBackgroundColor = Platform.select({
+    ios: theme.surfaceVariant,
+    default: theme.surface2,
+  });
 
   return (
     <View
       style={[
         styles.searchbarContainer,
+        Platform.select({
+          ios: styles.searchbarContainerIOS,
+          default: undefined,
+        }),
         {
           marginTop,
-          backgroundColor: theme.surface2,
+          backgroundColor: containerBackgroundColor,
         },
       ]}
     >
@@ -90,7 +98,14 @@ const Searchbar: React.FC<SearcbarProps> = ({
         <TextInput
           accessibilityLabel={placeholder}
           ref={searchbarRef}
-          style={[styles.textInput, { color: theme.onSurface }]}
+          style={[
+            styles.textInput,
+            Platform.select({
+              ios: styles.textInputIOS,
+              default: undefined,
+            }),
+            { color: theme.onSurface },
+          ]}
           placeholder={placeholder}
           placeholderTextColor={theme.onSurfaceVariant}
           onChangeText={onChangeText}
@@ -180,9 +195,16 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     zIndex: 1,
   },
+  searchbarContainerIOS: {
+    borderRadius: 10,
+    minHeight: 36,
+  },
   textInput: {
     flex: 1,
     fontSize: 16,
     marginHorizontal: 8,
+  },
+  textInputIOS: {
+    fontSize: 17,
   },
 });

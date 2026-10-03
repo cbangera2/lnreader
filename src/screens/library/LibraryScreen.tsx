@@ -6,6 +6,7 @@ import React, {
   useState,
 } from 'react';
 import {
+  Platform,
   StyleProp,
   StyleSheet,
   Text,
@@ -312,7 +313,15 @@ const LibraryScreen = ({ navigation }: LibraryScreenProps) => {
 
       return (
         <Row>
-          <Text style={[{ color }, styles.fontWeight500]}>{route.title}</Text>
+          <Text
+            style={[
+              { color },
+              styles.fontWeight500,
+              Platform.OS === 'ios' && { fontSize: 13 },
+            ]}
+          >
+            {route.title}
+          </Text>
           {showNumberOfNovels ? (
             <View
               style={[

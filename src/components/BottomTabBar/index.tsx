@@ -32,7 +32,11 @@ function CustomBottomTabBar({
   const isIos = Platform.OS === 'ios';
   const getLabelText = useCallback(
     (route: any) => {
-      if (!showLabelsInNav && route.name !== state.routeNames[state.index]) {
+      if (
+        !isIos &&
+        !showLabelsInNav &&
+        route.name !== state.routeNames[state.index]
+      ) {
         return '';
       }
 
@@ -46,7 +50,7 @@ function CustomBottomTabBar({
 
       return label;
     },
-    [descriptors, showLabelsInNav, state.index, state.routeNames],
+    [descriptors, isIos, showLabelsInNav, state.index, state.routeNames],
   );
 
   return (
@@ -54,15 +58,25 @@ function CustomBottomTabBar({
       style={[
         styles.container,
         {
-          backgroundColor: theme.surface2 || theme.surface,
+          backgroundColor: isIos
+            ? Color(theme.surface).alpha(0.85).string()
+            : theme.surface2 || theme.surface,
           paddingBottom: 16 + (insets?.bottom || 0),
+          ...(isIos
+            ? {
+                borderTopWidth: StyleSheet.hairlineWidth,
+                borderTopColor: theme.outlineVariant,
+              }
+            : null),
         },
       ]}
     >
       {state.routes.map((route, index) => {
         const label = getLabelText(route);
         const isFocused = state.index === index;
-        const showLabel = (showLabelsInNav || isFocused) && label;
+        const showLabel = isIos
+          ? label
+          : (showLabelsInNav || isFocused) && label;
 
         const onPress = () => {
           iosSelection();
@@ -139,6 +153,7 @@ function CustomBottomTabBar({
                         : theme.onSurface
                       : theme.onSurfaceVariant,
                     fontWeight: '500',
+                    fontSize: isIos ? 10 : 12,
                   },
                 ]}
                 numberOfLines={1}
