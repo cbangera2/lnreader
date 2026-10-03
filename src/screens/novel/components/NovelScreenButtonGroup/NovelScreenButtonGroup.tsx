@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import MaterialCommunityIcons from '@react-native-vector-icons/material-design-icons';
 
 import { NovelInfo } from '@database/types';
@@ -41,7 +41,10 @@ const NButton = ({
         android_ripple={{ color: theme.rippleColor }}
         onPress={onPress}
         onLongPress={onLongPress}
-        style={styles.button}
+        style={({ pressed }) => [
+          styles.button,
+          Platform.OS === 'ios' && pressed && styles.pressed,
+        ]}
       >
         <MaterialCommunityIcons
           name={icon}
@@ -186,5 +189,8 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 4,
     textAlign: 'center',
+  },
+  pressed: {
+    opacity: 0.6,
   },
 });
