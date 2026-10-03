@@ -1,8 +1,16 @@
 import { useCallback, useMemo, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import {
+  Platform,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import MaterialCommunityIcons from '@react-native-vector-icons/material-design-icons';
 import { FAB, TextInput } from 'react-native-paper';
+import Color from 'color';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Appbar, Dialog, List, SafeAreaView } from '@components';
@@ -229,7 +237,22 @@ const SettingsTaxonomyScreen = ({ navigation }: GenreTaxonomyScreenProps) => {
       </ScrollView>
 
       <FAB
-        style={[styles.fab, { backgroundColor: theme.primary, right, bottom }]}
+        style={[
+          styles.fab,
+          {
+            backgroundColor: theme.primary,
+            right,
+            bottom,
+            ...Platform.select({
+              ios: {
+                backgroundColor: Color(theme.primary).alpha(0.72).string(),
+                borderColor: Color(theme.onPrimary).alpha(0.4).string(),
+                borderWidth: StyleSheet.hairlineWidth,
+              },
+              default: undefined,
+            }),
+          },
+        ]}
         color={theme.onPrimary}
         icon="plus"
         label={getString('genreStats.newGroup')}

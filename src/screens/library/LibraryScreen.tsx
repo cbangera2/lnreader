@@ -38,6 +38,7 @@ import { useAppSettings, useHistory, useTheme } from '@hooks/persisted';
 import { useSearch, useBackHandler, useBoolean } from '@hooks';
 import { getString } from '@i18n/translations';
 import { FAB, Portal } from 'react-native-paper';
+import Color from 'color';
 import {
   markAllChaptersRead,
   markAllChaptersUnread,
@@ -560,7 +561,18 @@ const LibraryScreen = ({ navigation }: LibraryScreenProps) => {
         <FAB
           style={[
             styles.fab,
-            { backgroundColor: theme.primary, marginEnd: rightInset + 16 },
+            {
+              backgroundColor: theme.primary,
+              marginEnd: rightInset + 16,
+              ...Platform.select({
+                ios: {
+                  backgroundColor: Color(theme.primary).alpha(0.72).string(),
+                  borderColor: Color(theme.onPrimary).alpha(0.4).string(),
+                  borderWidth: StyleSheet.hairlineWidth,
+                },
+                default: undefined,
+              }),
+            },
           ]}
           color={theme.onPrimary}
           uppercase={false}

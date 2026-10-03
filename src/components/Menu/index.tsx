@@ -22,6 +22,8 @@ import {
 import { ScrollView } from 'react-native-gesture-handler';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 
+import Glass from '@components/Glass/Glass';
+
 const HORIZONTAL_MARGIN = 16;
 const VERTICAL_MARGIN = 8;
 const ANCHOR_GAP = 4;
@@ -57,6 +59,9 @@ const Menu: React.FC<MenuProps> & { Item: React.FC<MenuItemProps> } = ({
   const theme = useTheme();
   const { width: screenWidth, height: screenHeight } = useWindowDimensions();
   const anchorRef = useRef<View>(null);
+  const isIos = Platform.OS === 'ios';
+  const menuFallbackBackgroundColor =
+    theme.surfaceContainerLow ?? theme.surface2 ?? theme.surface;
 
   const [menuLayout, setMenuLayout] = useState<LayoutRectangle | null>(null);
   const [anchorLayout, setAnchorLayout] = useState<LayoutRectangle>({
@@ -162,16 +167,28 @@ const Menu: React.FC<MenuProps> & { Item: React.FC<MenuItemProps> } = ({
               style={[
                 styles.menuContainer,
                 {
-                  backgroundColor:
-                    theme.surfaceContainerLow ??
-                    theme.surface2 ??
-                    theme.surface,
+                  backgroundColor: isIos
+                    ? 'transparent'
+                    : menuFallbackBackgroundColor,
                 },
                 contentStyle,
                 menuPosition,
+                // A caller-provided contentStyle background must not paint
+                // over the glass on iOS.
+                isIos ? styles.menuContainerIOS : null,
               ]}
               testID="menu"
             >
+              {isIos ? (
+                <Glass
+                  glassEffectStyle="regular"
+                  fallbackBackgroundColor={menuFallbackBackgroundColor}
+                  isDark={theme.isDark}
+                  style={styles.menuGlassBackground}
+                  pointerEvents="none"
+                  testID="menu-glass"
+                />
+              ) : null}
               <ScrollView
                 contentContainerStyle={styles.menuContent}
                 style={{ maxHeight: screenHeight * MAX_MENU_HEIGHT_RATIO }}
@@ -246,6 +263,17 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     position: 'absolute',
     zIndex: 1,
+  },
+  menuContainerIOS: {
+    backgroundColor: 'transparent',
+  },
+  menuGlassBackground: {
+    borderRadius: 12,
+    bottom: 0,
+    left: 0,
+    position: 'absolute',
+    right: 0,
+    top: 0,
   },
   menuContent: {
     paddingVertical: 8,

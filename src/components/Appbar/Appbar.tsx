@@ -2,6 +2,7 @@ import React from 'react';
 import { Platform, StatusBar } from 'react-native';
 
 import { Appbar as PaperAppbar } from 'react-native-paper';
+import Glass from '@components/Glass/Glass';
 import { ThemeColors } from '../../theme/types';
 
 interface AppbarProps {
@@ -27,9 +28,11 @@ const Appbar: React.FC<AppbarProps> = ({
     } as const) ??
     'large';
 
-  return (
+  const header = (
     <PaperAppbar.Header
-      style={{ backgroundColor: theme.surface }}
+      style={{
+        backgroundColor: Platform.OS === 'ios' ? 'transparent' : theme.surface,
+      }}
       statusBarHeight={
         Platform.OS === 'android' ? StatusBar.currentHeight : undefined
       }
@@ -48,6 +51,16 @@ const Appbar: React.FC<AppbarProps> = ({
       {children}
     </PaperAppbar.Header>
   );
+
+  if (Platform.OS === 'ios') {
+    return (
+      <Glass fallbackBackgroundColor={theme.surface} isDark={theme.isDark}>
+        {header}
+      </Glass>
+    );
+  }
+
+  return header;
 };
 
 export default Appbar;

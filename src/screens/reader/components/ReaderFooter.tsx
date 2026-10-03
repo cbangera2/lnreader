@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Platform, Pressable, StyleSheet, View } from 'react-native';
 import { IconButton } from 'react-native-paper';
 import color from 'color';
 import Animated, {
@@ -11,6 +11,7 @@ import { useChapterContext } from '../ChapterContext';
 import { useTheme } from '@hooks/persisted';
 import { useNovelLayout } from '@screens/novel/NovelContext';
 import { iosSelection } from '@utils/haptics';
+import Glass from '@components/Glass/Glass';
 
 interface ChapterFooterProps {
   openReaderSheet: () => void;
@@ -19,6 +20,8 @@ interface ChapterFooterProps {
 }
 
 const fastOutSlowIn = Easing.bezier(0.4, 0.0, 0.2, 1.0);
+
+const isIos = Platform.OS === 'ios';
 
 const createEntering = (navigationBarHeight: number) => () => {
   'worklet';
@@ -76,14 +79,21 @@ const ChapterFooter = ({
   };
   const { navigationBarHeight } = useNovelLayout();
 
+  const iosTranslucentSurface = useMemo(
+    () => color(theme.surface).alpha(0.8).string(),
+    [theme.surface],
+  );
+
   const style = useMemo(
     () => [
       {
-        backgroundColor: color(theme.surface).alpha(0.9).string(),
+        backgroundColor: isIos
+          ? iosTranslucentSurface
+          : color(theme.surface).alpha(0.9).string(),
         paddingBottom: navigationBarHeight,
       },
     ],
-    [theme.surface, navigationBarHeight],
+    [iosTranslucentSurface, theme.surface, navigationBarHeight],
   );
 
   const entering = useMemo(
@@ -96,76 +106,79 @@ const ChapterFooter = ({
   );
 
   return (
-    <Animated.View
-      entering={entering}
-      exiting={exiting}
-      style={[styles.footer, style]}
-    >
-      <View style={styles.buttonsContainer}>
-        <Pressable
-          android_ripple={rippleConfig}
-          style={styles.buttonStyles}
-          onPress={() => {
-            iosSelection();
-            navigateChapter('PREV');
-          }}
-        >
-          <IconButton
-            icon="chevron-left"
-            size={26}
-            disabled={!prevChapter}
-            iconColor={theme.onSurface}
-          />
-        </Pressable>
-        <Pressable
-          android_ripple={rippleConfig}
-          style={styles.buttonStyles}
-          onPress={() => scrollToStart()}
-        >
-          <IconButton
-            icon="arrow-collapse-up"
-            size={26}
-            iconColor={theme.onSurface}
-          />
-        </Pressable>
-        <Pressable
-          android_ripple={rippleConfig}
-          style={styles.buttonStyles}
-          onPress={() => openDrawer()}
-        >
-          <IconButton
-            icon="format-list-bulleted"
-            size={26}
-            iconColor={theme.onSurface}
-          />
-        </Pressable>
-        <Pressable
-          android_ripple={rippleConfig}
-          style={styles.buttonStyles}
-          onPress={openReaderSheet}
-        >
-          <IconButton
-            icon="cog-outline"
-            size={26}
-            iconColor={theme.onSurface}
-          />
-        </Pressable>
-        <Pressable
-          android_ripple={rippleConfig}
-          style={styles.buttonStyles}
-          onPress={() => {
-            iosSelection();
-            navigateChapter('NEXT');
-          }}
-        >
-          <IconButton
-            icon="chevron-right"
-            size={26}
-            disabled={!nextChapter}
-            iconColor={theme.onSurface}
-          />
-        </Pressable>
-      </View>
+    <Animated.View entering={entering} exiting={exiting} style={styles.footer}>
+      <Glass
+        glassEffectStyle="regular"
+        fallbackBackgroundColor={iosTranslucentSurface}
+        isDark={theme.isDark}
+        style={style}
+      >
+        <View style={styles.buttonsContainer}>
+          <Pressable
+            android_ripple={rippleConfig}
+            style={styles.buttonStyles}
+            onPress={() => {
+              iosSelection();
+              navigateChapter('PREV');
+            }}
+          >
+            <IconButton
+              icon="chevron-left"
+              size={26}
+              disabled={!prevChapter}
+              iconColor={theme.onSurface}
+            />
+          </Pressable>
+          <Pressable
+            android_ripple={rippleConfig}
+            style={styles.buttonStyles}
+            onPress={() => scrollToStart()}
+          >
+            <IconButton
+              icon="arrow-collapse-up"
+              size={26}
+              iconColor={theme.onSurface}
+            />
+          </Pressable>
+          <Pressable
+            android_ripple={rippleConfig}
+            style={styles.buttonStyles}
+            onPress={() => openDrawer()}
+          >
+            <IconButton
+              icon="format-list-bulleted"
+              size={26}
+              iconColor={theme.onSurface}
+            />
+          </Pressable>
+          <Pressable
+            android_ripple={rippleConfig}
+            style={styles.buttonStyles}
+            onPress={openReaderSheet}
+          >
+            <IconButton
+              icon="cog-outline"
+              size={26}
+              iconColor={theme.onSurface}
+            />
+          </Pressable>
+          <Pressable
+            android_ripple={rippleConfig}
+            style={styles.buttonStyles}
+            onPress={() => {
+              iosSelection();
+              navigateChapter('NEXT');
+            }}
+          >
+            <IconButton
+              icon="chevron-right"
+              size={26}
+              disabled={!nextChapter}
+              iconColor={theme.onSurface}
+            />
+          </Pressable>
+        </View>
+      </Glass>
     </Animated.View>
   );
 };

@@ -1,7 +1,12 @@
 import { useTheme } from '@hooks/persisted';
 import { useState } from 'react';
-import { StyleSheet, TextInputProps as RNTextInputProps } from 'react-native';
+import {
+  Platform,
+  StyleSheet,
+  TextInputProps as RNTextInputProps,
+} from 'react-native';
 import { TextInput as RNTextInput } from 'react-native-gesture-handler';
+import Glass from '@components/Glass/Glass';
 
 interface TextInputProps extends RNTextInputProps {
   error?: boolean;
@@ -33,7 +38,7 @@ const TextInput = ({
   const isFocused = forceFocused ?? inputFocused;
   const borderWidth = isFocused || error ? 2 : 1;
   const margin = isFocused || error ? 0 : 1;
-  return (
+  const input = (
     <RNTextInput
       placeholderTextColor={'grey'}
       onFocus={_onFocus}
@@ -41,7 +46,8 @@ const TextInput = ({
       style={[
         {
           color: theme.onBackground,
-          backgroundColor: theme.background,
+          backgroundColor:
+            Platform.OS === 'ios' ? 'transparent' : theme.background,
           borderColor: error
             ? theme.error
             : isFocused
@@ -56,11 +62,27 @@ const TextInput = ({
       {...props}
     />
   );
+  if (Platform.OS === 'ios') {
+    return (
+      <Glass
+        glassEffectStyle="clear"
+        fallbackBackgroundColor={theme.background}
+        isDark={theme.isDark}
+        style={styles.glassContainer}
+      >
+        {input}
+      </Glass>
+    );
+  }
+  return input;
 };
 
 export default TextInput;
 
 const styles = StyleSheet.create({
+  glassContainer: {
+    borderRadius: 4,
+  },
   textInput: {
     borderRadius: 4,
     borderStyle: 'solid',

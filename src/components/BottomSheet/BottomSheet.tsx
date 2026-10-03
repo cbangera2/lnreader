@@ -8,7 +8,14 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useBackHandler } from '@hooks/index';
 import { BottomSheetModalMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
 import BottomSheetBackdrop from './BottomSheetBackdrop';
-import { StyleSheet, useWindowDimensions } from 'react-native';
+import {
+  Platform,
+  StyleProp,
+  StyleSheet,
+  ViewStyle,
+  useWindowDimensions,
+} from 'react-native';
+import Glass from '@components/Glass/Glass';
 import { useTheme } from '@hooks/persisted';
 import { getBottomSheetLayout, normalizeBottomSheetSnapPoints } from './layout';
 
@@ -37,6 +44,8 @@ interface BottomSheetProps
   snapPoints?: number[];
 }
 
+type BackgroundComponent = BottomSheetModalProps['backgroundComponent'];
+
 const BottomSheet: React.FC<BottomSheetProps> = ({
   bottomSheetRef,
   children,
@@ -60,6 +69,18 @@ const BottomSheet: React.FC<BottomSheetProps> = ({
     ),
     [],
   );
+  const surfaceBackgroundColor = theme.surfaceContainerLow ?? theme.surface;
+  const renderBackground = useCallback(
+    ({ style }: { style?: StyleProp<ViewStyle> }) => (
+      <Glass
+        glassEffectStyle="regular"
+        fallbackBackgroundColor={surfaceBackgroundColor}
+        isDark={theme.isDark}
+        style={[style, styles.modal]}
+      />
+    ),
+    [surfaceBackgroundColor, theme.isDark],
+  );
   useBackHandler(() => {
     if (typeof indexRef.current === 'number' && indexRef.current !== -1) {
       bottomSheetRef?.current?.close();
@@ -77,6 +98,11 @@ const BottomSheet: React.FC<BottomSheetProps> = ({
       ref={bottomSheetRef}
       backdropComponent={renderBackdrop}
       handleComponent={null}
+      backgroundComponent={
+        Platform.OS === 'ios'
+          ? (renderBackground as unknown as BackgroundComponent)
+          : undefined
+      }
       backgroundStyle={[
         styles.modal,
         {

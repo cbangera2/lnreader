@@ -1,6 +1,7 @@
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import React, { useEffect } from 'react';
 import { FAB } from 'react-native-paper';
+import Color from 'color';
 import { useNavigation } from '@react-navigation/native';
 import DraggableFlatList, {
   RenderItemParams,
@@ -96,7 +97,22 @@ const CategoriesScreen = () => {
         />
       )}
       <FAB
-        style={[styles.fab, { backgroundColor: theme.primary, right, bottom }]}
+        style={[
+          styles.fab,
+          {
+            backgroundColor: theme.primary,
+            right,
+            bottom,
+            ...Platform.select({
+              ios: {
+                backgroundColor: Color(theme.primary).alpha(0.72).string(),
+                borderColor: Color(theme.onPrimary).alpha(0.4).string(),
+                borderWidth: StyleSheet.hairlineWidth,
+              },
+              default: undefined,
+            }),
+          },
+        ]}
         color={theme.onPrimary}
         label={getString('common.add')}
         uppercase={false}

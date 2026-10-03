@@ -11,6 +11,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import Color from 'color';
 import ListView from './ListView';
+import Glass from '@components/Glass/Glass';
 
 import { DisplayModes } from '@screens/library/constants/constants';
 import { DBNovelInfo, NovelInfo } from '@database/types';
@@ -22,6 +23,8 @@ import SourceScreenSkeletonLoading from '@screens/browse/loadingAnimation/Source
 import NovelCoverImage from './NovelCoverImage';
 import { useNovelCoverLayout } from './NovelCoverLayoutContext';
 import MaterialCommunityIcons from '@react-native-vector-icons/material-design-icons';
+
+const isIos = Platform.OS === 'ios';
 
 interface UnreadBadgeProps {
   showDownloadBadges: boolean;
@@ -115,21 +118,50 @@ function NovelCover<
 
   const continueReadingButton =
     onContinueReading && !selectionActive ? (
-      <Pressable
-        accessibilityLabel={getString('novelScreen.continueReading')}
-        accessibilityRole="button"
-        android_ripple={{ color: theme.rippleColor }}
-        onPress={event => {
-          event.stopPropagation();
-          onContinueReading();
-        }}
-        style={[
-          styles.continueReadingButton,
-          { backgroundColor: Color(theme.primary).alpha(0.9).string() },
-        ]}
-      >
-        <MaterialCommunityIcons name="play" size={20} color={theme.onPrimary} />
-      </Pressable>
+      isIos ? (
+        <Pressable
+          accessibilityLabel={getString('novelScreen.continueReading')}
+          accessibilityRole="button"
+          onPress={event => {
+            event.stopPropagation();
+            onContinueReading();
+          }}
+          style={styles.continueReadingButton}
+        >
+          <Glass
+            glassEffectStyle="clear"
+            fallbackBackgroundColor={Color(theme.primary).alpha(0.85).string()}
+            isDark={theme.isDark}
+            style={styles.continueReadingGlass}
+          >
+            <MaterialCommunityIcons
+              name="play"
+              size={20}
+              color={theme.onPrimary}
+            />
+          </Glass>
+        </Pressable>
+      ) : (
+        <Pressable
+          accessibilityLabel={getString('novelScreen.continueReading')}
+          accessibilityRole="button"
+          android_ripple={{ color: theme.rippleColor }}
+          onPress={event => {
+            event.stopPropagation();
+            onContinueReading();
+          }}
+          style={[
+            styles.continueReadingButton,
+            { backgroundColor: Color(theme.primary).alpha(0.9).string() },
+          ]}
+        >
+          <MaterialCommunityIcons
+            name="play"
+            size={20}
+            color={theme.onPrimary}
+          />
+        </Pressable>
+      )
     ) : null;
 
   if (item.completeRow) {
@@ -302,76 +334,146 @@ const CompactTitle = ({ novelName }: { novelName: string }) => (
   </View>
 );
 
-const InLibraryBadge = ({ theme }: { theme: ThemeColors }) => (
-  <Text
-    style={[
-      styles.inLibraryBadge,
-      {
-        backgroundColor: theme.primary,
-        color: theme.onPrimary,
-      },
-      styles.standardBorderRadius,
-    ]}
-  >
-    {getString('novelScreen.inLibaray')}
-  </Text>
-);
+const InLibraryBadge = ({ theme }: { theme: ThemeColors }) => {
+  if (!isIos) {
+    return (
+      <Text
+        style={[
+          styles.inLibraryBadge,
+          {
+            backgroundColor: theme.primary,
+            color: theme.onPrimary,
+          },
+          styles.standardBorderRadius,
+        ]}
+      >
+        {getString('novelScreen.inLibaray')}
+      </Text>
+    );
+  }
+  return (
+    <Glass
+      glassEffectStyle="clear"
+      fallbackBackgroundColor={Color(theme.primary).alpha(0.85).string()}
+      isDark={theme.isDark}
+      style={[styles.inLibraryGlass, styles.standardBorderRadius]}
+    >
+      <Text style={[styles.badgeText, { color: theme.onPrimary }]}>
+        {getString('novelScreen.inLibaray')}
+      </Text>
+    </Glass>
+  );
+};
 
-const InActivityBadge = ({ theme }: { theme: ThemeColors }) => (
-  <View
-    style={[
-      styles.activityBadge,
-      {
-        backgroundColor: theme.primary,
-      },
-      styles.standardBorderRadius,
-    ]}
-  >
-    <ActivityIndicator animating={true} size={12} color={theme.onPrimary} />
-  </View>
-);
+const InActivityBadge = ({ theme }: { theme: ThemeColors }) => {
+  if (!isIos) {
+    return (
+      <View
+        style={[
+          styles.activityBadge,
+          {
+            backgroundColor: theme.primary,
+          },
+          styles.standardBorderRadius,
+        ]}
+      >
+        <ActivityIndicator animating={true} size={12} color={theme.onPrimary} />
+      </View>
+    );
+  }
+  return (
+    <Glass
+      glassEffectStyle="clear"
+      fallbackBackgroundColor={Color(theme.primary).alpha(0.85).string()}
+      isDark={theme.isDark}
+      style={[styles.activityBadge, styles.standardBorderRadius]}
+    >
+      <ActivityIndicator animating={true} size={12} color={theme.onPrimary} />
+    </Glass>
+  );
+};
 
 const UnreadBadge: React.FC<UnreadBadgeProps> = ({
   chaptersDownloaded,
   chaptersUnread,
   showDownloadBadges,
   theme,
-}: UnreadBadgeProps) => (
-  <Text
-    style={[
-      styles.unreadBadge,
-      !chaptersDownloaded && styles.LeftBorderRadius,
-      !showDownloadBadges && styles.standardBorderRadius,
-      {
-        backgroundColor: theme.primary,
-        color: theme.onPrimary,
-      },
-    ]}
-  >
-    {chaptersUnread}
-  </Text>
-);
+}: UnreadBadgeProps) => {
+  if (!isIos) {
+    return (
+      <Text
+        style={[
+          styles.unreadBadge,
+          !chaptersDownloaded && styles.LeftBorderRadius,
+          !showDownloadBadges && styles.standardBorderRadius,
+          {
+            backgroundColor: theme.primary,
+            color: theme.onPrimary,
+          },
+        ]}
+      >
+        {chaptersUnread}
+      </Text>
+    );
+  }
+  return (
+    <Glass
+      glassEffectStyle="clear"
+      fallbackBackgroundColor={Color(theme.primary).alpha(0.85).string()}
+      isDark={theme.isDark}
+      style={[
+        styles.unreadGlass,
+        !chaptersDownloaded && styles.LeftBorderRadius,
+        !showDownloadBadges && styles.standardBorderRadius,
+      ]}
+    >
+      <Text style={[styles.badgeText, { color: theme.onPrimary }]}>
+        {chaptersUnread}
+      </Text>
+    </Glass>
+  );
+};
 
 const DownloadBadge: React.FC<DownloadBadgeProps> = ({
   chaptersDownloaded,
   showUnreadBadges,
   chaptersUnread,
   theme,
-}: DownloadBadgeProps) => (
-  <Text
-    style={[
-      styles.downloadBadge,
-      !chaptersUnread && styles.RightBorderRadius,
-      !showUnreadBadges && styles.standardBorderRadius,
-      {
-        backgroundColor: theme.tertiary,
-        color: theme.onTertiary,
-      },
-    ]}
-  >
-    {chaptersDownloaded}
-  </Text>
-);
+}: DownloadBadgeProps) => {
+  if (!isIos) {
+    return (
+      <Text
+        style={[
+          styles.downloadBadge,
+          !chaptersUnread && styles.RightBorderRadius,
+          !showUnreadBadges && styles.standardBorderRadius,
+          {
+            backgroundColor: theme.tertiary,
+            color: theme.onTertiary,
+          },
+        ]}
+      >
+        {chaptersDownloaded}
+      </Text>
+    );
+  }
+  return (
+    <Glass
+      glassEffectStyle="clear"
+      fallbackBackgroundColor={Color(theme.tertiary).alpha(0.85).string()}
+      isDark={theme.isDark}
+      style={[
+        styles.downloadGlass,
+        !chaptersUnread && styles.RightBorderRadius,
+        !showUnreadBadges && styles.standardBorderRadius,
+      ]}
+    >
+      <Text style={[styles.badgeText, { color: theme.onTertiary }]}>
+        {chaptersDownloaded}
+      </Text>
+    </Glass>
+  );
+};
 
 const styles = StyleSheet.create({
   LeftBorderRadius: {
@@ -393,6 +495,9 @@ const styles = StyleSheet.create({
     top: 10,
     zIndex: 1,
   },
+  badgeText: {
+    fontSize: 12,
+  },
   compactTitle: {
     color: 'rgba(255,255,255,1)',
     textShadowColor: 'rgba(0, 0, 0, 0.75)',
@@ -413,6 +518,18 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     width: 36,
   },
+  continueReadingGlass: {
+    alignItems: 'center',
+    borderRadius: 8,
+    height: 36,
+    justifyContent: 'center',
+    overflow: 'hidden',
+    width: 36,
+    ...Platform.select({
+      ios: { borderCurve: 'continuous' },
+      default: {},
+    }),
+  },
   continueReadingOverlay: {
     position: 'absolute',
     right: 12,
@@ -424,6 +541,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     paddingTop: 2,
   },
+  downloadGlass: {
+    borderBottomLeftRadius: 4,
+    borderTopLeftRadius: 4,
+    paddingHorizontal: 5,
+    paddingTop: 2,
+  },
   extensionIcon: {
     borderRadius: 4,
     height: 42,
@@ -431,6 +554,10 @@ const styles = StyleSheet.create({
   },
   inLibraryBadge: {
     fontSize: 12,
+    paddingHorizontal: 4,
+    paddingVertical: 2,
+  },
+  inLibraryGlass: {
     paddingHorizontal: 4,
     paddingVertical: 2,
   },
@@ -466,7 +593,7 @@ const styles = StyleSheet.create({
   standardNovelCover: {
     overflow: 'hidden',
     ...Platform.select({
-      ios: { borderCurve: 'continuous', borderRadius: 8 },
+      ios: { borderCurve: 'continuous', borderRadius: 12 },
       default: { borderRadius: 6 },
     }),
   },
@@ -483,6 +610,12 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 4,
     borderTopRightRadius: 4,
     fontSize: 12,
+    paddingHorizontal: 4,
+    paddingTop: 2,
+  },
+  unreadGlass: {
+    borderBottomRightRadius: 4,
+    borderTopRightRadius: 4,
     paddingHorizontal: 4,
     paddingTop: 2,
   },

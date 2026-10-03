@@ -1,7 +1,15 @@
 import { useCallback, useEffect, useRef } from 'react';
-import { Keyboard, StyleSheet, Text, TextInput, View } from 'react-native';
+import {
+  Keyboard,
+  Platform,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 
 import { IconButtonV2 } from '@components';
+import Glass from '@components/Glass/Glass';
 import { ThemeColors } from '@theme/types';
 import { useChapterContext } from '../ChapterContext';
 import { ReaderSearchResult } from '../types';
@@ -19,6 +27,8 @@ interface ReaderSearchbarProps {
 const SEARCH_DEBOUNCE_MS = 300;
 const MIN_SEARCH_LENGTH = 3;
 const SPECIAL_CHARACTER_REGEX = /[^\p{L}\p{N}\s]/u;
+
+const isIos = Platform.OS === 'ios';
 
 const ReaderSearchbar = ({
   theme,
@@ -132,7 +142,19 @@ const ReaderSearchbar = ({
 
   return (
     <View style={styles.container}>
-      <View style={styles.searchbar}>
+      <Glass
+        glassEffectStyle="clear"
+        fallbackBackgroundColor={theme.surfaceVariant}
+        isDark={theme.isDark}
+        style={[
+          styles.searchbar,
+          isIos && {
+            backgroundColor: theme.surfaceVariant,
+            borderRadius: 16,
+            overflow: 'hidden',
+          },
+        ]}
+      >
         <IconButtonV2
           name="magnify"
           color={theme.onSurfaceVariant}
@@ -184,7 +206,7 @@ const ReaderSearchbar = ({
             theme={theme}
           />
         ) : null}
-      </View>
+      </Glass>
       {isSearchBlocked ? (
         <Text
           style={[styles.helperText, { color: theme.onSurfaceVariant }]}

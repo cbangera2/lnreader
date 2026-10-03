@@ -1,6 +1,7 @@
 import React, { memo, useRef, useState } from 'react';
-import { Platform, StyleSheet, View, TextInput } from 'react-native';
+import { Platform, StyleSheet, TextInput } from 'react-native';
 
+import Glass from '@components/Glass/Glass';
 import IconButtonV2 from '../IconButtonV2/IconButtonV2';
 import { ThemeColors } from '../../theme/types';
 import Menu from '../Menu';
@@ -58,7 +59,10 @@ const Searchbar: React.FC<SearcbarProps> = ({
   });
 
   return (
-    <View
+    <Glass
+      glassEffectStyle="clear"
+      fallbackBackgroundColor={containerBackgroundColor}
+      isDark={theme.isDark}
       style={[
         styles.searchbarContainer,
         Platform.select({
@@ -167,7 +171,7 @@ const Searchbar: React.FC<SearcbarProps> = ({
           </Menu>
         ) : null}
       </Pressable>
-    </View>
+    </Glass>
   );
 };
 

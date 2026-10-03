@@ -6,6 +6,7 @@ import { ThemeColors } from '@theme/types';
 import Animated from 'react-native-reanimated';
 import Color from 'color';
 import { iosSelection } from '@utils/haptics';
+import Glass from '@components/Glass/Glass';
 
 interface CustomBottomTabBarProps extends BottomTabBarProps {
   theme: ThemeColors;
@@ -29,6 +30,7 @@ function CustomBottomTabBar({
   renderIcon,
 }: CustomBottomTabBarProps) {
   const transparentBg = Color(theme.primaryContainer).fade(1).rgb().toString();
+  const iosTranslucentSurface = Color(theme.surface).alpha(0.85).string();
   const isIos = Platform.OS === 'ios';
   const getLabelText = useCallback(
     (route: any) => {
@@ -54,12 +56,15 @@ function CustomBottomTabBar({
   );
 
   return (
-    <View
+    <Glass
+      glassEffectStyle="regular"
+      fallbackBackgroundColor={iosTranslucentSurface}
+      isDark={theme.isDark}
       style={[
         styles.container,
         {
           backgroundColor: isIos
-            ? Color(theme.surface).alpha(0.85).string()
+            ? iosTranslucentSurface
             : theme.surface2 || theme.surface,
           paddingBottom: 16 + (insets?.bottom || 0),
           ...(isIos
@@ -164,7 +169,7 @@ function CustomBottomTabBar({
           </Pressable>
         );
       })}
-    </View>
+    </Glass>
   );
 }
 

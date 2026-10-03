@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import { FAB, ProgressBar } from 'react-native-paper';
+import Color from 'color';
 import {
   SlideInRight,
   SlideOutRight,
@@ -179,7 +180,17 @@ const GlobalSearchScreen = (props: Props) => {
           style={[
             styles.openNovelFabContainer,
             fabPositionStyle,
-            { backgroundColor: theme.primary },
+            {
+              backgroundColor: theme.primary,
+              ...Platform.select({
+                ios: {
+                  backgroundColor: Color(theme.primary).alpha(0.72).string(),
+                  borderColor: Color(theme.onPrimary).alpha(0.4).string(),
+                  borderWidth: StyleSheet.hairlineWidth,
+                },
+                default: undefined,
+              }),
+            },
           ]}
           testID="open-novel-button"
           icon={openNovelOffer.icon}

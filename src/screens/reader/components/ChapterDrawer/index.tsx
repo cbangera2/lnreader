@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-paper';
+import color from 'color';
 import { useAppSettings, useTheme } from '@hooks/persisted';
 import { Button, LoadingScreenV2 } from '@components/index';
+import Glass from '@components/Glass/Glass';
 import IconButtonV2 from '@components/IconButtonV2/IconButtonV2';
 import { EdgeInsets, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { getString } from '@i18n/translations';
@@ -33,6 +35,8 @@ const viewabilityConfig = {
   itemVisiblePercentThreshold: 90,
 };
 
+const isIos = Platform.OS === 'ios';
+
 type ChapterDrawerProps = {
   onClose?: () => void;
 };
@@ -54,6 +58,11 @@ const ChapterDrawer = ({ onClose }: ChapterDrawerProps) => {
   const styles = useMemo(
     () => createStylesheet(theme, insets),
     [theme, insets],
+  );
+
+  const drawerFallback = useMemo(
+    () => color(theme.surface).alpha(0.95).string(),
+    [theme.surface],
   );
 
   const { sort = defaultChapterSort } = novelSettings;
@@ -202,7 +211,12 @@ const ChapterDrawer = ({ onClose }: ChapterDrawerProps) => {
   }, [currentScrollIndex, scroll]);
 
   return (
-    <View style={styles.drawer}>
+    <Glass
+      glassEffectStyle="regular"
+      fallbackBackgroundColor={drawerFallback}
+      isDark={theme.isDark}
+      style={[styles.drawer, isIos && { backgroundColor: drawerFallback }]}
+    >
       <View style={styles.headerCtn}>
         <Text style={styles.headerTitle}>{getString('common.chapters')}</Text>
         {onClose ? (
@@ -254,7 +268,7 @@ const ChapterDrawer = ({ onClose }: ChapterDrawerProps) => {
           onPress={() => scroll(footerBtnProps.down.index)}
         />
       </View>
-    </View>
+    </Glass>
   );
 };
 

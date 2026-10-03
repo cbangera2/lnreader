@@ -1,6 +1,8 @@
 import React, { useCallback, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import color from 'color';
+
+import Glass from '@components/Glass/Glass';
 
 import { Text } from 'react-native-paper';
 import { IconButtonV2, Menu } from '../../../components';
@@ -36,6 +38,8 @@ interface ReaderAppbarProps {
 
 const fastOutSlowIn = Easing.bezier(0.4, 0.0, 0.2, 1.0);
 
+const isIos = Platform.OS === 'ios';
+
 const ReaderAppbar = ({
   goBack,
   theme,
@@ -55,6 +59,7 @@ const ReaderAppbar = ({
   const { chapter, novel, refetch } = useChapterContext();
   const { statusBarHeight } = useNovelLayout();
   const [menuVisible, setMenuVisible] = useState(false);
+  const appbarFallback = color(theme.surface).alpha(0.8).string();
 
   const runMenuAction = useCallback((action: () => void) => {
     setMenuVisible(false);
@@ -104,99 +109,110 @@ const ReaderAppbar = ({
     <Animated.View
       entering={entering}
       exiting={exiting}
-      style={[
-        styles.container,
-        {
-          paddingTop: statusBarHeight,
-          backgroundColor: color(theme.surface).alpha(0.9).string(),
-        },
-      ]}
+      style={styles.container}
     >
-      <View style={styles.appbar}>
-        <IconButtonV2
-          name="arrow-left"
-          onPress={goBack}
-          color={theme.onSurface}
-          size={26}
-          theme={theme}
-        />
-        <View style={styles.content}>
-          <Text
-            style={[styles.title, { color: theme.onSurface }]}
-            numberOfLines={1}
-          >
-            {novel.name}
-          </Text>
-          <Text
-            style={[styles.subtitle, { color: theme.onSurfaceVariant }]}
-            numberOfLines={1}
-          >
-            {chapter.name}
-          </Text>
-        </View>
-        <IconButtonV2
-          name={searchVisible ? 'close' : 'magnify'}
-          size={24}
-          padding={12}
-          onPress={() => setSearchVisible(current => !current)}
-          color={searchVisible ? theme.primary : theme.onSurface}
-          theme={theme}
-        />
-        <IconButtonV2
-          name={bookmarked ? 'bookmark' : 'bookmark-outline'}
-          size={24}
-          padding={12}
-          onPress={() => {
-            bookmarkChapter(chapter.id).then(() => setBookmarked(!bookmarked));
-          }}
-          color={bookmarked ? theme.primary : theme.onSurface}
-          theme={theme}
-        />
-        {!novel.isLocal ? (
-          <Menu
-            visible={menuVisible}
-            onDismiss={() => setMenuVisible(false)}
-            anchor={
-              <IconButtonV2
-                accessibilityLabel={getString('common.moreOptions')}
-                name="dots-vertical"
-                size={24}
-                padding={12}
-                onPress={() => setMenuVisible(true)}
-                color={theme.onSurface}
-                theme={theme}
+      <Glass
+        glassEffectStyle="clear"
+        fallbackBackgroundColor={appbarFallback}
+        isDark={theme.isDark}
+        style={[
+          styles.appbarGlass,
+          {
+            paddingTop: statusBarHeight,
+            backgroundColor: isIos
+              ? appbarFallback
+              : color(theme.surface).alpha(0.9).string(),
+          },
+        ]}
+      >
+        <View style={styles.appbar}>
+          <IconButtonV2
+            name="arrow-left"
+            onPress={goBack}
+            color={theme.onSurface}
+            size={26}
+            theme={theme}
+          />
+          <View style={styles.content}>
+            <Text
+              style={[styles.title, { color: theme.onSurface }]}
+              numberOfLines={1}
+            >
+              {novel.name}
+            </Text>
+            <Text
+              style={[styles.subtitle, { color: theme.onSurfaceVariant }]}
+              numberOfLines={1}
+            >
+              {chapter.name}
+            </Text>
+          </View>
+          <IconButtonV2
+            name={searchVisible ? 'close' : 'magnify'}
+            size={24}
+            padding={12}
+            onPress={() => setSearchVisible(current => !current)}
+            color={searchVisible ? theme.primary : theme.onSurface}
+            theme={theme}
+          />
+          <IconButtonV2
+            name={bookmarked ? 'bookmark' : 'bookmark-outline'}
+            size={24}
+            padding={12}
+            onPress={() => {
+              bookmarkChapter(chapter.id).then(() =>
+                setBookmarked(!bookmarked),
+              );
+            }}
+            color={bookmarked ? theme.primary : theme.onSurface}
+            theme={theme}
+          />
+          {!novel.isLocal ? (
+            <Menu
+              visible={menuVisible}
+              onDismiss={() => setMenuVisible(false)}
+              anchor={
+                <IconButtonV2
+                  accessibilityLabel={getString('common.moreOptions')}
+                  name="dots-vertical"
+                  size={24}
+                  padding={12}
+                  onPress={() => setMenuVisible(true)}
+                  color={theme.onSurface}
+                  theme={theme}
+                />
+              }
+            >
+              <Menu.Item
+                title={getString('webview.refresh')}
+                onPress={() => runMenuAction(refetch)}
               />
-            }
-          >
-            <Menu.Item
-              title={getString('webview.refresh')}
-              onPress={() => runMenuAction(refetch)}
-            />
-            <Menu.Item
-              title={getString('webview.openInWebView')}
-              onPress={() => runMenuAction(openInWebView)}
-            />
-            <Menu.Item
-              title={getString('webview.openInBrowser')}
-              onPress={() => runMenuAction(openInBrowser)}
-            />
-            <Menu.Item
-              title={getString('webview.share')}
-              onPress={() => runMenuAction(shareChapter)}
-            />
-          </Menu>
+              <Menu.Item
+                title={getString('webview.openInWebView')}
+                onPress={() => runMenuAction(openInWebView)}
+              />
+              <Menu.Item
+                title={getString('webview.openInBrowser')}
+                onPress={() => runMenuAction(openInBrowser)}
+              />
+              <Menu.Item
+                title={getString('webview.share')}
+                onPress={() => runMenuAction(shareChapter)}
+              />
+            </Menu>
+          ) : null}
+        </View>
+        {searchVisible ? (
+          <ReaderSearchbar
+            theme={theme}
+            searchText={searchText}
+            setSearchText={setSearchText}
+            searchResult={searchResult}
+            resetSearchResult={resetSearchResult}
+            resetSearch={resetSearch}
+          />
         ) : null}
-      </View>
-      {searchVisible ? (
-        <ReaderSearchbar
-          theme={theme}
-          searchText={searchText}
-          setSearchText={setSearchText}
-          searchResult={searchResult}
-          resetSearchResult={resetSearchResult}
-          resetSearch={resetSearch}
-        />
-      ) : null}
+      </Glass>
     </Animated.View>
   );
 };
@@ -210,9 +226,11 @@ const styles = StyleSheet.create({
     minHeight: 64,
     paddingHorizontal: 4,
   },
+  appbarGlass: {
+    paddingBottom: 8,
+  },
   container: {
     flex: 1,
-    paddingBottom: 8,
     position: 'absolute',
     top: 0,
     width: '100%',

@@ -9,6 +9,7 @@ import {
 } from 'react-native-tab-view';
 
 import { useTheme } from '@hooks/persisted';
+import Glass from '@components/Glass/Glass';
 
 const renderNullIndicator = () => null;
 
@@ -45,6 +46,15 @@ const TopTabBar = <T extends Route>({
     [theme.surface],
   );
 
+  const iosTransparentBarStyle = useMemo(
+    () => ({
+      backgroundColor: 'transparent',
+      elevation: 0,
+      shadowOpacity: 0,
+    }),
+    [],
+  );
+
   const renderIosTabBarItem = useCallback(
     ({
       key,
@@ -68,7 +78,7 @@ const TopTabBar = <T extends Route>({
     [iosSelectedTabStyle],
   );
 
-  return (
+  const tabBar = (
     <TabBar
       {...props}
       gap={isIos ? 0 : gap}
@@ -81,11 +91,26 @@ const TopTabBar = <T extends Route>({
       indicatorStyle={
         isIos ? indicatorStyle : [styles.primaryIndicator, indicatorStyle]
       }
-      style={isIos ? [style, iosBarStyle] : style}
+      style={isIos ? iosTransparentBarStyle : style}
       activeColor={isIos ? theme.onSurface : activeColor}
       inactiveColor={isIos ? theme.onSurfaceVariant : inactiveColor}
     />
   );
+
+  if (isIos) {
+    return (
+      <Glass
+        glassEffectStyle="regular"
+        fallbackBackgroundColor={theme.surfaceVariant}
+        isDark={theme.isDark}
+        style={[style, iosBarStyle]}
+      >
+        {tabBar}
+      </Glass>
+    );
+  }
+
+  return tabBar;
 };
 
 const styles = StyleSheet.create({

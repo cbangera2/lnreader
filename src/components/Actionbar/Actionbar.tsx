@@ -1,7 +1,9 @@
 import { useTheme } from '@hooks/persisted';
+import Glass from '@components/Glass/Glass';
 import React from 'react';
 import {
   Dimensions,
+  Platform,
   Pressable,
   StyleProp,
   StyleSheet,
@@ -32,6 +34,8 @@ export const Actionbar: React.FC<ActionbarProps> = ({
 
   const { bottom } = useSafeAreaInsets();
 
+  const isIos = Platform.OS === 'ios';
+
   if (!active) {
     return null;
   }
@@ -42,13 +46,22 @@ export const Actionbar: React.FC<ActionbarProps> = ({
       style={[
         styles.actionbarContainer,
         {
-          backgroundColor: theme.surface2,
+          backgroundColor: isIos ? 'transparent' : theme.surface2,
           minHeight: 80 + bottom,
           paddingBottom: bottom,
         },
         viewStyle,
       ]}
     >
+      {isIos ? (
+        <Glass
+          glassEffectStyle="regular"
+          fallbackBackgroundColor={theme.surface2}
+          isDark={theme.isDark}
+          style={StyleSheet.absoluteFill}
+          pointerEvents="none"
+        />
+      ) : null}
       {actions.map(({ icon, onPress }, id) => (
         <Pressable
           key={id}

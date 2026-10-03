@@ -66,9 +66,14 @@ describe('Menu', () => {
     expect(
       screen.getByTestId('menu', { includeHiddenElements: true }),
     ).toHaveStyle({
-      backgroundColor: '#f7f2fa',
+      backgroundColor: 'transparent',
       borderRadius: 12,
       minWidth: 112,
+    });
+    expect(
+      screen.getByTestId('menu-glass', { includeHiddenElements: true }),
+    ).toHaveStyle({
+      backgroundColor: '#f7f2fa',
     });
     expect(screen.getByRole('menuitem', { name: 'Open' })).toHaveStyle({
       minHeight: 44,

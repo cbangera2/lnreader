@@ -1,8 +1,9 @@
-import { View, StyleSheet, useWindowDimensions } from 'react-native';
+import { Platform, View, StyleSheet, useWindowDimensions } from 'react-native';
 import { useCallback, useRef, useState } from 'react';
 import { BottomSheetModalMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
 import { useNavigation } from '@react-navigation/native';
 import { FAB } from 'react-native-paper';
+import Color from 'color';
 import MaterialCommunityIcons from '@react-native-vector-icons/material-design-icons';
 import {
   TabView,
@@ -136,6 +137,14 @@ const SettingsReaderScreen = () => {
             backgroundColor: theme.primary,
             bottom,
             right,
+            ...Platform.select({
+              ios: {
+                backgroundColor: Color(theme.primary).alpha(0.72).string(),
+                borderColor: Color(theme.onPrimary).alpha(0.4).string(),
+                borderWidth: StyleSheet.hairlineWidth,
+              },
+              default: undefined,
+            }),
           },
         ]}
         icon="cog"

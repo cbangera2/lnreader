@@ -11,6 +11,7 @@ import {
 import MaterialIcon from '@react-native-vector-icons/material-design-icons';
 
 import { List as PaperList, Divider as PaperDivider } from 'react-native-paper';
+import Glass from '@components/Glass/Glass';
 import { useTheme } from '@hooks/persisted';
 import { ThemeColors } from '../../theme/types';
 import { ColorInstance } from 'color';
@@ -37,15 +38,27 @@ const Section = ({
   const hookTheme = useTheme();
   const theme = themeProp ?? hookTheme;
   const backgroundColor = theme?.surfaceContainerLow ?? theme?.surface;
+  if (Platform.OS === 'ios') {
+    return (
+      <Glass
+        glassEffectStyle="regular"
+        fallbackBackgroundColor={backgroundColor}
+        isDark={theme?.isDark ?? false}
+        style={[
+          styles.listSection,
+          styles.sectionIOS,
+          { backgroundColor },
+          style,
+        ]}
+      >
+        <PaperList.Section style={styles.listSection}>
+          {children}
+        </PaperList.Section>
+      </Glass>
+    );
+  }
   return (
-    <PaperList.Section
-      style={[
-        styles.listSection,
-        Platform.select({ ios: styles.sectionIOS, default: undefined }),
-        Platform.OS === 'ios' ? { backgroundColor } : undefined,
-        style,
-      ]}
-    >
+    <PaperList.Section style={[styles.listSection, style]}>
       {children}
     </PaperList.Section>
   );

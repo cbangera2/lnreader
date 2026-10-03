@@ -17,6 +17,7 @@ import Color from 'color';
 
 import { useTheme } from '@hooks/persisted';
 
+import Glass from '@components/Glass/Glass';
 import Button from '../Button/Button';
 
 interface DialogRootProps extends PropsWithChildren {
@@ -81,7 +82,12 @@ const DialogRoot = ({
               style={styles.viewport}
               testID={`${testID}-viewport`}
             >
-              <View
+              <Glass
+                glassEffectStyle="regular"
+                fallbackBackgroundColor={
+                  theme.surfaceContainerHigh ?? theme.surface
+                }
+                isDark={theme.isDark}
                 accessibilityViewIsModal
                 style={[
                   styles.surface,
@@ -94,7 +100,7 @@ const DialogRoot = ({
                 testID={testID}
               >
                 {children}
-              </View>
+              </Glass>
             </View>
           </KeyboardAvoidingView>
         </SafeAreaView>
