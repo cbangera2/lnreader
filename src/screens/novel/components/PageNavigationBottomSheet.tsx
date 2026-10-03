@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Pressable, Text } from 'react-native';
+import { Platform, StyleSheet, View, Pressable, Text } from 'react-native';
 import {
   BottomSheetView,
   useBottomSheetScrollableCreator,
@@ -50,7 +50,10 @@ export default function PageNavigationBottomSheet({
               ? color(theme.primary).alpha(0.2).string()
               : theme.rippleColor,
           }}
-          style={styles.pageItem}
+          style={({ pressed }) => [
+            styles.pageItem,
+            Platform.OS === 'ios' && pressed && styles.pressed,
+          ]}
           onPress={() => {
             openPage(index);
             bottomSheetRef.current?.close();
@@ -95,6 +98,9 @@ export default function PageNavigationBottomSheet({
 }
 
 const styles = StyleSheet.create({
+  pressed: {
+    opacity: 0.6,
+  },
   contentContainer: {
     flex: 1,
     maxHeight: 400,

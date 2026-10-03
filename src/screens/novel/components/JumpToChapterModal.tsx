@@ -171,7 +171,10 @@ const JumpToChapterModal = ({
         android_ripple={{ color: theme.rippleColor }}
         disabled={searching}
         onPress={() => void executeFunction(item)}
-        style={styles.listElementContainer}
+        style={({ pressed }) => [
+          styles.listElementContainer,
+          Platform.OS === 'ios' && pressed && styles.pressed,
+        ]}
       >
         <Text numberOfLines={1} style={{ color: theme.onSurface }}>
           {item.name}
@@ -404,6 +407,9 @@ const styles = StyleSheet.create({
   listElementContainer: {
     paddingHorizontal: 16,
     paddingVertical: 12,
+  },
+  pressed: {
+    opacity: 0.6,
   },
   resultDivider: {
     height: 1,

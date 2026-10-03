@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import { ThemeColors } from '../../../../theme/types';
 import Switch from '@components/Switch/Switch';
 
@@ -20,7 +20,10 @@ const ReaderSheetPreferenceItem: React.FC<ReaderSheetPreferenceItemProps> = ({
 }) => {
   return (
     <Pressable
-      style={styles.container}
+      style={({ pressed }) => [
+        styles.container,
+        Platform.OS === 'ios' && pressed && styles.pressed,
+      ]}
       android_ripple={{ color: theme.rippleColor }}
       onPress={onPress}
     >
@@ -48,6 +51,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 12,
+  },
+  pressed: {
+    opacity: 0.6,
   },
   label: {
     fontSize: 16,
