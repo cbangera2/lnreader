@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Platform,
   View,
   Text,
   StyleSheet,
@@ -33,7 +34,16 @@ export function SegmentedControl<T extends string = string>({
   showLabels = true,
 }: SegmentedControlProps<T>) {
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        Platform.OS === 'ios' && {
+          backgroundColor: theme.surfaceVariant,
+          borderRadius: 10,
+          padding: 2,
+        },
+      ]}
+    >
       {options.map((option, index) => {
         const isSelected = value === option.value;
         const isFirst = index === 0;
@@ -41,20 +51,35 @@ export function SegmentedControl<T extends string = string>({
 
         const buttonStyles = [
           styles.segment,
-          isFirst && styles.segmentFirst,
-          isLast && styles.segmentLast,
-          !isFirst && !isLast && styles.segmentMiddle,
-          {
-            backgroundColor: isSelected
-              ? theme.secondaryContainer
-              : 'transparent',
-            borderColor: theme.outline,
-          },
+          Platform.OS === 'ios'
+            ? [
+                styles.segmentIOS,
+                isSelected && {
+                  backgroundColor: theme.surface,
+                  borderRadius: 8,
+                },
+              ]
+            : [
+                isFirst && styles.segmentFirst,
+                isLast && styles.segmentLast,
+                !isFirst && !isLast && styles.segmentMiddle,
+                {
+                  backgroundColor: isSelected
+                    ? theme.secondaryContainer
+                    : 'transparent',
+                  borderColor: theme.outline,
+                },
+              ],
         ];
 
-        const textColor = isSelected
-          ? theme.onSecondaryContainer
-          : theme.onSurface;
+        const textColor =
+          Platform.OS === 'ios'
+            ? isSelected
+              ? theme.onSurface
+              : theme.onSurfaceVariant
+            : isSelected
+            ? theme.onSecondaryContainer
+            : theme.onSurface;
 
         return (
           <View key={option.value} style={buttonStyles}>
@@ -62,7 +87,10 @@ export function SegmentedControl<T extends string = string>({
               accessibilityLabel={option.label}
               accessibilityRole="radio"
               accessibilityState={{ checked: isSelected }}
-              style={styles.segmentPressable}
+              style={({ pressed }) => [
+                styles.segmentPressable,
+                Platform.OS === 'ios' && pressed && styles.pressed,
+              ]}
               onPress={e => onChange(option.value, e)}
               android_ripple={{
                 color: theme.rippleColor,
@@ -108,6 +136,14 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderBottomWidth: 1,
     overflow: 'hidden',
+  },
+  segmentIOS: {
+    borderTopWidth: 0,
+    borderBottomWidth: 0,
+    overflow: 'hidden',
+  },
+  pressed: {
+    opacity: 0.6,
   },
   segmentFirst: {
     borderLeftWidth: 1,
