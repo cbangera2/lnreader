@@ -74,7 +74,10 @@ const RepositoryCard: FC<RepositoryCardProps> = ({
           accessibilityLabel={repositoryName}
           accessibilityRole="button"
           android_ripple={{ color: theme.rippleColor }}
-          style={styles.nameCtn}
+          style={({ pressed }) => [
+            styles.nameCtn,
+            Platform.OS === 'ios' && pressed && styles.pressed,
+          ]}
           onPress={showRepositoryModal}
         >
           <MaterialCommunityIcons
@@ -201,6 +204,9 @@ const styles = StyleSheet.create({
     gap: 12,
     minHeight: 48,
     minWidth: 0,
+  },
+  pressed: {
+    opacity: 0.6,
   },
   switchCtn: {
     justifyContent: 'center',

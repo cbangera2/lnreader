@@ -1,5 +1,12 @@
 import React, { useCallback } from 'react';
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import {
+  Image,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import { IconButton } from 'react-native-paper';
 
 import { useTheme } from '@hooks/persisted';
@@ -20,7 +27,10 @@ export const AddTrackingCard: React.FC<AddTrackingCardProps> = ({
       <Image source={icon} style={styles.trackerIcon} />
       <View style={styles.addCardPressableContainer}>
         <Pressable
-          style={styles.rippleContainer}
+          style={({ pressed }) => [
+            styles.rippleContainer,
+            Platform.OS === 'ios' && pressed && styles.pressed,
+          ]}
           android_ripple={{
             color: theme.rippleColor,
             borderless: true,
@@ -102,7 +112,11 @@ export const TrackedItemCard: React.FC<TrackedItemCardProps> = ({
       </View>
       <View style={styles.trackedItemRow}>
         <Pressable
-          style={[{ borderRightColor: borderColor }, styles.listItemLeft]}
+          style={({ pressed }) => [
+            { borderRightColor: borderColor },
+            styles.listItemLeft,
+            Platform.OS === 'ios' && pressed && styles.pressed,
+          ]}
           android_ripple={{ color: theme.rippleColor }}
           onPress={onSetStatus}
         >
@@ -111,7 +125,10 @@ export const TrackedItemCard: React.FC<TrackedItemCardProps> = ({
           </Text>
         </Pressable>
         <Pressable
-          style={styles.flex1}
+          style={({ pressed }) => [
+            styles.flex1,
+            Platform.OS === 'ios' && pressed && styles.pressed,
+          ]}
           android_ripple={{ color: theme.rippleColor }}
           onPress={onSetChapters}
         >
@@ -120,7 +137,11 @@ export const TrackedItemCard: React.FC<TrackedItemCardProps> = ({
           </Text>
         </Pressable>
         <Pressable
-          style={[{ borderLeftColor: borderColor }, styles.listItemRight]}
+          style={({ pressed }) => [
+            { borderLeftColor: borderColor },
+            styles.listItemRight,
+            Platform.OS === 'ios' && pressed && styles.pressed,
+          ]}
           android_ripple={{ color: theme.rippleColor }}
           onPress={onSetScore}
         >
@@ -134,6 +155,9 @@ export const TrackedItemCard: React.FC<TrackedItemCardProps> = ({
 };
 
 const styles = StyleSheet.create({
+  pressed: {
+    opacity: 0.6,
+  },
   addCardContainer: {
     alignItems: 'center',
     flexDirection: 'row',
