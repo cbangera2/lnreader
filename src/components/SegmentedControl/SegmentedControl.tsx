@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import MaterialCommunityIcons from '@react-native-vector-icons/material-design-icons';
 import { ThemeColors } from '@theme/types';
+import { iosSelection } from '@utils/haptics';
 
 export interface SegmentedControlOption<T extends string = string> {
   value: T;
@@ -91,7 +92,10 @@ export function SegmentedControl<T extends string = string>({
                 styles.segmentPressable,
                 Platform.OS === 'ios' && pressed && styles.pressed,
               ]}
-              onPress={e => onChange(option.value, e)}
+              onPress={e => {
+                iosSelection();
+                onChange(option.value, e);
+              }}
               android_ripple={{
                 color: theme.rippleColor,
                 borderless: false,
