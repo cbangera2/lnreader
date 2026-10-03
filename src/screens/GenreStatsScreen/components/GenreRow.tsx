@@ -1,5 +1,12 @@
 import React from 'react';
-import { Pressable, StyleSheet, Text, View, ViewStyle } from 'react-native';
+import {
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  ViewStyle,
+} from 'react-native';
 import type { ThemeColors } from '@theme/types';
 
 interface GenreRowProps {
@@ -64,6 +71,9 @@ const GenreRow: React.FC<GenreRowProps> = ({
         onPress={onPress}
         accessibilityRole="button"
         accessibilityLabel={`${name}, ${count}`}
+        style={({ pressed }) => [
+          Platform.OS === 'ios' && pressed && styles.pressed,
+        ]}
       >
         {row}
       </Pressable>
@@ -74,6 +84,9 @@ const GenreRow: React.FC<GenreRowProps> = ({
 };
 
 const styles = StyleSheet.create({
+  pressed: {
+    opacity: 0.7,
+  },
   row: {
     flexDirection: 'row',
     alignItems: 'center',

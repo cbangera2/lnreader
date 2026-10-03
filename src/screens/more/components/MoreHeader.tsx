@@ -23,7 +23,6 @@ export const MoreHeader = ({
     <Appbar
       title={title}
       handleGoBack={goBack ? navigation.goBack : undefined}
-      mode="small"
       theme={theme}
     />
     <View style={styles.overflow}>

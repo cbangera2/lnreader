@@ -1,7 +1,9 @@
 import React, { RefObject } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { Platform, View, Text, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Color from 'color';
 
+import Glass from '@components/Glass/Glass';
 import { IconButtonV2 } from '@components';
 import { ThemeColors } from '@theme/types';
 import WebView from 'react-native-webview';
@@ -29,6 +31,77 @@ const Appbar: React.FC<AppbarProps> = ({
 }) => {
   const { top } = useSafeAreaInsets();
 
+  const content = (
+    <>
+      <IconButtonV2
+        name="close"
+        color={theme.onSurface}
+        onPress={goBack}
+        padding={12}
+        theme={theme}
+      />
+      <View style={styles.titleContainer}>
+        <Text
+          numberOfLines={1}
+          style={[styles.title, { color: theme.onSurface }]}
+        >
+          {title}
+        </Text>
+        <Text
+          numberOfLines={1}
+          style={[styles.url, { color: theme.onSurfaceVariant }]}
+        >
+          {currentUrl}
+        </Text>
+      </View>
+      <View style={styles.iconContainer}>
+        <IconButtonV2
+          name="arrow-left"
+          color={theme.onSurface}
+          disabled={!canGoBack}
+          onPress={() => webView.current?.goBack()}
+          padding={12}
+          theme={theme}
+        />
+        <IconButtonV2
+          name="arrow-right"
+          color={theme.onSurface}
+          disabled={!canGoForward}
+          onPress={() => webView.current?.goForward()}
+          padding={12}
+          theme={theme}
+        />
+        <IconButtonV2
+          name="dots-vertical"
+          color={theme.onSurface}
+          onPress={() => setMenuVisible(true)}
+          padding={12}
+          theme={theme}
+        />
+      </View>
+    </>
+  );
+
+  if (Platform.OS === 'ios') {
+    const fallbackBackgroundColor = Color(theme.surface).alpha(0.85).string();
+    return (
+      <Glass
+        glassEffectStyle="regular"
+        fallbackBackgroundColor={fallbackBackgroundColor}
+        isDark={theme.isDark}
+        style={[
+          styles.container,
+          {
+            paddingTop: top,
+            backgroundColor: fallbackBackgroundColor,
+          },
+        ]}
+      >
+        <View style={styles.appbar}>{content}</View>
+      </Glass>
+    );
+  }
+
   return (
     <View
       style={[
@@ -36,54 +109,7 @@ const Appbar: React.FC<AppbarProps> = ({
         { paddingTop: top, backgroundColor: theme.surface },
       ]}
     >
-      <View style={styles.appbar}>
-        <IconButtonV2
-          name="close"
-          color={theme.onSurface}
-          onPress={goBack}
-          padding={12}
-          theme={theme}
-        />
-        <View style={styles.titleContainer}>
-          <Text
-            numberOfLines={1}
-            style={[styles.title, { color: theme.onSurface }]}
-          >
-            {title}
-          </Text>
-          <Text
-            numberOfLines={1}
-            style={[styles.url, { color: theme.onSurfaceVariant }]}
-          >
-            {currentUrl}
-          </Text>
-        </View>
-        <View style={styles.iconContainer}>
-          <IconButtonV2
-            name="arrow-left"
-            color={theme.onSurface}
-            disabled={!canGoBack}
-            onPress={() => webView.current?.goBack()}
-            padding={12}
-            theme={theme}
-          />
-          <IconButtonV2
-            name="arrow-right"
-            color={theme.onSurface}
-            disabled={!canGoForward}
-            onPress={() => webView.current?.goForward()}
-            padding={12}
-            theme={theme}
-          />
-          <IconButtonV2
-            name="dots-vertical"
-            color={theme.onSurface}
-            onPress={() => setMenuVisible(true)}
-            padding={12}
-            theme={theme}
-          />
-        </View>
-      </View>
+      <View style={styles.appbar}>{content}</View>
     </View>
   );
 };

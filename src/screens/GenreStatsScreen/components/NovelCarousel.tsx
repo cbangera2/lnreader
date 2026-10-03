@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import MaterialCommunityIcons from '@react-native-vector-icons/material-design-icons';
 import { getString } from '@i18n/translations';
 import NovelCard from './NovelCard';
@@ -68,7 +68,10 @@ const NovelCarousel: React.FC<NovelCarouselProps> = ({
                 onPress={() => setShowAll(true)}
                 accessibilityRole="button"
                 accessibilityLabel={getString('genreStats.seeAllNovels')}
-                style={styles.seeAllCard}
+                style={({ pressed }) => [
+                  styles.seeAllCard,
+                  Platform.OS === 'ios' && pressed && styles.pressed,
+                ]}
               >
                 <Text style={[styles.seeAllText, { color: theme.primary }]}>
                   {getString('genreStats.seeAllNovels')}
@@ -99,6 +102,9 @@ const NovelCarousel: React.FC<NovelCarouselProps> = ({
 const styles = StyleSheet.create({
   container: {
     marginTop: 12,
+  },
+  pressed: {
+    opacity: 0.7,
   },
   heading: {
     fontSize: 14,

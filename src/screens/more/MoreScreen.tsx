@@ -1,5 +1,12 @@
 import { useEffect } from 'react';
-import { StyleSheet, View, Pressable, Text, ScrollView } from 'react-native';
+import {
+  Platform,
+  StyleSheet,
+  View,
+  Pressable,
+  Text,
+  ScrollView,
+} from 'react-native';
 import { getString } from '@i18n/translations';
 
 import { List, SafeAreaView } from '@components';
@@ -51,16 +58,28 @@ const MoreScreen = ({ navigation }: MoreStackScreenProps) => {
   return (
     <SafeAreaView excludeTop excludeBottom>
       <ScrollView>
-        <MoreHeader
-          // status bar is translucent, text could be mess with it
-          title={''}
-          navigation={navigation}
-          theme={theme}
-        />
+        {Platform.OS === 'ios' ? (
+          <Text
+            style={[styles.iosLargeTitle, { color: theme.onSurface }]}
+            numberOfLines={1}
+          >
+            {getString('more')}
+          </Text>
+        ) : (
+          <MoreHeader
+            // status bar is translucent, text could be mess with it
+            title={''}
+            navigation={navigation}
+            theme={theme}
+          />
+        )}
         <List.Section>
           <Pressable
             android_ripple={{ color: theme.rippleColor }}
-            style={styles.pressable}
+            style={({ pressed }) => [
+              styles.pressable,
+              Platform.OS === 'ios' && pressed && styles.pressed,
+            ]}
             onPress={enableDownloadedOnlyMode}
           >
             <View style={styles.row}>
@@ -93,7 +112,10 @@ const MoreScreen = ({ navigation }: MoreStackScreenProps) => {
           </Pressable>
           <Pressable
             android_ripple={{ color: theme.rippleColor }}
-            style={styles.pressable}
+            style={({ pressed }) => [
+              styles.pressable,
+              Platform.OS === 'ios' && pressed && styles.pressed,
+            ]}
             onPress={enableIncognitoMode}
           >
             <View style={styles.row}>
@@ -204,12 +226,27 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 20,
   },
+  iosLargeTitle: {
+    fontSize: 34,
+    fontWeight: '700',
+    letterSpacing: 0.4,
+    marginBottom: 4,
+    marginHorizontal: 16,
+    marginTop: 8,
+  },
   pressable: {
     paddingHorizontal: 16,
     paddingVertical: 14,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    ...Platform.select({
+      ios: { minHeight: 44 },
+      default: {},
+    }),
+  },
+  pressed: {
+    opacity: 0.7,
   },
   row: { flexDirection: 'row' },
   fontSize16: { fontSize: 16 },

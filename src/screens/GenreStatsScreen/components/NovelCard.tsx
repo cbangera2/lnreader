@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable, StyleSheet, Text } from 'react-native';
+import { Platform, Pressable, StyleSheet, Text } from 'react-native';
 import NovelCoverImage from '@components/NovelCoverImage';
 import type { ThemeColors } from '@theme/types';
 
@@ -16,7 +16,10 @@ const NovelCard: React.FC<NovelCardProps> = React.memo(
         onPress={onPress}
         accessibilityLabel={`${novel.name}, novel`}
         accessibilityRole="button"
-        style={styles.card}
+        style={({ pressed }) => [
+          styles.card,
+          Platform.OS === 'ios' && pressed && styles.pressed,
+        ]}
       >
         <NovelCoverImage
           uri={novel.cover}
@@ -45,7 +48,13 @@ const styles = StyleSheet.create({
   cover: {
     width: 80,
     aspectRatio: 2 / 3,
-    borderRadius: 4,
+    ...Platform.select({
+      ios: { borderCurve: 'continuous', borderRadius: 12 },
+      default: { borderRadius: 4 },
+    }),
+  },
+  pressed: {
+    opacity: 0.7,
   },
   title: {
     fontSize: 12,
