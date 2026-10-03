@@ -1,5 +1,12 @@
 import React, { memo, useCallback, useMemo, useState } from 'react';
-import { FlatList, StyleSheet, Text, View, Pressable } from 'react-native';
+import {
+  Platform,
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+  Pressable,
+} from 'react-native';
 import { ImageBackground, type ImageSource } from 'expo-image';
 import color from 'color';
 import { IconButton, Portal } from 'react-native-paper';
@@ -208,7 +215,10 @@ const FollowButton = ({
         borderless: false,
       }}
       onPress={onPress}
-      style={styles.followButtonPressable}
+      style={({ pressed }) => [
+        styles.followButtonPressable,
+        Platform.OS === 'ios' && pressed && styles.pressed,
+      ]}
     >
       <IconButton
         icon={followed ? 'heart' : 'heart-outline'}
@@ -246,7 +256,10 @@ const TrackerButton = ({
         borderless: false,
       }}
       onPress={onPress}
-      style={styles.followButtonPressable}
+      style={({ pressed }) => [
+        styles.followButtonPressable,
+        Platform.OS === 'ios' && pressed && styles.pressed,
+      ]}
     >
       <IconButton
         icon={isTracked ? 'check' : 'sync'}
@@ -306,6 +319,9 @@ export {
 };
 
 const styles = StyleSheet.create({
+  pressed: {
+    opacity: 0.6,
+  },
   flex1: {
     flex: 1,
   },

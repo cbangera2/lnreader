@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import {
   FlatList,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -109,9 +110,10 @@ const EditInfoModalContent = ({
                   key={'novelInfo' + index}
                 >
                   <Pressable
-                    style={[
+                    style={({ pressed }) => [
                       styles.statusChipPressable,
                       getStatusChipPressable(novelInfo.status === item, theme),
+                      Platform.OS === 'ios' && pressed && styles.pressed,
                     ]}
                     android_ripple={{
                       color: theme.rippleColor,
@@ -296,6 +298,9 @@ const GenreChip = ({
 );
 
 const styles = StyleSheet.create({
+  pressed: {
+    opacity: 0.6,
+  },
   errorText: {
     color: '#FF0033',
     paddingTop: 8,

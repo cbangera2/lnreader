@@ -188,6 +188,9 @@ const SettingsTaxonomyScreen = ({ navigation }: GenreTaxonomyScreenProps) => {
                   openDialog({ type: 'editParent', parentName: node.parent })
                 }
                 android_ripple={{ color: theme.rippleColor }}
+                style={({ pressed }) => [
+                  Platform.OS === 'ios' && pressed && styles.pressed,
+                ]}
               >
                 <View
                   style={[
@@ -430,6 +433,9 @@ const SettingsTaxonomyScreen = ({ navigation }: GenreTaxonomyScreenProps) => {
 export default SettingsTaxonomyScreen;
 
 const styles = StyleSheet.create({
+  pressed: {
+    opacity: 0.6,
+  },
   flex: {
     flex: 1,
   },

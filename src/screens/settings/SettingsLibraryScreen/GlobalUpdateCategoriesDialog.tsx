@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import {
   FlatList,
   ListRenderItemInfo,
+  Platform,
   Pressable,
   StyleSheet,
   Text,
@@ -73,7 +74,10 @@ const GlobalUpdateCategoriesDialog = ({
           }}
           android_ripple={{ color: theme.rippleColor }}
           onPress={toggleCategory}
-          style={styles.category}
+          style={({ pressed }) => [
+            styles.category,
+            Platform.OS === 'ios' && pressed && styles.pressed,
+          ]}
         >
           <MaterialCommunityIcons
             color={
@@ -131,6 +135,9 @@ const GlobalUpdateCategoriesDialog = ({
 export default GlobalUpdateCategoriesDialog;
 
 const styles = StyleSheet.create({
+  pressed: {
+    opacity: 0.6,
+  },
   category: {
     alignItems: 'center',
     flexDirection: 'row',
