@@ -1,4 +1,10 @@
-import { Pressable, StyleProp, StyleSheet, ViewStyle } from 'react-native';
+import {
+  Platform,
+  Pressable,
+  StyleProp,
+  StyleSheet,
+  ViewStyle,
+} from 'react-native';
 import React, { useEffect } from 'react';
 import Animated, {
   interpolateColor,
@@ -10,12 +16,13 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useTheme } from '@hooks/persisted';
 
-// MD3 Switch dimensions
-const TRACK_WIDTH = 52;
-const TRACK_HEIGHT = 32;
+// MD3 Switch dimensions (Android); iOS uses iOS switch metrics
+const IS_IOS = Platform.OS === 'ios';
+const TRACK_WIDTH = IS_IOS ? 51 : 52;
+const TRACK_HEIGHT = IS_IOS ? 31 : 32;
 const TRACK_RADIUS = TRACK_HEIGHT / 2;
-const THUMB_SIZE_OFF = 16;
-const THUMB_SIZE_ON = 24;
+const THUMB_SIZE_OFF = IS_IOS ? 26 : 16;
+const THUMB_SIZE_ON = IS_IOS ? 26 : 24;
 const TRACK_BORDER_WIDTH = 2;
 
 // Thumb positions: centered vertically, padded from edges

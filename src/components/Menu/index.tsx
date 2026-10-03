@@ -9,6 +9,7 @@ import React, {
 import {
   LayoutRectangle,
   Modal as NativeModal,
+  Platform,
   Pressable,
   StyleProp,
   StyleSheet,
@@ -105,7 +106,8 @@ const Menu: React.FC<MenuProps> & { Item: React.FC<MenuItemProps> } = ({
     return {
       left: leftPos,
       top: topPos,
-      shadowColor: theme.isDark ? '#000' : theme.shadow,
+      shadowColor:
+        Platform.OS === 'ios' ? '#000' : theme.isDark ? '#000' : theme.shadow,
       [fullWidth ? 'width' : 'maxWidth']: maxWidth,
     };
   }, [
@@ -215,15 +217,28 @@ const styles = StyleSheet.create({
   },
   menuContainer: {
     borderCurve: 'continuous',
-    borderRadius: 4,
-    elevation: 2,
+    ...Platform.select({
+      ios: {
+        borderRadius: 12,
+        shadowOffset: {
+          width: 0,
+          height: 4,
+        },
+        shadowOpacity: 0.15,
+        shadowRadius: 12,
+      },
+      default: {
+        borderRadius: 4,
+        elevation: 2,
+        shadowOffset: {
+          width: 0,
+          height: 1,
+        },
+        shadowOpacity: 0.2,
+        shadowRadius: 3,
+      },
+    }),
     minWidth: 112,
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
     overflow: 'hidden',
     position: 'absolute',
     zIndex: 1,
@@ -234,7 +249,10 @@ const styles = StyleSheet.create({
   menuItem: {
     paddingHorizontal: 12,
     paddingVertical: 8,
-    minHeight: 48,
+    ...Platform.select({
+      ios: { minHeight: 44 },
+      default: { minHeight: 48 },
+    }),
     justifyContent: 'center',
   },
   menuItemText: {

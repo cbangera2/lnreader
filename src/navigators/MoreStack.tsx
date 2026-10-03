@@ -1,3 +1,5 @@
+import { Platform } from 'react-native';
+
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 // Screens
@@ -34,6 +36,9 @@ const SettingsStack = () => {
         animation: 'none',
         contentStyle: { backgroundColor: theme.background },
         headerShown: false,
+        ...(Platform.OS === 'ios'
+          ? { animation: 'slide_from_right' as const, gestureEnabled: true }
+          : {}),
       }}
     >
       <Stack.Screen name="Settings" component={Settings} />
@@ -48,7 +53,7 @@ const SettingsStack = () => {
         component={RespositorySettings}
       />
       <Stack.Screen name="LibrarySettings" component={LibrarySettings} />
-<Stack.Screen name="CustomCode" component={SettingsCustomCode} />
+      <Stack.Screen name="CustomCode" component={SettingsCustomCode} />
       <Stack.Screen name="CodeSnippets" component={CodeSnippetsScreen} />
       <Stack.Screen name="GenreTaxonomy" component={GenreTaxonomyScreen} />
     </Stack.Navigator>
@@ -64,6 +69,9 @@ const MoreStack = () => {
         animation: 'none',
         contentStyle: { backgroundColor: theme.background },
         headerShown: false,
+        ...(Platform.OS === 'ios'
+          ? { animation: 'slide_from_right' as const, gestureEnabled: true }
+          : {}),
       }}
     >
       <Stack.Screen name="SettingsStack" component={SettingsStack} />

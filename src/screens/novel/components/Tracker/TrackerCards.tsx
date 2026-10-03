@@ -47,7 +47,7 @@ export const TrackedItemCard: React.FC<TrackedItemCardProps> = ({
   icon,
 }) => {
   const theme = useTheme();
-  const borderColor = 'rgba(0, 0, 0, 0.12)';
+  const borderColor = theme.outlineVariant;
 
   const renderScore = useCallback(() => {
     if (trackItem.score === 0) {

@@ -4,7 +4,7 @@ import { useTheme } from '@hooks/persisted';
 import { getString } from '@i18n/translations';
 import { CodeSnippet } from '@utils/customCode';
 import { memo, useMemo } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Platform, Pressable, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-paper';
 
 function Snippet({
@@ -136,11 +136,21 @@ const styles = StyleSheet.create({
   card: {
     borderCurve: 'continuous',
     borderRadius: 12,
-    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
     marginBottom: 8,
     marginHorizontal: 16,
     paddingHorizontal: 8,
     paddingVertical: 8,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.12,
+        shadowRadius: 8,
+      },
+      default: {
+        boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+      },
+    }),
   },
   content: {
     minHeight: 48,

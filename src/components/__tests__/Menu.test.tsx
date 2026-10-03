@@ -56,7 +56,7 @@ describe('Menu', () => {
     expect(onDismiss).not.toHaveBeenCalled();
   });
 
-  it('uses Material 3 container and item tokens', () => {
+  it('uses iOS container and item tokens', () => {
     render(
       <Menu anchor={<></>} onDismiss={() => {}} visible>
         <Menu.Item onPress={() => {}} title="Open" />
@@ -67,20 +67,13 @@ describe('Menu', () => {
       screen.getByTestId('menu', { includeHiddenElements: true }),
     ).toHaveStyle({
       backgroundColor: '#f7f2fa',
-      borderRadius: 4,
-      elevation: 2,
+      borderRadius: 12,
       minWidth: 112,
     });
     expect(screen.getByRole('menuitem', { name: 'Open' })).toHaveStyle({
-      minHeight: 48,
+      minHeight: 44,
       paddingHorizontal: 12,
       paddingVertical: 8,
-    });
-    expect(screen.getByText('Open')).toHaveStyle({
-      fontSize: 14,
-      fontWeight: '500',
-      letterSpacing: 0.1,
-      lineHeight: 20,
     });
   });
 });

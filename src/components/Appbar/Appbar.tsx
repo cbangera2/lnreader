@@ -1,5 +1,5 @@
 import React from 'react';
-import { StatusBar } from 'react-native';
+import { Platform, StatusBar } from 'react-native';
 
 import { Appbar as PaperAppbar } from 'react-native-paper';
 import { ThemeColors } from '../../theme/types';
@@ -21,7 +21,9 @@ const Appbar: React.FC<AppbarProps> = ({
 }) => (
   <PaperAppbar.Header
     style={{ backgroundColor: theme.surface }}
-    statusBarHeight={StatusBar.currentHeight}
+    statusBarHeight={
+      Platform.OS === 'android' ? StatusBar.currentHeight : undefined
+    }
     mode={mode}
   >
     {handleGoBack && (

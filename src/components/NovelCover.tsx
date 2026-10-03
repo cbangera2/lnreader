@@ -1,5 +1,6 @@
 import React, { memo, useMemo } from 'react';
 import {
+  Platform,
   StyleSheet,
   View,
   Text,
@@ -457,10 +458,17 @@ const styles = StyleSheet.create({
   },
   standardBorderRadius: {
     borderRadius: 4,
+    ...Platform.select({
+      ios: { borderCurve: 'continuous' },
+      default: {},
+    }),
   },
   standardNovelCover: {
-    borderRadius: 6,
     overflow: 'hidden',
+    ...Platform.select({
+      ios: { borderCurve: 'continuous', borderRadius: 8 },
+      default: { borderRadius: 6 },
+    }),
   },
   title: {
     fontFamily: 'pt-sans-bold',

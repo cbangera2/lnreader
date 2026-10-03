@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Platform,
   Pressable,
   StyleSheet,
   View,
@@ -43,7 +44,10 @@ const SwitchItem: React.FC<SwitchItemProps> = ({
     <View style={styles.labelContainer}>
       <Text style={[{ color: theme.onSurface }, styles.label]}>{label}</Text>
       {description ? (
-        <Text numberOfLines={descriptionNumberOfLines} style={[styles.description, { color: theme.onSurfaceVariant }]}>
+        <Text
+          numberOfLines={descriptionNumberOfLines}
+          style={[styles.description, { color: theme.onSurfaceVariant }]}
+        >
           {description}
         </Text>
       ) : null}
@@ -66,6 +70,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 12,
+    ...Platform.select({
+      ios: { minHeight: 44 },
+      default: {},
+    }),
   },
   description: {
     fontSize: 14,

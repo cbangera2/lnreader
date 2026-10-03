@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import { Platform } from 'react-native';
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -36,6 +37,12 @@ const ReaderStack = ({ route }) => {
         screenOptions={{
           contentStyle: { backgroundColor: theme.background },
           headerShown: false,
+          ...(Platform.OS === 'ios'
+            ? {
+                animation: 'slide_from_right' as const,
+                gestureEnabled: true,
+              }
+            : {}),
         }}
       >
         <Stack.Screen name="Novel" component={Novel} />

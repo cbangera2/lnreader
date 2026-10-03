@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { NovelCoverImage } from '@components';
 import { ThemeColors } from '@theme/types';
@@ -67,14 +67,29 @@ export default DiscoverNovelCard;
 const styles = StyleSheet.create({
   container: {
     borderRadius: 8,
-    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
     flex: 1,
     margin: 8,
+    ...Platform.select({
+      ios: {
+        borderCurve: 'continuous',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.12,
+        shadowRadius: 8,
+      },
+      default: {
+        boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+      },
+    }),
   },
   cover: {
     borderBottomLeftRadius: 8,
     borderTopLeftRadius: 8,
     width: 100,
+    ...Platform.select({
+      ios: { borderCurve: 'continuous' },
+      default: {},
+    }),
   },
   infoContainer: {
     flex: 1,

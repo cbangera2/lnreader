@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
-import { Pressable, View, StyleSheet } from 'react-native';
+import { Platform, Pressable, View, StyleSheet } from 'react-native';
 import { Text } from 'react-native-paper';
 import { ThemeColors } from '@theme/types';
 import Animated from 'react-native-reanimated';
@@ -28,6 +28,7 @@ function CustomBottomTabBar({
   renderIcon,
 }: CustomBottomTabBarProps) {
   const transparentBg = Color(theme.primaryContainer).fade(1).rgb().toString();
+  const isIos = Platform.OS === 'ios';
   const getLabelText = useCallback(
     (route: any) => {
       if (!showLabelsInNav && route.name !== state.routeNames[state.index]) {
@@ -82,7 +83,9 @@ function CustomBottomTabBar({
         };
 
         const iconColor = isFocused
-          ? theme.onPrimaryContainer
+          ? isIos
+            ? theme.primary
+            : theme.onPrimaryContainer
           : theme.onSurfaceVariant;
 
         return (
@@ -111,7 +114,9 @@ function CustomBottomTabBar({
                     transitionDuration: 250,
                     transitionTimingFunction: 'ease-in-out',
                     transform: [{ scaleX: isFocused ? 1 : 0.5 }],
-                    backgroundColor: isFocused
+                    backgroundColor: isIos
+                      ? 'transparent'
+                      : isFocused
                       ? theme.primaryContainer
                       : transparentBg,
                   },
@@ -126,7 +131,11 @@ function CustomBottomTabBar({
                 style={[
                   styles.label,
                   {
-                    color: isFocused ? theme.onSurface : theme.onSurfaceVariant,
+                    color: isFocused
+                      ? isIos
+                        ? theme.primary
+                        : theme.onSurface
+                      : theme.onSurfaceVariant,
                     fontWeight: '500',
                   },
                 ]}

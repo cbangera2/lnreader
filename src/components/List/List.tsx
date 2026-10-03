@@ -1,5 +1,6 @@
 import React, { ReactNode, useCallback } from 'react';
 import {
+  Platform,
   Pressable,
   StyleProp,
   StyleSheet,
@@ -88,7 +89,10 @@ const Item: React.FC<ListItemProps> = ({
       disabled={disabled}
       onPress={onPress}
       rippleColor={theme.rippleColor}
-      style={styles.listItemCtn}
+      style={[
+        styles.listItemCtn,
+        onPress && !disabled ? styles.listItemTappable : undefined,
+      ]}
     />
   );
 };
@@ -184,6 +188,10 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: 1,
+    ...Platform.select({
+      ios: { marginLeft: 16 },
+      default: {},
+    }),
   },
   iconCtn: {
     paddingStart: 16,
@@ -198,6 +206,12 @@ const styles = StyleSheet.create({
   },
   listItemCtn: {
     paddingVertical: 12,
+  },
+  listItemTappable: {
+    ...Platform.select({
+      ios: { minHeight: 44 },
+      default: {},
+    }),
   },
   listSection: {
     flex: 1,

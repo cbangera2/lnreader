@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import MaterialCommunityIcons from '@react-native-vector-icons/material-design-icons';
 import * as Clipboard from 'expo-clipboard';
 import * as Linking from 'expo-linking';
@@ -167,11 +167,21 @@ const styles = StyleSheet.create({
   cardCtn: {
     borderCurve: 'continuous',
     borderRadius: 12,
-    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
     marginBottom: 8,
     marginHorizontal: 16,
     paddingHorizontal: 8,
     paddingVertical: 8,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.12,
+        shadowRadius: 8,
+      },
+      default: {
+        boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+      },
+    }),
   },
   headerCtn: {
     alignItems: 'center',

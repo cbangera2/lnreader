@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Platform,
   Pressable,
   StyleProp,
   StyleSheet,
@@ -59,5 +60,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: 16,
     paddingVertical: 6,
+    ...Platform.select({
+      ios: { paddingVertical: 10 },
+      default: {},
+    }),
   },
 });

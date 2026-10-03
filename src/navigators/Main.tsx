@@ -129,6 +129,9 @@ const MainNavigator = () => {
               animation: 'none',
               contentStyle: { backgroundColor: theme.background },
               headerShown: false,
+              ...(Platform.OS === 'ios'
+                ? { animation: 'slide_from_right' as const, gestureEnabled: true }
+                : {}),
             }}
           >
             <Stack.Screen name="BottomNavigator" component={BottomNavigator} />
