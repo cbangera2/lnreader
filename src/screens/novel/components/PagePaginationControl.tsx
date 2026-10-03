@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { Platform, View, Text, StyleSheet, Pressable } from 'react-native';
 import { IconButton } from 'react-native-paper';
 import color from 'color';
 import { ThemeColors } from '@theme/types';
@@ -86,7 +86,7 @@ const PagePaginationControl: React.FC<PagePaginationControlProps> = ({
   return (
     <View style={styles.container}>
       <Pressable
-        style={[
+        style={({ pressed }) => [
           styles.button,
           styles.navButton,
           {
@@ -94,6 +94,7 @@ const PagePaginationControl: React.FC<PagePaginationControlProps> = ({
             backgroundColor: theme.surface,
           },
           !canGoPrevious && styles.disabledButton,
+          Platform.OS === 'ios' && pressed && styles.pressed,
         ]}
         onPress={handlePrevious}
         disabled={!canGoPrevious}
@@ -113,13 +114,14 @@ const PagePaginationControl: React.FC<PagePaginationControlProps> = ({
             return (
               <Pressable
                 key={`ellipsis-${index}`}
-                style={[
+                style={({ pressed }) => [
                   styles.button,
                   styles.ellipsisButton,
                   {
                     borderColor: borderColor,
                     backgroundColor: theme.surface,
                   },
+                  Platform.OS === 'ios' && pressed && styles.pressed,
                 ]}
                 onPress={onOpenDrawer}
                 android_ripple={{ color: theme.rippleColor }}
@@ -193,6 +195,9 @@ const PagePaginationControl: React.FC<PagePaginationControlProps> = ({
 };
 
 const styles = StyleSheet.create({
+  pressed: {
+    opacity: 0.6,
+  },
   button: {
     alignItems: 'center',
     borderRadius: 8,

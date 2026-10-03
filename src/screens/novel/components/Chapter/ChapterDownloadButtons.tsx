@@ -101,7 +101,10 @@ export const DownloadChapterButton: React.FC<buttonPropType> = ({
 }) => (
   <View style={styles.container}>
     <Pressable
-      style={styles.pressable}
+      style={({ pressed }) => [
+        styles.pressable,
+        Platform.OS === 'ios' && pressed && styles.pressed,
+      ]}
       onPress={onPress}
       android_ripple={{ color: theme.rippleColor }}
     >
@@ -124,7 +127,10 @@ export const DeleteChapterButton: React.FC<buttonPropType> = ({
 }) => (
   <View style={styles.container}>
     <Pressable
-      style={styles.pressable}
+      style={({ pressed }) => [
+        styles.pressable,
+        Platform.OS === 'ios' && pressed && styles.pressed,
+      ]}
       onPress={onPress}
       android_ripple={{ color: theme.rippleColor }}
     >
@@ -144,6 +150,9 @@ export const ChapterBookmarkButton: React.FC<theme> = ({ theme }) => (
 );
 
 const styles = StyleSheet.create({
+  pressed: {
+    opacity: 0.6,
+  },
   activityIndicator: { margin: 3.5, padding: 5 },
   container: {
     borderRadius: 50,

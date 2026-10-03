@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useMemo } from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { Platform, View, Text, StyleSheet, Pressable } from 'react-native';
 
 import * as Clipboard from 'expo-clipboard';
 
@@ -288,7 +288,10 @@ const NovelInfoHeader = ({
         ) : (
           <View style={styles.bottomsheetContainer}>
             <Pressable
-              style={styles.bottomsheet}
+              style={({ pressed }) => [
+                styles.bottomsheet,
+                Platform.OS === 'ios' && pressed && styles.pressed,
+              ]}
               onPress={handleOpenBottomSheet}
               android_ripple={ripple}
             >
@@ -324,6 +327,9 @@ const NovelInfoHeader = ({
 export default memo(NovelInfoHeader);
 
 const styles = StyleSheet.create({
+  pressed: {
+    opacity: 0.6,
+  },
   bottomsheet: {
     alignItems: 'center',
     flexDirection: 'row',
