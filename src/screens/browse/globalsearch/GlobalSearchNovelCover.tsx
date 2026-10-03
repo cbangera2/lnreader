@@ -28,7 +28,10 @@ const GlobalSearchNovelCover = ({
     <View style={styles.container}>
       <Pressable
         android_ripple={{ color: theme.rippleColor }}
-        style={styles.pressable}
+        style={({ pressed }) => [
+          styles.pressable,
+          Platform.OS === 'ios' && pressed && styles.pressed,
+        ]}
         onPress={onPress}
         onLongPress={onLongPress}
       >
@@ -52,6 +55,9 @@ const GlobalSearchNovelCover = ({
 export default GlobalSearchNovelCover;
 
 const styles = StyleSheet.create({
+  pressed: {
+    opacity: 0.6,
+  },
   container: {
     borderRadius: 6,
     flex: 1,

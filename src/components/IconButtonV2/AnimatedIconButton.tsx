@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable, StyleSheet, View, ViewStyle } from 'react-native';
+import { Platform, Pressable, StyleSheet, View, ViewStyle } from 'react-native';
 import MaterialCommunityIcons from '@react-native-vector-icons/material-design-icons';
 import Color from 'color';
 
@@ -58,7 +58,11 @@ const AnimatedIconButton: React.FC<Props> = ({
   return (
     <View style={[styles.container, style]}>
       <Pressable
-        style={[styles.pressable, { padding }]}
+        style={({ pressed }) => [
+          styles.pressable,
+          { padding },
+          Platform.OS === 'ios' && pressed && styles.pressed,
+        ]}
         onPress={onPress}
         disabled={disabled}
         android_ripple={
@@ -80,6 +84,9 @@ const AnimatedIconButton: React.FC<Props> = ({
 export default React.memo(AnimatedIconButton);
 
 const styles = StyleSheet.create({
+  pressed: {
+    opacity: 0.6,
+  },
   container: {
     borderRadius: 50,
     overflow: 'hidden',
