@@ -30,7 +30,10 @@ const DiscoverCard: React.FC<Props> = ({
     <Pressable
       accessibilityLabel={`${getString('browse')} ${trackerName}`}
       accessibilityRole="button"
-      style={styles.container}
+      style={({ pressed }) => [
+        styles.container,
+        Platform.OS === 'ios' && pressed && styles.pressed,
+      ]}
       onPress={onPress}
       android_ripple={{ color: theme.rippleColor }}
     >
@@ -57,6 +60,9 @@ const DiscoverCard: React.FC<Props> = ({
 export default DiscoverCard;
 
 const styles = StyleSheet.create({
+  pressed: {
+    opacity: 0.6,
+  },
   container: {
     alignItems: 'center',
     flexDirection: 'row',

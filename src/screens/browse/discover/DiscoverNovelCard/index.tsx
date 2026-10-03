@@ -19,7 +19,10 @@ const DiscoverNovelCard: React.FC<Props> = ({ novel, onPress, theme }) => {
   return (
     <View style={[styles.container, { backgroundColor: theme.overlay3 }]}>
       <Pressable
-        style={styles.pressable}
+        style={({ pressed }) => [
+          styles.pressable,
+          Platform.OS === 'ios' && pressed && styles.pressed,
+        ]}
         onPress={onPress}
         android_ripple={{ color: theme.rippleColor }}
       >
@@ -65,6 +68,9 @@ const DiscoverNovelCard: React.FC<Props> = ({ novel, onPress, theme }) => {
 export default DiscoverNovelCard;
 
 const styles = StyleSheet.create({
+  pressed: {
+    opacity: 0.6,
+  },
   container: {
     borderRadius: 8,
     flex: 1,
