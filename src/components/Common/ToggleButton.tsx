@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { Platform, View, StyleSheet } from 'react-native';
 import MaterialCommunityIcons from '@react-native-vector-icons/material-design-icons';
 import { ThemeColors } from '../../theme/types';
 import Color from 'color';
@@ -41,9 +41,10 @@ export const ToggleButton: React.FC<ToggleButtonProps> = ({
   <View style={styles.toggleButtonContainer}>
     <Pressable
       android_ripple={{ color: theme.rippleColor }}
-      style={[
+      style={({ pressed }) => [
         styles.toggleButtonPressable,
         getToggleButtonPressableStyle(selected, theme, disabled),
+        Platform.OS === 'ios' && pressed && styles.pressed,
       ]}
       onPress={onPress}
       disabled={disabled}
@@ -76,11 +77,12 @@ export const ToggleColorButton: React.FC<ToggleColorButtonProps> = ({
     accessibilityRole="radio"
     accessibilityState={{ checked: selected }}
     android_ripple={{ color: theme.rippleColor, foreground: true }}
-    style={[
+    style={({ pressed }) => [
       styles.toggleColorButtonContainer,
       {
         borderColor: selected ? theme.primary : 'transparent',
       },
+      Platform.OS === 'ios' && pressed && styles.pressed,
     ]}
     onPress={onPress}
   >
@@ -102,6 +104,9 @@ export const ToggleColorButton: React.FC<ToggleColorButtonProps> = ({
 );
 
 const styles = StyleSheet.create({
+  pressed: {
+    opacity: 0.6,
+  },
   toggleButtonContainer: {
     borderRadius: 6,
     overflow: 'hidden',
