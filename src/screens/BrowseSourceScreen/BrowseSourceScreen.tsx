@@ -20,6 +20,7 @@ import SourceScreenSkeletonLoading from '@screens/browse/loadingAnimation/Source
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BrowseSourceScreenProps } from '@navigators/types';
 import { useLibraryContext } from '@components/Context/LibraryContext';
+import { iosSelection } from '@utils/haptics';
 
 const BrowseSourceScreen = ({ route, navigation }: BrowseSourceScreenProps) => {
   const theme = useTheme();
@@ -187,6 +188,7 @@ const BrowseSourceScreen = ({ route, navigation }: BrowseSourceScreenProps) => {
                   (hasNextSearchPage && Boolean(searchText))
                 }
                 onLongPress={async () => {
+                  iosSelection();
                   setInActivity(prev => ({ ...prev, [item.path]: true }));
 
                   await switchNovelToLibrary(item.path, pluginId);

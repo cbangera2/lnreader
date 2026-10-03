@@ -3,6 +3,7 @@ import NovelCover from '@components/NovelCover';
 import { History, NovelInfo } from '@database/types';
 import { ThemeColors } from '@theme/types';
 import { ImageRequestInit } from '@plugins/types';
+import { iosImpactLight } from '@utils/haptics';
 
 interface LibraryNovelItemProps {
   item: NovelInfo;
@@ -30,6 +31,7 @@ const LibraryNovelItem = memo(function LibraryNovelItem_({
   imageRequestInit,
 }: LibraryNovelItemProps) {
   const handleLongPress = useCallback(() => {
+    iosImpactLight();
     onSelect(item.id);
   }, [item.id, onSelect]);
 

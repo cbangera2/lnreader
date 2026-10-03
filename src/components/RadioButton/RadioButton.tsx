@@ -9,6 +9,7 @@ import {
   ViewStyle,
 } from 'react-native';
 import { RadioButton as PaperRadioButton } from 'react-native-paper';
+import { iosSelection } from '@utils/haptics';
 import { ThemeColors } from '../../theme/types';
 
 interface Props {
@@ -27,24 +28,31 @@ export const RadioButton: React.FC<Props> = ({
   style,
   labelStyle,
   theme,
-}) => (
-  <Pressable
-    android_ripple={{ color: theme.rippleColor }}
-    style={[styles.pressable, style]}
-    onPress={onPress}
-  >
-    <PaperRadioButton
-      status={status ? 'checked' : 'unchecked'}
-      value={label}
-      onPress={onPress}
-      color={theme.primary}
-      uncheckedColor={theme.onSurfaceVariant}
-    />
-    <Text style={[styles.label, labelStyle, { color: theme.onSurface }]}>
-      {label}
-    </Text>
-  </Pressable>
-);
+}) => {
+  const handlePress = () => {
+    iosSelection();
+    onPress?.();
+  };
+
+  return (
+    <Pressable
+      android_ripple={{ color: theme.rippleColor }}
+      style={[styles.pressable, style]}
+      onPress={handlePress}
+    >
+      <PaperRadioButton
+        status={status ? 'checked' : 'unchecked'}
+        value={label}
+        onPress={handlePress}
+        color={theme.primary}
+        uncheckedColor={theme.onSurfaceVariant}
+      />
+      <Text style={[styles.label, labelStyle, { color: theme.onSurface }]}>
+        {label}
+      </Text>
+    </Pressable>
+  );
+};
 
 const styles = StyleSheet.create({
   icon: {

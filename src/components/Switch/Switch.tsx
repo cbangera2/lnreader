@@ -15,6 +15,7 @@ import Animated, {
   useDerivedValue,
 } from 'react-native-reanimated';
 import { useTheme } from '@hooks/persisted';
+import { iosSelection } from '@utils/haptics';
 
 // MD3 Switch dimensions (Android); iOS uses iOS switch metrics
 const IS_IOS = Platform.OS === 'ios';
@@ -127,7 +128,10 @@ const Switch = ({
       accessibilityRole={accessible ? 'switch' : undefined}
       accessibilityState={accessible ? { checked: value } : undefined}
       style={containerStyle}
-      onPress={onValueChange}
+      onPress={() => {
+        iosSelection();
+        onValueChange?.();
+      }}
     >
       <Animated.View
         style={[styles.track, style, trackColorStyle, trackBorderStyle]}

@@ -10,6 +10,7 @@ import Animated, {
 import { useChapterContext } from '../ChapterContext';
 import { useTheme } from '@hooks/persisted';
 import { useNovelLayout } from '@screens/novel/NovelContext';
+import { iosSelection } from '@utils/haptics';
 
 interface ChapterFooterProps {
   openReaderSheet: () => void;
@@ -104,7 +105,10 @@ const ChapterFooter = ({
         <Pressable
           android_ripple={rippleConfig}
           style={styles.buttonStyles}
-          onPress={() => navigateChapter('PREV')}
+          onPress={() => {
+            iosSelection();
+            navigateChapter('PREV');
+          }}
         >
           <IconButton
             icon="chevron-left"
@@ -149,7 +153,10 @@ const ChapterFooter = ({
         <Pressable
           android_ripple={rippleConfig}
           style={styles.buttonStyles}
-          onPress={() => navigateChapter('NEXT')}
+          onPress={() => {
+            iosSelection();
+            navigateChapter('NEXT');
+          }}
         >
           <IconButton
             icon="chevron-right"

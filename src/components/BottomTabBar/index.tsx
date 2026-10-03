@@ -5,6 +5,7 @@ import { Text } from 'react-native-paper';
 import { ThemeColors } from '@theme/types';
 import Animated from 'react-native-reanimated';
 import Color from 'color';
+import { iosSelection } from '@utils/haptics';
 
 interface CustomBottomTabBarProps extends BottomTabBarProps {
   theme: ThemeColors;
@@ -64,6 +65,7 @@ function CustomBottomTabBar({
         const showLabel = (showLabelsInNav || isFocused) && label;
 
         const onPress = () => {
+          iosSelection();
           const event = navigation.emit({
             type: 'tabPress',
             target: route.key,

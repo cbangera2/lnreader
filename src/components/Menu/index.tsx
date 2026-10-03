@@ -1,4 +1,5 @@
 import { useTheme } from '@hooks/persisted';
+import { iosSelection } from '@utils/haptics';
 import React, {
   useCallback,
   useLayoutEffect,
@@ -197,7 +198,10 @@ const MenuItem: React.FC<MenuItemProps> = ({
     <Pressable
       accessibilityRole="menuitem"
       style={[styles.menuItem, style]}
-      onPress={onPress}
+      onPress={() => {
+        iosSelection();
+        onPress();
+      }}
       android_ripple={{ color: theme.rippleColor, foreground: true }}
     >
       <Animated.Text

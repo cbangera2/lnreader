@@ -9,6 +9,7 @@ import {
   StyleProp,
 } from 'react-native';
 import Switch from './Switch';
+import { iosSelection } from '@utils/haptics';
 import { ThemeColors } from '../../theme/types';
 
 interface SwitchItemProps {
@@ -38,7 +39,10 @@ const SwitchItem: React.FC<SwitchItemProps> = ({
     accessibilityState={{ checked: value }}
     android_ripple={{ color: theme.rippleColor }}
     style={[styles.container, style]}
-    onPress={onPress}
+    onPress={() => {
+      iosSelection();
+      onPress();
+    }}
     onLongPress={onLongPress}
   >
     <View style={styles.labelContainer}>
