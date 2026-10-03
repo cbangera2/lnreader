@@ -80,6 +80,14 @@ const ChapterItem: React.FC<ChapterItemProps> = ({
     [isSelected, theme.rippleColor],
   );
 
+  const pressableStyle = useCallback(
+    ({ pressed }: { pressed: boolean }) => [
+      selectedStyle,
+      Platform.OS === 'ios' && pressed && styles.pressed,
+    ],
+    [selectedStyle],
+  );
+
   const titleColor = useMemo(
     () =>
       !unread ? theme.outline : bookmark ? theme.primary : theme.onSurface,
@@ -114,7 +122,7 @@ const ChapterItem: React.FC<ChapterItemProps> = ({
   return (
     <View key={'chapterItem' + id}>
       <Pressable
-        style={selectedStyle}
+        style={pressableStyle}
         onPress={handlePress}
         onLongPress={handleLongPress}
         android_ripple={ripple}
@@ -217,6 +225,9 @@ const ChapterItem: React.FC<ChapterItemProps> = ({
 export default memo(ChapterItem);
 
 const styles = StyleSheet.create({
+  pressed: {
+    opacity: 0.6,
+  },
   chapterCardContainer: {
     alignItems: 'center',
     flexDirection: 'row',

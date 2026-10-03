@@ -196,7 +196,10 @@ function NovelCover<
     >
       <Pressable
         android_ripple={{ color: theme.rippleColor }}
-        style={styles.opac}
+        style={({ pressed }) => [
+          styles.opac,
+          Platform.OS === 'ios' && pressed && styles.pressed,
+        ]}
         onPress={selectionActive ? selectNovel : onPress}
         onLongPress={selectNovel}
       >
@@ -577,6 +580,9 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     flex: 1,
     padding: 4.8,
+  },
+  pressed: {
+    opacity: 0.6,
   },
   opacityPoint5: { opacity: 0.5 },
   padding4: { padding: 4 },

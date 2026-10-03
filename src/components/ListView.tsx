@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, Pressable } from 'react-native';
+import { Platform, StyleSheet, View, Text, Pressable } from 'react-native';
 
 import color from 'color';
 import { ThemeColors } from '@theme/types';
@@ -34,11 +34,12 @@ const ListView = ({
   return (
     <Pressable
       android_ripple={{ color: theme.rippleColor }}
-      style={[
+      style={({ pressed }) => [
         styles.listView,
         isSelected && {
           backgroundColor: color(theme.primary).alpha(0.12).string(),
         },
+        Platform.OS === 'ios' && pressed && styles.pressed,
       ]}
       onPress={onPress}
       onLongPress={onLongPress}
@@ -84,6 +85,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: 12,
     paddingVertical: 8,
+  },
+  pressed: {
+    opacity: 0.6,
   },
   novelName: {
     flex: 1,
