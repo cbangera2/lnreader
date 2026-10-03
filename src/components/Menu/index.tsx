@@ -214,7 +214,11 @@ const MenuItem: React.FC<MenuItemProps> = ({
   return (
     <Pressable
       accessibilityRole="menuitem"
-      style={[styles.menuItem, style]}
+      style={({ pressed }) => [
+        styles.menuItem,
+        style,
+        Platform.OS === 'ios' && pressed && styles.pressed,
+      ]}
       onPress={() => {
         iosSelection();
         onPress();
@@ -233,6 +237,9 @@ const MenuItem: React.FC<MenuItemProps> = ({
 Menu.Item = MenuItem;
 
 const styles = StyleSheet.create({
+  pressed: {
+    opacity: 0.6,
+  },
   modal: {
     flex: 1,
   },

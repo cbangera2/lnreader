@@ -70,6 +70,7 @@ export const Actionbar: React.FC<ActionbarProps> = ({
             color: theme.rippleColor,
             borderless: true,
           }}
+          style={({ pressed }) => [isIos && pressed && styles.pressed]}
           onPress={onPress}
         >
           <MaterialCommunityIcons
@@ -84,6 +85,9 @@ export const Actionbar: React.FC<ActionbarProps> = ({
 };
 
 const styles = StyleSheet.create({
+  pressed: {
+    opacity: 0.6,
+  },
   actionbarContainer: {
     alignItems: 'center',
     bottom: 0,
