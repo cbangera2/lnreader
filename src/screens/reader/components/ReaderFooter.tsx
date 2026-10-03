@@ -116,7 +116,10 @@ const ChapterFooter = ({
         <View style={styles.buttonsContainer}>
           <Pressable
             android_ripple={rippleConfig}
-            style={styles.buttonStyles}
+            style={({ pressed }) => [
+              styles.buttonStyles,
+              isIos && pressed && styles.pressed,
+            ]}
             onPress={() => {
               iosSelection();
               navigateChapter('PREV');
@@ -131,7 +134,10 @@ const ChapterFooter = ({
           </Pressable>
           <Pressable
             android_ripple={rippleConfig}
-            style={styles.buttonStyles}
+            style={({ pressed }) => [
+              styles.buttonStyles,
+              isIos && pressed && styles.pressed,
+            ]}
             onPress={() => scrollToStart()}
           >
             <IconButton
@@ -142,7 +148,10 @@ const ChapterFooter = ({
           </Pressable>
           <Pressable
             android_ripple={rippleConfig}
-            style={styles.buttonStyles}
+            style={({ pressed }) => [
+              styles.buttonStyles,
+              isIos && pressed && styles.pressed,
+            ]}
             onPress={() => openDrawer()}
           >
             <IconButton
@@ -153,7 +162,10 @@ const ChapterFooter = ({
           </Pressable>
           <Pressable
             android_ripple={rippleConfig}
-            style={styles.buttonStyles}
+            style={({ pressed }) => [
+              styles.buttonStyles,
+              isIos && pressed && styles.pressed,
+            ]}
             onPress={openReaderSheet}
           >
             <IconButton
@@ -164,7 +176,10 @@ const ChapterFooter = ({
           </Pressable>
           <Pressable
             android_ripple={rippleConfig}
-            style={styles.buttonStyles}
+            style={({ pressed }) => [
+              styles.buttonStyles,
+              isIos && pressed && styles.pressed,
+            ]}
             onPress={() => {
               iosSelection();
               navigateChapter('NEXT');
@@ -186,6 +201,9 @@ const ChapterFooter = ({
 export default React.memo(ChapterFooter);
 
 const styles = StyleSheet.create({
+  pressed: {
+    opacity: 0.6,
+  },
   buttonStyles: {
     alignItems: 'center',
     flex: 1,

@@ -1,5 +1,12 @@
 import React from 'react';
-import { View, Pressable, TextStyle, StyleProp, ViewStyle } from 'react-native';
+import {
+  Platform,
+  View,
+  Pressable,
+  TextStyle,
+  StyleProp,
+  ViewStyle,
+} from 'react-native';
 import { Text } from 'react-native-paper';
 import { ChapterInfo } from '@database/types';
 import { ThemeColors } from '@theme/types';
@@ -46,7 +53,10 @@ const RenderListChapter = ({
       <Pressable
         android_ripple={{ color: theme.rippleColor }}
         onPress={() => onPress(item)}
-        style={styles.chapterCtn}
+        style={({ pressed }) => [
+          styles.chapterCtn,
+          Platform.OS === 'ios' && pressed && { opacity: 0.6 },
+        ]}
       >
         <Text
           numberOfLines={1}
