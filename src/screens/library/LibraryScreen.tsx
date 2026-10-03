@@ -483,6 +483,14 @@ const LibraryScreen = ({ navigation }: LibraryScreenProps) => {
 
   return (
     <SafeAreaView excludeBottom>
+      {Platform.OS === 'ios' ? (
+        <Text
+          style={[styles.iosLargeTitle, { color: theme.onSurface }]}
+          numberOfLines={1}
+        >
+          {getString('library')}
+        </Text>
+      ) : null}
       <SearchbarV2
         searchText={searchText}
         clearSearchbar={clearSearchbar}
@@ -628,6 +636,14 @@ function createStyles(theme: ThemeColors) {
     },
     globalSearchBtn: {
       margin: 16,
+    },
+    iosLargeTitle: {
+      fontSize: 34,
+      fontWeight: '700',
+      letterSpacing: 0.4,
+      marginBottom: 4,
+      marginHorizontal: 16,
+      marginTop: 8,
     },
     tabBar: {
       borderBottomWidth: 1,
