@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import MaterialCommunityIcons from '@react-native-vector-icons/material-design-icons';
 import { useTheme } from '@hooks/persisted';
 import { getErrorMessage } from '@utils/error';
@@ -30,7 +30,10 @@ const ErrorScreen: React.FC<ErrorScreenProps> = ({ error, actions }) => {
               <Pressable
                 android_ripple={{ color: theme.rippleColor }}
                 onPress={action.onPress}
-                style={styles.buttonCtn}
+                style={({ pressed }) => [
+                  styles.buttonCtn,
+                  Platform.OS === 'ios' && pressed && styles.pressed,
+                ]}
               >
                 <MaterialCommunityIcons
                   name={action.iconName}
@@ -59,6 +62,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     paddingVertical: 8,
+    ...Platform.select({
+      ios: { minHeight: 44 },
+      default: {},
+    }),
+  },
+  pressed: {
+    opacity: 0.6,
   },
   buttonWrapper: {
     borderRadius: 50,
