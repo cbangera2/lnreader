@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, Pressable } from 'react-native';
+import { Platform, StyleSheet, View, Text, Pressable } from 'react-native';
 import { ThemeColors } from '@theme/types';
 import { NovelItem } from '@plugins/types';
 import { NovelCoverImage } from '@components';
@@ -61,6 +61,10 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     height: 150,
     width: 115,
+    ...Platform.select({
+      ios: { borderCurve: 'continuous' },
+      default: {},
+    }),
   },
   pressable: {
     borderRadius: 4,

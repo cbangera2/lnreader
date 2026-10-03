@@ -3,8 +3,7 @@ import { FlatList, StyleSheet } from 'react-native';
 
 import { Appbar as MaterialAppbar } from 'react-native-paper';
 
-import EmptyView from '@components/EmptyView';
-import { Appbar, List, SafeAreaView } from '@components';
+import { Appbar, EmptyView, List, SafeAreaView } from '@components';
 import {
   deleteChapter,
   deleteDownloads,
@@ -123,6 +122,7 @@ const Downloads = ({ navigation }: DownloadsScreenProps) => {
             <EmptyView
               icon="(˘･_･˘)"
               description={getString('downloadScreen.noDownloads')}
+              theme={theme}
             />
           }
         />

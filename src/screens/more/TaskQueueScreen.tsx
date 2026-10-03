@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { FlatList, View, Text, StyleSheet } from 'react-native';
+import { FlatList, Platform, StyleSheet, Text, View } from 'react-native';
 import {
   FAB,
   ProgressBar,
   Appbar as MaterialAppbar,
   overlay,
 } from 'react-native-paper';
+import Color from 'color';
 
 import { useTheme } from '@hooks/persisted';
 
@@ -88,9 +89,25 @@ const DownloadQueue = ({ navigation }: TaskQueueScreenProps) => {
           <View style={styles.padding}>
             <View style={styles.taskRow}>
               <View style={styles.taskDetails}>
-                <Text style={{ color: theme.onSurface }}>{item.meta.name}</Text>
+                <Text
+                  style={[
+                    styles.taskName,
+                    { color: theme.onSurface },
+                    Platform.select({
+                      ios: styles.taskNameIOS,
+                      default: undefined,
+                    }),
+                  ]}
+                >
+                  {item.meta.name}
+                </Text>
                 {item.meta.progressText ? (
-                  <Text style={{ color: theme.onSurfaceVariant }}>
+                  <Text
+                    style={[
+                      styles.taskProgressText,
+                      { color: theme.onSurfaceVariant },
+                    ]}
+                  >
                     {item.meta.progressText}
                   </Text>
                 ) : null}
@@ -103,6 +120,10 @@ const DownloadQueue = ({ navigation }: TaskQueueScreenProps) => {
                   style={[
                     { backgroundColor: theme.surface2 },
                     styles.marginTop,
+                    Platform.select({
+                      ios: styles.progressBarIOS,
+                      default: undefined,
+                    }),
                   ]}
                 />
               </View>
@@ -130,6 +151,14 @@ const DownloadQueue = ({ navigation }: TaskQueueScreenProps) => {
           style={[
             styles.fab,
             { backgroundColor: theme.primary, bottom, right },
+            Platform.select({
+              ios: {
+                backgroundColor: Color(theme.primary).alpha(0.72).string(),
+                borderColor: Color(theme.onPrimary).alpha(0.4).string(),
+                borderWidth: StyleSheet.hairlineWidth,
+              },
+              default: undefined,
+            }),
           ]}
           color={theme.onPrimary}
           label={
@@ -177,6 +206,27 @@ const styles = StyleSheet.create({
   marginTop: { marginTop: 8 },
   paddingBottom: { paddingBottom: 100, flexGrow: 1 },
   padding: { padding: 16 },
+  progressBarIOS: {
+    borderRadius: 2,
+    height: 4,
+    overflow: 'hidden',
+  },
   taskDetails: { flex: 1 },
-  taskRow: { alignItems: 'center', flexDirection: 'row', gap: 8 },
+  taskName: {},
+  taskNameIOS: {
+    fontSize: 17,
+  },
+  taskProgressText: {
+    fontSize: 13,
+    marginTop: 2,
+  },
+  taskRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 8,
+    ...Platform.select({
+      ios: { minHeight: 44 },
+      default: {},
+    }),
+  },
 });

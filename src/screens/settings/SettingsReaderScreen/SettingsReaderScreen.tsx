@@ -118,7 +118,6 @@ const SettingsReaderScreen = () => {
       style={[styles.container, { backgroundColor: readerBackgroundColor }]}
     >
       <Appbar
-        mode="small"
         title={getString('readerSettings.title')}
         handleGoBack={navigation.goBack}
         theme={theme}

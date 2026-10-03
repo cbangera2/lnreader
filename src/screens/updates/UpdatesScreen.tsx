@@ -1,6 +1,12 @@
 import React, { memo, useCallback, useEffect, useMemo } from 'react';
 import dayjs from 'dayjs';
-import { RefreshControl, SectionList, StyleSheet, Text } from 'react-native';
+import {
+  Platform,
+  RefreshControl,
+  SectionList,
+  StyleSheet,
+  Text,
+} from 'react-native';
 
 import {
   EmptyView,
@@ -89,6 +95,14 @@ const UpdatesScreen = ({ navigation }: UpdateScreenProps) => {
 
   return (
     <SafeAreaView excludeBottom>
+      {Platform.OS === 'ios' ? (
+        <Text
+          style={[styles.iosLargeTitle, { color: theme.onSurface }]}
+          numberOfLines={1}
+        >
+          {getString('updates')}
+        </Text>
+      ) : null}
       <SearchbarV2
         searchText={searchText}
         clearSearchbar={clearSearchbar}
@@ -104,7 +118,17 @@ const UpdatesScreen = ({ navigation }: UpdateScreenProps) => {
         ]}
       />
       {error ? (
-        <ErrorScreenV2 error={error} />
+        <ErrorScreenV2
+          error={error}
+          actions={[
+            {
+              iconName: 'refresh',
+              title: getString('common.retry'),
+              onPress: () =>
+                backgroundTasks.enqueue({ name: 'UPDATE_LIBRARY' }),
+            },
+          ]}
+        />
       ) : (
         <SectionList
           ListHeaderComponent={
@@ -114,7 +138,17 @@ const UpdatesScreen = ({ navigation }: UpdateScreenProps) => {
           }
           contentContainerStyle={styles.listContainer}
           renderSectionHeader={({ section: { date } }) => (
-            <Text style={[styles.dateHeader, { color: theme.onSurface }]}>
+            <Text
+              style={[
+                styles.dateHeader,
+                {
+                  color:
+                    Platform.OS === 'ios'
+                      ? theme.onSurfaceVariant
+                      : theme.onSurface,
+                },
+              ]}
+            >
               {formatDate(date, dateFormat, relativeTimestamps)}
             </Text>
           )}
@@ -147,6 +181,14 @@ const UpdatesScreen = ({ navigation }: UpdateScreenProps) => {
               icon="(˘･_･˘)"
               description={getString('updatesScreen.emptyView')}
               theme={theme}
+              actions={[
+                {
+                  iconName: 'refresh',
+                  title: getString('common.retry'),
+                  onPress: () =>
+                    backgroundTasks.enqueue({ name: 'UPDATE_LIBRARY' }),
+                },
+              ]}
             />
           }
           refreshControl={
@@ -157,6 +199,7 @@ const UpdatesScreen = ({ navigation }: UpdateScreenProps) => {
               }
               colors={[theme.onPrimary]}
               progressBackgroundColor={theme.primary}
+              tintColor={theme.primary}
             />
           }
         />
@@ -183,6 +226,21 @@ const styles = StyleSheet.create({
     paddingBottom: 2,
     paddingHorizontal: 16,
     paddingTop: 8,
+    ...Platform.select({
+      ios: {
+        fontSize: 13,
+        fontWeight: '600',
+      },
+      default: {},
+    }),
+  },
+  iosLargeTitle: {
+    fontSize: 34,
+    fontWeight: '700',
+    letterSpacing: 0.4,
+    marginBottom: 4,
+    marginHorizontal: 16,
+    marginTop: 8,
   },
   lastUpdateTime: {
     fontSize: 12,

@@ -23,7 +23,7 @@ const HistoryCard: React.FC<HistoryCardProps> = ({ history, onRemove }) => {
   return (
     <View>
       <Pressable
-        style={styles.row}
+        style={({ pressed }) => [styles.row, pressed && { opacity: 0.7 }]}
         android_ripple={{ color: theme.rippleColor }}
         onPress={() =>
           navigate('ReaderStack', {
@@ -43,6 +43,7 @@ const HistoryCard: React.FC<HistoryCardProps> = ({ history, onRemove }) => {
         }
       >
         <Pressable
+          style={({ pressed }) => [pressed && { opacity: 0.7 }]}
           onPress={event => {
             event.stopPropagation();
             navigate('ReaderStack', {

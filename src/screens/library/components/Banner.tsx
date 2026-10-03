@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Platform, StyleSheet, Text, View } from 'react-native';
 
 import MaterialCommunityIcons from '@react-native-vector-icons/material-design-icons';
 import { ThemeColors } from '../../../theme/types';
@@ -36,7 +36,11 @@ export const Banner: React.FC<Props> = ({
 const styles = StyleSheet.create({
   bannerText: {
     fontSize: 12,
-    fontWeight: 500,
+    fontWeight: '500',
+    ...Platform.select({
+      ios: { fontSize: 13, fontWeight: '600' },
+      default: {},
+    }),
   },
   container: {
     alignItems: 'center',

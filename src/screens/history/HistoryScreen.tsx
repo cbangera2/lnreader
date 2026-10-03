@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { StyleSheet, SectionList, Text } from 'react-native';
+import { Platform, StyleSheet, SectionList, Text } from 'react-native';
 
 import {
   EmptyView,
@@ -181,6 +181,10 @@ const styles = StyleSheet.create({
   dateHeader: {
     paddingHorizontal: 16,
     paddingVertical: 8,
+    ...Platform.select({
+      ios: { fontSize: 13, fontWeight: '600' },
+      default: {},
+    }),
   },
   listContainer: {
     flexGrow: 1,

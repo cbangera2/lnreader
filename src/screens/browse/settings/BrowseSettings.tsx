@@ -1,5 +1,5 @@
-import { FlatList, StyleSheet } from 'react-native';
-import { Appbar, List, SwitchItem } from '@components';
+import { FlatList, Platform, StyleSheet } from 'react-native';
+import { Appbar, List, SafeAreaView, SwitchItem } from '@components';
 
 import {
   useBrowseSettings,
@@ -28,7 +28,7 @@ const BrowseSettings = ({ navigation }: BrowseSettingsScreenProp) => {
 
   const globalSearchConcurrencyModal = useBoolean();
 
-  return (
+  const content = (
     <>
       <Appbar
         title={getString('browseSettings')}
@@ -94,6 +94,12 @@ const BrowseSettings = ({ navigation }: BrowseSettingsScreenProp) => {
       />
     </>
   );
+
+  if (Platform.OS === 'ios') {
+    return <SafeAreaView excludeTop>{content}</SafeAreaView>;
+  }
+
+  return content;
 };
 
 export default BrowseSettings;

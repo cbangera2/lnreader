@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { View, StyleSheet, Image } from 'react-native';
+import { Platform, View, StyleSheet, Image } from 'react-native';
 import { Provider, List as PaperList } from 'react-native-paper';
 
 import { getTracker, useTheme, useTracker } from '@hooks/persisted';
@@ -201,7 +201,9 @@ const TrackerScreen = ({ navigation }: TrackerSettingsScreenProps) => {
                   }
                 }
               }}
-              rippleColor={theme.rippleColor}
+              rippleColor={
+                Platform.OS === 'android' ? theme.rippleColor : undefined
+              }
               style={styles.listItem}
             />
             <PaperList.Item
@@ -219,7 +221,9 @@ const TrackerScreen = ({ navigation }: TrackerSettingsScreenProps) => {
                   }
                 }
               }}
-              rippleColor={theme.rippleColor}
+              rippleColor={
+                Platform.OS === 'android' ? theme.rippleColor : undefined
+              }
               style={styles.listItem}
             />
             <PaperList.Item
@@ -234,7 +238,9 @@ const TrackerScreen = ({ navigation }: TrackerSettingsScreenProps) => {
                   showCredentialLogin('MangaUpdates');
                 }
               }}
-              rippleColor={theme.rippleColor}
+              rippleColor={
+                Platform.OS === 'android' ? theme.rippleColor : undefined
+              }
               style={styles.listItem}
             />
             <PaperList.Item
@@ -249,7 +255,9 @@ const TrackerScreen = ({ navigation }: TrackerSettingsScreenProps) => {
                   showCredentialLogin('Kitsu');
                 }
               }}
-              rippleColor={theme.rippleColor}
+              rippleColor={
+                Platform.OS === 'android' ? theme.rippleColor : undefined
+              }
               style={styles.listItem}
             />
             <List.InfoItem
@@ -364,6 +372,10 @@ const styles = StyleSheet.create({
   },
   listItem: {
     paddingVertical: 12,
+    ...Platform.select({
+      ios: { minHeight: 44 },
+      default: undefined,
+    }),
   },
   iconStyle: {
     margin: 0,

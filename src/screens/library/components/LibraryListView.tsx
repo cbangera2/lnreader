@@ -142,9 +142,10 @@ export const LibraryView: React.FC<Props> = ({
         onRefresh={onRefresh}
         colors={[theme.onPrimary]}
         progressBackgroundColor={theme.primary}
+        tintColor={theme.onSurfaceVariant}
       />
     ),
-    [onRefresh, theme.onPrimary, theme.primary],
+    [onRefresh, theme.onPrimary, theme.primary, theme.onSurfaceVariant],
   );
 
   return (

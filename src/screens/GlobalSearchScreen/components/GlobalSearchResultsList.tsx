@@ -13,6 +13,7 @@ import { useTheme } from '@hooks/persisted';
 import { GlobalSearchResult } from '../hooks/useGlobalSearch';
 import GlobalSearchSkeletonLoading from '@screens/browse/loadingAnimation/GlobalSearchSkeletonLoading';
 import { interpolateColor } from 'react-native-reanimated';
+import { iosImpactLight } from '@utils/haptics';
 import { useLibraryContext } from '@components/Context/LibraryContext';
 import NovelCover from '@components/NovelCover';
 import { RootStackParamList } from '@navigators/types';
@@ -83,7 +84,10 @@ const GlobalSearchSourceResults: React.FC<{ item: GlobalSearchResult }> = ({
             android_ripple={{
               color: color(theme.primary).alpha(0.12).string(),
             }}
-            style={styles.sourceHeader}
+            style={({ pressed }) => [
+              styles.sourceHeader,
+              pressed && { opacity: 0.7 },
+            ]}
             onPress={() =>
               navigation.navigate('SourceScreen', {
                 pluginId: item.plugin.id,
@@ -146,6 +150,7 @@ const GlobalSearchSourceResults: React.FC<{ item: GlobalSearchResult }> = ({
                     }
                     theme={theme}
                     onLongPress={async () => {
+                      iosImpactLight();
                       setInActivity(prev => ({
                         ...prev,
                         [novelItem.path]: true,

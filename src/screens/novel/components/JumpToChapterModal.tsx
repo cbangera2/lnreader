@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Platform, Pressable, StyleSheet, View } from 'react-native';
 import { getString } from '@i18n/translations';
 import { Dialog, SwitchItem } from '@components';
 
@@ -407,6 +407,6 @@ const styles = StyleSheet.create({
   },
   resultDivider: {
     height: 1,
-    width: '100%',
+    ...Platform.select({ ios: { marginLeft: 16 }, default: {} }),
   },
 });

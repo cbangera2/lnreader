@@ -1,8 +1,15 @@
-import { StyleSheet, View, FlatList, Text, FlatListProps } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  FlatList,
+  Text,
+  FlatListProps,
+  Platform,
+} from 'react-native';
 import { useTheme } from '@hooks/persisted';
 
 import ListView from '../../components/ListView';
-import { Appbar } from '@components';
+import { Appbar, SafeAreaView } from '@components';
 import { SourceNovelsScreenProps } from '@navigators/types';
 import { NovelInfo } from '@database/types';
 import { getString } from '@i18n/translations';
@@ -27,8 +34,8 @@ const SourceNovels = ({ navigation, route }: SourceNovelsScreenProps) => {
     />
   );
 
-  return (
-    <View style={styles.container}>
+  const content = (
+    <>
       <Appbar
         title={getString('browseScreen.selectNovel')}
         handleGoBack={navigation.goBack}
@@ -51,8 +58,14 @@ const SourceNovels = ({ navigation, route }: SourceNovelsScreenProps) => {
           </Text>
         }
       />
-    </View>
+    </>
   );
+
+  if (Platform.OS === 'ios') {
+    return <SafeAreaView excludeTop>{content}</SafeAreaView>;
+  }
+
+  return <View style={styles.container}>{content}</View>;
 };
 
 export default SourceNovels;

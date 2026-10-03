@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Platform,
   StyleSheet,
   Text,
   View,
@@ -74,6 +75,10 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     height: 40,
     width: 40,
+    ...Platform.select({
+      ios: { borderCurve: 'continuous' },
+      default: {},
+    }),
   },
   mainAction: {
     flex: 1,

@@ -8,6 +8,7 @@ import {
   ScrollView,
   Modal as RNModal,
 } from 'react-native';
+import Glass from '@components/Glass/Glass';
 import MaterialCommunityIcons from '@react-native-vector-icons/material-design-icons';
 import color from 'color';
 
@@ -285,7 +286,10 @@ const ChaptersSettingsSheet = ({
           onRequestClose={() => setScanlatorsModalVisible(false)}
         >
           <View style={styles.modalBackdrop}>
-            <View
+            <Glass
+              glassEffectStyle="regular"
+              fallbackBackgroundColor={theme.surface}
+              isDark={theme.isDark}
               style={[
                 styles.scanlatorModalContent,
                 { backgroundColor: theme.surface },
@@ -322,7 +326,7 @@ const ChaptersSettingsSheet = ({
                   onPress={() => setTempExcludedScanlators([])}
                 />
               </View>
-            </View>
+            </Glass>
           </View>
         </RNModal>
       )}

@@ -1,6 +1,7 @@
 import { memo, useMemo } from 'react';
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import { AnimatedFAB } from 'react-native-paper';
+import color from 'color';
 import { ThemeColors } from '@theme/types';
 
 interface NovelFloatingActionsProps {
@@ -29,16 +30,38 @@ const NovelFloatingActions = ({
   const scrollToTopStyle = useMemo(
     () => [
       styles.scrollToTop,
-      { backgroundColor: theme.surface2, marginBottom: bottomInset },
+      {
+        backgroundColor: theme.surface2,
+        marginBottom: bottomInset,
+        ...Platform.select({
+          ios: {
+            backgroundColor: color(theme.surface2).alpha(0.72).string(),
+            borderColor: color(theme.primary).alpha(0.4).string(),
+            borderWidth: StyleSheet.hairlineWidth,
+          },
+          default: {},
+        }),
+      },
     ],
-    [bottomInset, theme.surface2],
+    [bottomInset, theme.surface2, theme.primary],
   );
   const continueStyle = useMemo(
     () => [
       styles.continue,
-      { backgroundColor: theme.primary, marginBottom: bottomInset },
+      {
+        backgroundColor: theme.primary,
+        marginBottom: bottomInset,
+        ...Platform.select({
+          ios: {
+            backgroundColor: color(theme.primary).alpha(0.72).string(),
+            borderColor: color(theme.onPrimary).alpha(0.4).string(),
+            borderWidth: StyleSheet.hairlineWidth,
+          },
+          default: {},
+        }),
+      },
     ],
-    [bottomInset, theme.primary],
+    [bottomInset, theme.onPrimary, theme.primary],
   );
 
   return (

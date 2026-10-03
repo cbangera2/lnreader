@@ -1,5 +1,12 @@
 import { memo, useCallback, useMemo } from 'react';
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import {
+  Image,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import {
   LegendList,
   LegendListRenderItemProps,
@@ -47,7 +54,17 @@ const SourceRow = memo(
     plugin,
     theme,
   }: SourceRowProps) => (
-    <View style={styles.sourceRow}>
+    <View
+      style={[
+        styles.sourceRow,
+        Platform.OS === 'ios'
+          ? {
+              borderBottomColor: theme.outlineVariant,
+              borderBottomWidth: StyleSheet.hairlineWidth,
+            }
+          : undefined,
+      ]}
+    >
       <Pressable
         accessibilityLabel={`${getString('browse')} ${plugin.name}`}
         accessibilityRole="button"
@@ -164,7 +181,11 @@ export const SourcesTab = memo(
         if (item.type === 'header') {
           return (
             <Text
-              style={[styles.sectionHeader, { color: theme.onSurfaceVariant }]}
+              style={[
+                styles.sectionHeader,
+                Platform.select({ ios: styles.sectionHeaderIOS }),
+                { color: theme.onSurfaceVariant },
+              ]}
             >
               {item.title}
             </Text>
@@ -255,6 +276,10 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     height: 44,
     width: 44,
+    ...Platform.select({
+      ios: { borderCurve: 'continuous' },
+      default: {},
+    }),
   },
   emptyList: {
     flexGrow: 1,
@@ -280,6 +305,10 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     paddingHorizontal: 16,
     paddingVertical: 10,
+  },
+  sectionHeaderIOS: {
+    fontSize: 13,
+    textTransform: 'uppercase',
   },
   sourceRow: {
     alignItems: 'center',

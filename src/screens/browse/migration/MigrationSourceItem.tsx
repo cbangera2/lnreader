@@ -1,6 +1,6 @@
 import { PluginItem } from '@plugins/types';
 import { ThemeColors } from '@theme/types';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, Platform, StyleSheet } from 'react-native';
 import { TouchableRipple } from 'react-native-paper';
 
 interface MigrationSourceCardProps {
@@ -74,6 +74,10 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     height: 40,
     width: 40,
+    ...Platform.select({
+      ios: { borderCurve: 'continuous' },
+      default: {},
+    }),
   },
   fontSize14: { fontSize: 14 },
   fontSize12: { fontSize: 12 },

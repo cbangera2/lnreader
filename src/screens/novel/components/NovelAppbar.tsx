@@ -11,8 +11,12 @@ import Animated, {
 } from 'react-native-reanimated';
 import ExportNovelAsEpubButton from './ExportNovelAsEpubButton';
 import { NovelInfo } from '@database/types';
-import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
+import { Platform, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
+import Glass from '@components/Glass/Glass';
+import color from 'color';
 import { MaterialDesignIconName } from '@type/icon';
+
+const isIos = Platform.OS === 'ios';
 
 const NovelAppbarAction = memo(
   ({
@@ -243,58 +247,88 @@ const NovelAppbar = ({
     [theme],
   );
 
+  const appbarFallback = useMemo(
+    () =>
+      color(theme.surface2 || theme.surface)
+        .alpha(0.8)
+        .string(),
+    [theme.surface, theme.surface2],
+  );
+
+  const header = (
+    <Appbar.Header
+      theme={headerTheme}
+      mode={isIos ? 'center-aligned' : undefined}
+    >
+      <Appbar.BackAction onPress={goBack} />
+
+      {hideActions ? null : (
+        <View style={styles.row}>
+          <ExportNovelAsEpubButton
+            novel={novel}
+            renderIcon={renderExportIcon}
+          />
+          <NovelAppbarAction
+            theme={theme}
+            icon="book-search-outline"
+            onPress={openJumpToChapter}
+          />
+          {!isLocal ? (
+            <Menu
+              theme={theme}
+              visible={downloadMenu}
+              onDismiss={closeDlMenu}
+              anchor={
+                <Appbar.Action
+                  theme={appbarTheme}
+                  icon="download-outline"
+                  onPress={openDlMenu}
+                  size={26}
+                />
+              }
+              items={downloadMenuItems}
+            />
+          ) : null}
+          <Menu
+            visible={extraMenu}
+            onDismiss={closeExtraMenu}
+            anchor={
+              <Appbar.Action
+                theme={appbarTheme}
+                icon="dots-vertical"
+                onPress={openExtraMenu}
+                size={24}
+              />
+            }
+            theme={theme}
+            items={extraMenuItems}
+          />
+        </View>
+      )}
+    </Appbar.Header>
+  );
+
+  if (isIos) {
+    return (
+      <Animated.View exiting={SlideOutUp.duration(250)}>
+        <Glass
+          glassEffectStyle="clear"
+          fallbackBackgroundColor={appbarFallback}
+          isDark={theme.isDark}
+          style={{ backgroundColor: appbarFallback }}
+        >
+          {header}
+        </Glass>
+      </Animated.View>
+    );
+  }
+
   return (
     <Animated.View
       exiting={SlideOutUp.duration(250)}
       style={headerOpacityStyle}
     >
-      <Appbar.Header theme={headerTheme}>
-        <Appbar.BackAction onPress={goBack} />
-
-        {hideActions ? null : (
-          <View style={styles.row}>
-            <ExportNovelAsEpubButton
-              novel={novel}
-              renderIcon={renderExportIcon}
-            />
-            <NovelAppbarAction
-              theme={theme}
-              icon="book-search-outline"
-              onPress={openJumpToChapter}
-            />
-            {!isLocal ? (
-              <Menu
-                theme={theme}
-                visible={downloadMenu}
-                onDismiss={closeDlMenu}
-                anchor={
-                  <Appbar.Action
-                    theme={appbarTheme}
-                    icon="download-outline"
-                    onPress={openDlMenu}
-                    size={26}
-                  />
-                }
-                items={downloadMenuItems}
-              />
-            ) : null}
-            <Menu
-              visible={extraMenu}
-              onDismiss={closeExtraMenu}
-              anchor={
-                <Appbar.Action
-                  theme={appbarTheme}
-                  icon="dots-vertical"
-                  onPress={openExtraMenu}
-                  size={24}
-                />
-              }
-              theme={theme}
-              items={extraMenuItems}
-            />
-          </View>
-        )}
-      </Appbar.Header>
+      {header}
     </Animated.View>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
-import { useWindowDimensions } from 'react-native';
+import { Platform, StyleSheet, Text, useWindowDimensions } from 'react-native';
 import { TabView, type TabBarProps } from 'react-native-tab-view';
 
 import { useSearch } from '@hooks';
@@ -132,6 +132,14 @@ const BrowseScreen = ({ navigation }: BrowseScreenProps) => {
 
   return (
     <SafeAreaView excludeBottom>
+      {Platform.OS === 'ios' ? (
+        <Text
+          style={[styles.iosLargeTitle, { color: theme.onSurface }]}
+          numberOfLines={1}
+        >
+          {getString('browse')}
+        </Text>
+      ) : null}
       <SearchbarV2
         searchText={searchText}
         placeholder={getString('browseScreen.searchbar')}
@@ -157,3 +165,14 @@ const BrowseScreen = ({ navigation }: BrowseScreenProps) => {
 };
 
 export default BrowseScreen;
+
+const styles = StyleSheet.create({
+  iosLargeTitle: {
+    fontSize: 34,
+    fontWeight: '700',
+    letterSpacing: 0.4,
+    marginBottom: 4,
+    marginHorizontal: 16,
+    marginTop: 8,
+  },
+});

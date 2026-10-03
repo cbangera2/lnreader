@@ -1,5 +1,5 @@
 import { Suspense, useCallback, useMemo, useRef, useState } from 'react';
-import { StyleSheet, View, StatusBar, Text } from 'react-native';
+import { Platform, StyleSheet, View, StatusBar, Text } from 'react-native';
 import Animated, {
   SlideInUp,
   SlideOutUp,
@@ -29,6 +29,10 @@ import { useNovelRefresh } from './hooks/useNovelRefresh';
 import SetCategoryModal from './components/SetCategoriesModal';
 import { backgroundTasks } from '@services/backgroundTasks';
 import { getPageChapterIds } from '@database/queries/ChapterQueries';
+import Glass from '@components/Glass/Glass';
+import color from 'color';
+
+const isIos = Platform.OS === 'ios';
 
 const Novel = ({ route, navigation }: NovelScreenProps) => {
   const novel = useNovelValue('novel');
@@ -139,6 +143,32 @@ const Novel = ({ route, navigation }: NovelScreenProps) => {
     () => [styles.container, { backgroundColor: theme.background }],
     [styles.container, theme.background],
   );
+  const selectionGlassStyle = useMemo(
+    () => [
+      styles.selectionGlass,
+      { backgroundColor: color(theme.surface2).alpha(0.8).string() },
+    ],
+    [styles.selectionGlass, theme.surface2],
+  );
+  const selectionAppbarStyle = useMemo(
+    () => (isIos ? [styles.appbar, styles.appbarIos] : styles.appbar),
+    [styles.appbar, styles.appbarIos],
+  );
+  const selectionBarContent = (
+    <>
+      <Appbar.Action
+        icon="close"
+        iconColor={theme.onBackground}
+        onPress={clearSelection}
+      />
+      <Appbar.Content title={`${selected.length}`} titleStyle={titleStyle} />
+      <Appbar.Action
+        icon="select-all"
+        iconColor={theme.onBackground}
+        onPress={selectAll}
+      />
+    </>
+  );
 
   return (
     <Portal.Host>
@@ -166,22 +196,20 @@ const Novel = ({ route, navigation }: NovelScreenProps) => {
             <Animated.View
               entering={SlideInUp.duration(250)}
               exiting={SlideOutUp.duration(250)}
-              style={styles.appbar}
+              style={selectionAppbarStyle}
             >
-              <Appbar.Action
-                icon="close"
-                iconColor={theme.onBackground}
-                onPress={clearSelection}
-              />
-              <Appbar.Content
-                title={`${selected.length}`}
-                titleStyle={titleStyle}
-              />
-              <Appbar.Action
-                icon="select-all"
-                iconColor={theme.onBackground}
-                onPress={selectAll}
-              />
+              {isIos ? (
+                <Glass
+                  glassEffectStyle="clear"
+                  fallbackBackgroundColor={theme.surface2}
+                  isDark={theme.isDark}
+                  style={selectionGlassStyle}
+                >
+                  {selectionBarContent}
+                </Glass>
+              ) : (
+                selectionBarContent
+              )}
             </Animated.View>
           )}
         </Portal>
@@ -284,6 +312,14 @@ function createStyles(theme: ThemeColors) {
       paddingTop: StatusBar.currentHeight || 0,
       position: 'absolute',
       width: '100%',
+    },
+    appbarIos: {
+      backgroundColor: 'transparent',
+    },
+    selectionGlass: {
+      alignItems: 'center',
+      flex: 1,
+      flexDirection: 'row',
     },
     container: { flex: 1 },
     rowBack: {

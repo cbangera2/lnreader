@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, TextInput } from 'react-native';
+import { Platform, StyleSheet, Text, TextInput } from 'react-native';
 import { Dialog } from '@components';
 import { useTheme } from '@hooks/persisted';
 
@@ -121,9 +121,11 @@ export default TrackerLoginDialog;
 
 const styles = StyleSheet.create({
   input: {
-    height: 48,
+    ...Platform.select({
+      ios: { minHeight: 44, borderRadius: 10 },
+      default: { height: 48, borderRadius: 4 },
+    }),
     borderWidth: 1,
-    borderRadius: 4,
     paddingHorizontal: 16,
     marginBottom: 16,
     fontSize: 16,

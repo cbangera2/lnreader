@@ -1,6 +1,12 @@
 import React, { useMemo } from 'react';
 import { ThemeColors } from '@theme/types';
-import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Platform,
+  Pressable,
+  StyleSheet,
+  View,
+} from 'react-native';
 
 import { overlay } from 'react-native-paper';
 import { getString } from '@i18n/translations';
@@ -141,15 +147,15 @@ const styles = StyleSheet.create({
   activityIndicator: { margin: 3.5, padding: 5 },
   container: {
     borderRadius: 50,
-    width: 40,
-    height: 40,
+    width: Platform.select({ ios: 44, default: 40 }),
+    height: Platform.select({ ios: 44, default: 40 }),
     overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
   },
   pressable: {
-    width: 40,
-    height: 40,
+    width: Platform.select({ ios: 44, default: 40 }),
+    height: Platform.select({ ios: 44, default: 40 }),
     alignItems: 'center',
     justifyContent: 'center',
   },

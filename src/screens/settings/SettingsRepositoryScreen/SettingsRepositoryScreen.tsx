@@ -1,6 +1,12 @@
 import { useCallback, useEffect } from 'react';
-import { FlatList, ListRenderItemInfo, StyleSheet } from 'react-native';
+import {
+  FlatList,
+  ListRenderItemInfo,
+  Platform,
+  StyleSheet,
+} from 'react-native';
 import { FAB, Portal } from 'react-native-paper';
+import Color from 'color';
 
 import { Appbar, EmptyView, SafeAreaView } from '@components';
 
@@ -123,7 +129,22 @@ const SettingsBrowseScreen = ({
         }
       />
       <FAB
-        style={[styles.fab, { backgroundColor: theme.primary, right, bottom }]}
+        style={[
+          styles.fab,
+          {
+            backgroundColor: theme.primary,
+            right,
+            bottom,
+            ...Platform.select({
+              ios: {
+                backgroundColor: Color(theme.primary).alpha(0.72).string(),
+                borderColor: Color(theme.onPrimary).alpha(0.4).string(),
+                borderWidth: StyleSheet.hairlineWidth,
+              },
+              default: undefined,
+            }),
+          },
+        ]}
         color={theme.onPrimary}
         label={getString('common.add')}
         uppercase={false}

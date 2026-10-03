@@ -138,7 +138,6 @@ const CodeSnippetsScreen: React.FC<CodeSnippetsScreenProps> = ({
         title={snippetName}
         handleGoBack={() => navigation.goBack()}
         theme={theme}
-        mode="small"
       >
         <IconButtonV2
           accessibilityLabel={getString('customCodeSettings.importCode')}

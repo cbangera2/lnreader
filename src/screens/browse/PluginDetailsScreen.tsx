@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react';
 import {
   ActivityIndicator,
   Image,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -231,6 +232,10 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     height: 112,
     width: 112,
+    ...Platform.select({
+      ios: { borderCurve: 'continuous' },
+      default: {},
+    }),
   },
   metadata: {
     alignItems: 'center',

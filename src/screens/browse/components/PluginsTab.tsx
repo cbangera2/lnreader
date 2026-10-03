@@ -1,6 +1,7 @@
 import { memo, useCallback, useMemo, useState } from 'react';
 import {
   Image,
+  Platform,
   Pressable,
   RefreshControl,
   StyleSheet,
@@ -61,7 +62,17 @@ const PluginRow = memo(
     const isInstalled = status !== 'available';
 
     return (
-      <View style={styles.pluginRow}>
+      <View
+        style={[
+          styles.pluginRow,
+          Platform.OS === 'ios'
+            ? {
+                borderBottomColor: theme.outlineVariant,
+                borderBottomWidth: StyleSheet.hairlineWidth,
+              }
+            : undefined,
+        ]}
+      >
         <Pressable
           accessibilityLabel={
             isInstalled
@@ -265,6 +276,7 @@ export const PluginsTab = memo(
               <Text
                 style={[
                   styles.sectionHeader,
+                  Platform.select({ ios: styles.sectionHeaderIOS }),
                   { color: theme.onSurfaceVariant },
                 ]}
               >
@@ -359,6 +371,7 @@ export const PluginsTab = memo(
             onRefresh={refresh}
             colors={[theme.onPrimary]}
             progressBackgroundColor={theme.primary}
+            tintColor={Platform.select({ ios: theme.primary })}
           />
         }
         renderItem={renderItem}
@@ -392,6 +405,10 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     height: 44,
     width: 44,
+    ...Platform.select({
+      ios: { borderCurve: 'continuous' },
+      default: {},
+    }),
   },
   name: {
     fontSize: 14,
@@ -423,6 +440,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     paddingVertical: 10,
+  },
+  sectionHeaderIOS: {
+    fontSize: 13,
+    textTransform: 'uppercase',
   },
   updateAllButton: {
     borderRadius: 24,

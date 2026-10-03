@@ -1,10 +1,17 @@
-import { StyleSheet, View, FlatList, Text, FlatListProps } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  FlatList,
+  Text,
+  FlatListProps,
+  Platform,
+} from 'react-native';
 
 import MigrationSourceItem from './MigrationSourceItem';
 
 import { useFilteredInstalledPlugins, useTheme } from '@hooks/persisted';
 import { useLibraryNovels } from '@screens/library/hooks/useLibrary';
-import { Appbar } from '@components';
+import { Appbar, SafeAreaView } from '@components';
 import { MigrationScreenProps } from '@navigators/types';
 import { PluginItem } from '@plugins/types';
 import { getString } from '@i18n/translations';
@@ -37,8 +44,8 @@ const Migration = ({ navigation }: MigrationScreenProps) => {
     </Text>
   );
 
-  return (
-    <View style={styles.container}>
+  const content = (
+    <>
       <Appbar
         title={getString('browseScreen.migration.selectSource')}
         handleGoBack={navigation.goBack}
@@ -51,10 +58,15 @@ const Migration = ({ navigation }: MigrationScreenProps) => {
         renderItem={renderItem}
         ListHeaderComponent={ListHeaderComponent}
       />
-    </View>
+    </>
   );
-};
 
+  if (Platform.OS === 'ios') {
+    return <SafeAreaView excludeTop>{content}</SafeAreaView>;
+  }
+
+  return <View style={styles.container}>{content}</View>;
+};
 export default Migration;
 
 const styles = StyleSheet.create({

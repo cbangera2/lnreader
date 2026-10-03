@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useMemo, ReactNode } from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Pressable, Platform } from 'react-native';
 import {
   ChapterBookmarkButton,
   DownloadButton,
@@ -9,6 +9,8 @@ import { ChapterInfo } from '@database/types';
 import MaterialCommunityIcons from '@react-native-vector-icons/material-design-icons';
 import { getString } from '@i18n/translations';
 import { DateFormat, formatDate } from '@utils/dateFormat';
+
+const isIos = Platform.OS === 'ios';
 
 interface ChapterItemProps {
   chapter: ChapterInfo;
@@ -203,6 +205,11 @@ const ChapterItem: React.FC<ChapterItemProps> = ({
           />
         ) : null}
       </Pressable>
+      {isIos ? (
+        <View
+          style={[styles.iosDivider, { backgroundColor: theme.outlineVariant }]}
+        />
+      ) : null}
     </View>
   );
 };
@@ -248,6 +255,10 @@ const styles = StyleSheet.create({
   },
   groupedChapterNovelName: {
     fontSize: 14,
+  },
+  iosDivider: {
+    height: StyleSheet.hairlineWidth,
+    marginLeft: 16,
   },
   mt4: {
     marginTop: 4,
