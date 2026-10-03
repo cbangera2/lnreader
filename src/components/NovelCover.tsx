@@ -22,7 +22,7 @@ import { getString } from '@i18n/translations';
 import SourceScreenSkeletonLoading from '@screens/browse/loadingAnimation/SourceScreenSkeletonLoading';
 import NovelCoverImage from './NovelCoverImage';
 import { useNovelCoverLayout } from './NovelCoverLayoutContext';
-import MaterialCommunityIcons from '@react-native-vector-icons/material-design-icons';
+import { ISIcon } from '@components/ios/ISIcon';
 
 const isIos = Platform.OS === 'ios';
 
@@ -134,11 +134,7 @@ function NovelCover<
             isDark={theme.isDark}
             style={styles.continueReadingGlass}
           >
-            <MaterialCommunityIcons
-              name="play"
-              size={20}
-              color={theme.onPrimary}
-            />
+            <ISIcon name="play" size={20} color={theme.onPrimary} />
           </Glass>
         </Pressable>
       ) : (
@@ -155,11 +151,7 @@ function NovelCover<
             { backgroundColor: Color(theme.primary).alpha(0.9).string() },
           ]}
         >
-          <MaterialCommunityIcons
-            name="play"
-            size={20}
-            color={theme.onPrimary}
-          />
+          <ISIcon name="play" size={20} color={theme.onPrimary} />
         </Pressable>
       )
     ) : null;

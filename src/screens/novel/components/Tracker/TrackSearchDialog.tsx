@@ -4,12 +4,13 @@ import {
   StyleSheet,
   Text,
   TextInputSubmitEditingEvent,
+  View,
 } from 'react-native';
 import { TextInput, TouchableRipple } from 'react-native-paper';
-import MaterialCommunityIcons from '@react-native-vector-icons/material-design-icons';
 import { LegendList } from '@legendapp/list/react-native';
 
 import { Dialog, NovelCoverImage } from '@components';
+import { ISIcon } from '@components/ios/ISIcon';
 import { getTracker, useTheme } from '@hooks/persisted';
 import { getString } from '@i18n/translations';
 import { SearchResult } from '@services/Trackers';
@@ -179,12 +180,9 @@ const TrackSearchDialog: React.FC<TrackSearchDialogProps> = ({
         >
           <>
             {isSelected && (
-              <MaterialCommunityIcons
-                name="check-circle"
-                color={theme.primary}
-                size={24}
-                style={styles.checkIcon}
-              />
+              <View style={styles.checkIcon}>
+                <ISIcon name="check-circle" color={theme.primary} size={24} />
+              </View>
             )}
             <NovelCoverImage
               uri={item.coverImage}
@@ -226,7 +224,9 @@ const TrackSearchDialog: React.FC<TrackSearchDialogProps> = ({
           right={
             <TextInput.Icon
               color={theme.onSurfaceVariant}
-              icon="close"
+              icon={({ size, color }) => (
+                <ISIcon name="close" size={size} color={color} />
+              )}
               onPress={handleClearSearch}
             />
           }

@@ -4,7 +4,7 @@ import {
   useAdaptiveRender,
 } from '@legendapp/list/react-native';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import MaterialCommunityIcons from '@react-native-vector-icons/material-design-icons';
+import { ISIcon } from '@components/ios/ISIcon';
 import { NovelCoverImage } from '@components';
 import AnimatedHeight from './AnimatedHeight';
 import type { ThemeColors } from '@theme/types';
@@ -62,7 +62,7 @@ const PluginSection: React.FC<PluginSectionProps> = ({
           <Text style={[styles.count, { color: theme.onSurfaceVariant }]}>
             {count}
           </Text>
-          <MaterialCommunityIcons
+          <ISIcon
             name={expanded ? 'chevron-down' : 'chevron-right'}
             color={theme.onSurfaceVariant}
             size={24}
@@ -97,7 +97,7 @@ const PluginSection: React.FC<PluginSectionProps> = ({
               >
                 {novel.name}
               </Text>
-              <MaterialCommunityIcons
+              <ISIcon
                 name="chevron-right"
                 color={theme.onSurfaceVariant}
                 size={20}

@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
-import MaterialCommunityIcons from '@react-native-vector-icons/material-design-icons';
+import { ISIcon } from '@components/ios/ISIcon';
 
 import { NovelInfo } from '@database/types';
 import { useNavigation } from '@react-navigation/native';
@@ -46,11 +46,7 @@ const NButton = ({
           Platform.OS === 'ios' && pressed && styles.pressed,
         ]}
       >
-        <MaterialCommunityIcons
-          name={icon}
-          color={color ?? theme.outline}
-          size={24}
-        />
+        <ISIcon name={icon} color={color ?? theme.outline} size={24} />
         <Text style={[styles.buttonLabel, { color: color ?? theme.outline }]}>
           {label}
         </Text>

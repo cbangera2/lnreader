@@ -8,7 +8,7 @@ import {
   View,
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import MaterialCommunityIcons from '@react-native-vector-icons/material-design-icons';
+import { ISIcon } from '@components/ios/ISIcon';
 import { FAB, TextInput } from 'react-native-paper';
 import Color from 'color';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -222,7 +222,7 @@ const SettingsTaxonomyScreen = ({ navigation }: GenreTaxonomyScreenProps) => {
                       {node.children.length}
                     </Text>
                   )}
-                  <MaterialCommunityIcons
+                  <ISIcon
                     name="chevron-right"
                     color={theme.onSurfaceVariant}
                     size={24}
@@ -321,7 +321,7 @@ const SettingsTaxonomyScreen = ({ navigation }: GenreTaxonomyScreenProps) => {
                               >
                                 {item}
                               </Text>
-                              <MaterialCommunityIcons
+                              <ISIcon
                                 name="close"
                                 size={16}
                                 color={theme.onSecondaryContainer}
@@ -373,7 +373,7 @@ const SettingsTaxonomyScreen = ({ navigation }: GenreTaxonomyScreenProps) => {
                                   { borderColor: theme.outlineVariant },
                                 ]}
                               >
-                                <MaterialCommunityIcons
+                                <ISIcon
                                   name="plus"
                                   size={18}
                                   color={theme.primary}

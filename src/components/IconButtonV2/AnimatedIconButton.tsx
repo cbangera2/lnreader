@@ -11,6 +11,8 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
+import ISIcon from '../ios/ISIconCompat';
+
 const AnimatedIcon = Animated.createAnimatedComponent(MaterialCommunityIcons);
 
 type Props = {
@@ -55,6 +57,26 @@ const AnimatedIconButton: React.FC<Props> = ({
       ],
     };
   });
+  // iOS wraps the SF Symbol in an animated host view: ISIcon takes no style
+  // prop, and the rotation/scale transform is visually identical on the
+  // wrapper. Android keeps the original animated Material icon untouched.
+  const IconWrapperStyle = useAnimatedStyle(() => {
+    const rotate = rotation
+      ? withTiming(rotation.value + 'deg', { duration: 250 })
+      : '0deg';
+    const scale = _scale ? withTiming(_scale.value, { duration: 250 }) : 1;
+    return {
+      transform: [
+        {
+          rotate,
+        },
+        {
+          scale,
+        },
+      ],
+    };
+  });
+  const iconColor = disabled ? theme.outline : color || theme.onSurface;
   return (
     <View style={[styles.container, style]}>
       <Pressable
@@ -71,12 +93,18 @@ const AnimatedIconButton: React.FC<Props> = ({
             : undefined
         }
       >
-        <AnimatedIcon
-          name={name}
-          size={size}
-          color={disabled ? theme.outline : color || theme.onSurface}
-          style={IconStyle}
-        />
+        {Platform.OS === 'ios' ? (
+          <Animated.View style={IconWrapperStyle}>
+            <ISIcon name={name} size={size} color={iconColor} />
+          </Animated.View>
+        ) : (
+          <AnimatedIcon
+            name={name}
+            size={size}
+            color={iconColor}
+            style={IconStyle}
+          />
+        )}
       </Pressable>
     </View>
   );

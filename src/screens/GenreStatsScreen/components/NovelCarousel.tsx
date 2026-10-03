@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
-import MaterialCommunityIcons from '@react-native-vector-icons/material-design-icons';
+import { ISIcon } from '@components/ios/ISIcon';
 import { getString } from '@i18n/translations';
 import NovelCard from './NovelCard';
 import type { ThemeColors } from '@theme/types';
@@ -76,11 +76,7 @@ const NovelCarousel: React.FC<NovelCarouselProps> = ({
                 <Text style={[styles.seeAllText, { color: theme.primary }]}>
                   {getString('genreStats.seeAllNovels')}
                 </Text>
-                <MaterialCommunityIcons
-                  name="chevron-right"
-                  color={theme.primary}
-                  size={20}
-                />
+                <ISIcon name="chevron-right" color={theme.primary} size={20} />
               </Pressable>
             );
           }

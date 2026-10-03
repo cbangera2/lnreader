@@ -4,7 +4,7 @@ import {
   useRecyclingState,
 } from '@legendapp/list/react-native';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import MaterialCommunityIcons from '@react-native-vector-icons/material-design-icons';
+import { ISIcon } from '@components/ios/ISIcon';
 import { getString } from '@i18n/translations';
 import GenreRow from './GenreRow';
 import NovelCarousel from './NovelCarousel';
@@ -92,7 +92,7 @@ const GenreSection: React.FC<GenreSectionProps> = ({
               {node.categoryTotal}
             </Text>
           )}
-          <MaterialCommunityIcons
+          <ISIcon
             name={expanded ? 'chevron-down' : 'chevron-right'}
             color={theme.onSurfaceVariant}
             size={24}

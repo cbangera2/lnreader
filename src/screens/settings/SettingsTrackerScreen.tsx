@@ -4,6 +4,7 @@ import { Provider, List as PaperList } from 'react-native-paper';
 
 import { getTracker, useTheme, useTracker } from '@hooks/persisted';
 import { Appbar, ConfirmationDialog, List, SafeAreaView } from '@components';
+import { ISIcon } from '@components/ios/ISIcon';
 import { TrackerSettingsScreenProps } from '@navigators/types';
 import { getString } from '@i18n/translations';
 import TrackerLoginDialog from './components/TrackerLoginDialog';
@@ -23,6 +24,9 @@ const TrackerCheckIcon = ({
 }: TrackerCheckIconProps) => {
   if (!checked) {
     return null;
+  }
+  if (Platform.OS === 'ios') {
+    return <ISIcon name="check" size={24} color={theme.primary} />;
   }
   return (
     <PaperList.Icon

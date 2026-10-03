@@ -1,10 +1,18 @@
-import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import {
+  FlatList,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React, { useCallback, useMemo, useState } from 'react';
 import color from 'color';
 
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
 import MaterialCommunityIcons from '@react-native-vector-icons/material-design-icons';
+import { ISIcon } from '@components/ios/ISIcon';
 
 import { getPlugin } from '@plugins/pluginManager';
 import { getString } from '@i18n/translations';
@@ -106,11 +114,15 @@ const GlobalSearchSourceResults: React.FC<{ item: GlobalSearchResult }> = ({
                 {item.plugin.lang}
               </Text>
             </View>
-            <MaterialCommunityIcons
-              name="arrow-right"
-              size={24}
-              color={theme.onSurface}
-            />
+            {Platform.OS === 'ios' ? (
+              <ISIcon name="arrow-right" size={24} color={theme.onSurface} />
+            ) : (
+              <MaterialCommunityIcons
+                name="arrow-right"
+                size={24}
+                color={theme.onSurface}
+              />
+            )}
           </Pressable>
           {item.isLoading ? (
             <GlobalSearchSkeletonLoading theme={theme} />

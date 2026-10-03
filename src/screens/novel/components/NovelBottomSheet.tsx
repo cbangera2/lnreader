@@ -9,7 +9,7 @@ import {
   Modal as RNModal,
 } from 'react-native';
 import Glass from '@components/Glass/Glass';
-import MaterialCommunityIcons from '@react-native-vector-icons/material-design-icons';
+import { ISIcon } from '@components/ios/ISIcon';
 import color from 'color';
 
 import { TabView, TabViewProps } from 'react-native-tab-view';
@@ -132,12 +132,13 @@ const ChaptersSettingsSheet = ({
               >
                 {getString('novelScreen.bottomSheet.filters.scanlators')}
               </Text>
-              <MaterialCommunityIcons
-                name="chevron-right"
-                color={theme.onSurfaceVariant}
-                size={20}
-                style={styles.chevron}
-              />
+              <View style={styles.chevron}>
+                <ISIcon
+                  name="chevron-right"
+                  color={theme.onSurfaceVariant}
+                  size={20}
+                />
+              </View>
             </Pressable>
           </View>
         )}

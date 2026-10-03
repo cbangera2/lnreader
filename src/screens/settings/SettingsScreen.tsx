@@ -1,10 +1,28 @@
-import { ScrollView, StyleSheet } from 'react-native';
+import { Platform, ScrollView, StyleSheet } from 'react-native';
 
 import { Appbar, List, SafeAreaView } from '@components';
+import { ISRow } from '@components/ios';
 import { useTheme } from '@hooks/persisted';
+import { ThemeColors } from '@theme/types';
 
 import { getString } from '@i18n/translations';
 import { SettingsScreenProps } from '@navigators/types';
+
+interface SettingsRowProps {
+  title: string;
+  icon: string;
+  onPress: () => void;
+  theme: ThemeColors;
+}
+
+// iOS renders the native grouped row (SF Symbol icon + chevron via ISRow);
+// Android keeps the existing List.Item untouched.
+const SettingsRow = ({ title, icon, onPress, theme }: SettingsRowProps) =>
+  Platform.OS === 'ios' ? (
+    <ISRow title={title} icon={icon} onPress={onPress} theme={theme} />
+  ) : (
+    <List.Item title={title} icon={icon} onPress={onPress} theme={theme} />
+  );
 
 const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
   const theme = useTheme();
@@ -17,7 +35,7 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
         theme={theme}
       />
       <ScrollView style={[{ backgroundColor: theme.background }, styles.flex]}>
-        <List.Item
+        <SettingsRow
           title={getString('generalSettings')}
           icon="tune"
           onPress={() =>
@@ -27,7 +45,7 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
           }
           theme={theme}
         />
-        <List.Item
+        <SettingsRow
           title={getString('appearance')}
           icon="palette-outline"
           onPress={() =>
@@ -37,7 +55,7 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
           }
           theme={theme}
         />
-        <List.Item
+        <SettingsRow
           title={getString('library')}
           icon="bookshelf"
           onPress={() =>
@@ -47,7 +65,7 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
           }
           theme={theme}
         />
-        <List.Item
+        <SettingsRow
           title={getString('readerSettings.title')}
           icon="book-open-outline"
           onPress={() =>
@@ -57,7 +75,7 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
           }
           theme={theme}
         />
-        <List.Item
+        <SettingsRow
           title="Repositories"
           icon="github"
           onPress={() =>
@@ -67,13 +85,13 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
           }
           theme={theme}
         />
-        <List.Item
+        <SettingsRow
           title="Custom Code"
           icon="code-braces"
           onPress={() => navigation.navigate('CustomCode')}
           theme={theme}
         />
-        <List.Item
+        <SettingsRow
           title={getString('tracking')}
           icon="sync"
           onPress={() =>
@@ -83,7 +101,7 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
           }
           theme={theme}
         />
-        <List.Item
+        <SettingsRow
           title={getString('common.backup')}
           icon="cloud-upload-outline"
           onPress={() =>
@@ -93,7 +111,7 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
           }
           theme={theme}
         />
-        <List.Item
+        <SettingsRow
           title={getString('advancedSettings')}
           icon="code-tags"
           onPress={() =>
@@ -103,7 +121,7 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
           }
           theme={theme}
         />
-        <List.Item
+        <SettingsRow
           title={getString('genreStats.taxonomyTitle')}
           icon="tag-multiple-outline"
           onPress={() =>

@@ -12,6 +12,7 @@ import { useTheme } from '@hooks/persisted';
 import { useNovelLayout } from '@screens/novel/NovelContext';
 import { iosSelection } from '@utils/haptics';
 import Glass from '@components/Glass/Glass';
+import { ISIcon } from '@components/ios/ISIcon';
 
 interface ChapterFooterProps {
   openReaderSheet: () => void;
@@ -125,12 +126,24 @@ const ChapterFooter = ({
               navigateChapter('PREV');
             }}
           >
-            <IconButton
-              icon="chevron-left"
-              size={26}
-              disabled={!prevChapter}
-              iconColor={theme.onSurface}
-            />
+            {isIos ? (
+              <ISIcon
+                name="chevron-left"
+                size={26}
+                color={
+                  !prevChapter
+                    ? color(theme.onSurface).alpha(0.38).string()
+                    : theme.onSurface
+                }
+              />
+            ) : (
+              <IconButton
+                icon="chevron-left"
+                size={26}
+                disabled={!prevChapter}
+                iconColor={theme.onSurface}
+              />
+            )}
           </Pressable>
           <Pressable
             android_ripple={rippleConfig}
@@ -140,11 +153,19 @@ const ChapterFooter = ({
             ]}
             onPress={() => scrollToStart()}
           >
-            <IconButton
-              icon="arrow-collapse-up"
-              size={26}
-              iconColor={theme.onSurface}
-            />
+            {isIos ? (
+              <ISIcon
+                name="arrow-collapse-up"
+                size={26}
+                color={theme.onSurface}
+              />
+            ) : (
+              <IconButton
+                icon="arrow-collapse-up"
+                size={26}
+                iconColor={theme.onSurface}
+              />
+            )}
           </Pressable>
           <Pressable
             android_ripple={rippleConfig}
@@ -154,11 +175,19 @@ const ChapterFooter = ({
             ]}
             onPress={() => openDrawer()}
           >
-            <IconButton
-              icon="format-list-bulleted"
-              size={26}
-              iconColor={theme.onSurface}
-            />
+            {isIos ? (
+              <ISIcon
+                name="format-list-bulleted"
+                size={26}
+                color={theme.onSurface}
+              />
+            ) : (
+              <IconButton
+                icon="format-list-bulleted"
+                size={26}
+                iconColor={theme.onSurface}
+              />
+            )}
           </Pressable>
           <Pressable
             android_ripple={rippleConfig}
@@ -168,11 +197,15 @@ const ChapterFooter = ({
             ]}
             onPress={openReaderSheet}
           >
-            <IconButton
-              icon="cog-outline"
-              size={26}
-              iconColor={theme.onSurface}
-            />
+            {isIos ? (
+              <ISIcon name="cog-outline" size={26} color={theme.onSurface} />
+            ) : (
+              <IconButton
+                icon="cog-outline"
+                size={26}
+                iconColor={theme.onSurface}
+              />
+            )}
           </Pressable>
           <Pressable
             android_ripple={rippleConfig}
@@ -185,12 +218,24 @@ const ChapterFooter = ({
               navigateChapter('NEXT');
             }}
           >
-            <IconButton
-              icon="chevron-right"
-              size={26}
-              disabled={!nextChapter}
-              iconColor={theme.onSurface}
-            />
+            {isIos ? (
+              <ISIcon
+                name="chevron-right"
+                size={26}
+                color={
+                  !nextChapter
+                    ? color(theme.onSurface).alpha(0.38).string()
+                    : theme.onSurface
+                }
+              />
+            ) : (
+              <IconButton
+                icon="chevron-right"
+                size={26}
+                disabled={!nextChapter}
+                iconColor={theme.onSurface}
+              />
+            )}
           </Pressable>
         </View>
       </Glass>

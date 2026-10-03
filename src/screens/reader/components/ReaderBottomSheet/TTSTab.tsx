@@ -1,5 +1,12 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
-import { Pressable, View, StyleSheet, Text, ScrollView } from 'react-native';
+import {
+  Platform,
+  Pressable,
+  View,
+  StyleSheet,
+  Text,
+  ScrollView,
+} from 'react-native';
 import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { Dialog, List, Slider } from '@components';
 import { getLocales } from 'expo-localization';
@@ -11,6 +18,8 @@ import {
 } from '@hooks/persisted';
 import { getString } from '@i18n/translations';
 import { Chip } from 'react-native-paper';
+import { ISIcon } from '@components/ios/ISIcon';
+import { ISRow } from '@components/ios';
 import ReaderSheetPreferenceItem from './ReaderSheetPreferenceItem';
 
 interface VoicePickerModalProps {
@@ -144,11 +153,7 @@ const VoicePickerModal: React.FC<VoicePickerModalProps> = ({
                 System default
               </Text>
             </View>
-            {!currentVoice ? (
-              <Text style={[styles.checkIcon, { color: theme.primary }]}>
-                ✓
-              </Text>
-            ) : null}
+            {!currentVoice ? <SelectionCheck color={theme.primary} /> : null}
           </Pressable>
           {filteredVoices.length === 0 ? (
             <Text
@@ -189,9 +194,7 @@ const VoicePickerModal: React.FC<VoicePickerModalProps> = ({
                   ) : null}
                 </View>
                 {currentVoice?.identifier === voice.identifier ? (
-                  <Text style={[styles.checkIcon, { color: theme.primary }]}>
-                    ✓
-                  </Text>
+                  <SelectionCheck color={theme.primary} />
                 ) : null}
               </Pressable>
             ))
@@ -246,11 +249,7 @@ const EnginePickerModal: React.FC<EnginePickerModalProps> = ({
                 System default
               </Text>
             </View>
-            {!currentEngine ? (
-              <Text style={[styles.checkIcon, { color: theme.primary }]}>
-                ✓
-              </Text>
-            ) : null}
+            {!currentEngine ? <SelectionCheck color={theme.primary} /> : null}
           </Pressable>
           {engines.map(engine => (
             <Pressable
@@ -274,9 +273,7 @@ const EnginePickerModal: React.FC<EnginePickerModalProps> = ({
                 </Text>
               </View>
               {currentEngine?.name === engine.name ? (
-                <Text style={[styles.checkIcon, { color: theme.primary }]}>
-                  ✓
-                </Text>
+                <SelectionCheck color={theme.primary} />
               ) : null}
             </Pressable>
           ))}
@@ -287,6 +284,14 @@ const EnginePickerModal: React.FC<EnginePickerModalProps> = ({
       </Dialog.Actions>
     </Dialog.Root>
   );
+};
+
+// Selected-row checkmark: SF Symbol on iOS, unchanged text glyph on Android.
+const SelectionCheck: React.FC<{ color: string }> = ({ color }) => {
+  if (Platform.OS === 'ios') {
+    return <ISIcon name="check" size={16} color={color} />;
+  }
+  return <Text style={[styles.checkIcon, { color }]}>✓</Text>;
 };
 
 const TTSTab: React.FC = () => {
@@ -353,22 +358,42 @@ const TTSTab: React.FC = () => {
           {TTSEnable ? (
             <>
               {engines.length > 0 ? (
+                Platform.OS === 'ios' ? (
+                  <ISRow
+                    title="Engine"
+                    description={tts?.engine?.label || 'System default'}
+                    onPress={() => setEngineModalVisible(true)}
+                    right="chevron"
+                    theme={theme}
+                  />
+                ) : (
+                  <List.Item
+                    title="Engine"
+                    description={tts?.engine?.label || 'System default'}
+                    onPress={() => setEngineModalVisible(true)}
+                    right="chevron-right"
+                    theme={theme}
+                  />
+                )
+              ) : null}
+
+              {Platform.OS === 'ios' ? (
+                <ISRow
+                  title="Voice"
+                  description={tts?.voice?.name || 'System default'}
+                  onPress={() => setVoiceModalVisible(true)}
+                  right="chevron"
+                  theme={theme}
+                />
+              ) : (
                 <List.Item
-                  title="Engine"
-                  description={tts?.engine?.label || 'System default'}
-                  onPress={() => setEngineModalVisible(true)}
+                  title="Voice"
+                  description={tts?.voice?.name || 'System default'}
+                  onPress={() => setVoiceModalVisible(true)}
                   right="chevron-right"
                   theme={theme}
                 />
-              ) : null}
-
-              <List.Item
-                title="Voice"
-                description={tts?.voice?.name || 'System default'}
-                onPress={() => setVoiceModalVisible(true)}
-                right="chevron-right"
-                theme={theme}
-              />
+              )}
 
               <View style={styles.sliderSection}>
                 <Text style={[styles.sliderLabel, { color: theme.onSurface }]}>

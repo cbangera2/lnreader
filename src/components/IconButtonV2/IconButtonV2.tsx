@@ -8,6 +8,8 @@ import { MaterialDesignIconName } from '@type/icon';
 import { Pressable } from 'react-native-gesture-handler';
 import { PressableEvent } from 'react-native-gesture-handler/lib/typescript/components/Pressable/PressableProps';
 
+import ISIcon from '../ios/ISIconCompat';
+
 type Props = {
   accessibilityLabel?: string;
   name: MaterialDesignIconName;
@@ -32,37 +34,38 @@ const IconButton: React.FC<Props> = ({
   disabled,
   theme,
   style,
-}) => (
-  <View style={[styles.container, style]}>
-    <Pressable
-      accessibilityLabel={accessibilityLabel}
-      accessibilityRole="button"
-      style={({ pressed }) => [
-        styles.pressable,
-        { padding },
-        Platform.OS === 'ios' && pressed && styles.pressed,
-      ]}
-      onPress={onPress}
-      onPressIn={onPressIn}
-      disabled={disabled}
-      android_ripple={
-        onPress || onPressIn
-          ? { color: Color(theme.primary).alpha(0.12).string() }
-          : undefined
-      }
-    >
-      <MaterialCommunityIcons
-        name={name}
-        size={size}
-        color={
-          disabled
-            ? Color(theme.onSurface).alpha(0.38).string()
-            : color || theme.onSurface
+}) => {
+  const iconColor = disabled
+    ? Color(theme.onSurface).alpha(0.38).string()
+    : color || theme.onSurface;
+  return (
+    <View style={[styles.container, style]}>
+      <Pressable
+        accessibilityLabel={accessibilityLabel}
+        accessibilityRole="button"
+        style={({ pressed }) => [
+          styles.pressable,
+          { padding },
+          Platform.OS === 'ios' && pressed && styles.pressed,
+        ]}
+        onPress={onPress}
+        onPressIn={onPressIn}
+        disabled={disabled}
+        android_ripple={
+          onPress || onPressIn
+            ? { color: Color(theme.primary).alpha(0.12).string() }
+            : undefined
         }
-      />
-    </Pressable>
-  </View>
-);
+      >
+        {Platform.OS === 'ios' ? (
+          <ISIcon name={name} size={size} color={iconColor} />
+        ) : (
+          <MaterialCommunityIcons name={name} size={size} color={iconColor} />
+        )}
+      </Pressable>
+    </View>
+  );
+};
 
 export default React.memo(IconButton);
 

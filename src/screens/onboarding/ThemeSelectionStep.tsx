@@ -6,6 +6,7 @@ import {
   useMMKVString,
 } from 'react-native-mmkv';
 import { SegmentedControl } from '@components';
+import { ISSegmented } from '@components/ios';
 import type { SegmentedControlOption } from '@components/SegmentedControl';
 import { ThemePicker } from '@components/ThemePicker/ThemePicker';
 import { ThemeColors } from '@theme/types';
@@ -100,12 +101,21 @@ export default function ThemeSelectionStep() {
     <View style={styles.container}>
       {/* Segmented Control */}
       <View style={styles.segmentedControlContainer}>
-        <SegmentedControl
-          options={themeModeOptions}
-          value={currentMode}
-          onChange={handleModeChange}
-          theme={theme}
-        />
+        {Platform.OS === 'ios' ? (
+          <ISSegmented
+            options={themeModeOptions}
+            value={currentMode}
+            onChange={handleModeChange}
+            theme={theme}
+          />
+        ) : (
+          <SegmentedControl
+            options={themeModeOptions}
+            value={currentMode}
+            onChange={handleModeChange}
+            theme={theme}
+          />
+        )}
       </View>
       {/* Theme List */}
       <LegendList

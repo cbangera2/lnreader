@@ -4,6 +4,7 @@ import Color from 'color';
 
 import { Appbar as PaperAppbar } from 'react-native-paper';
 import Glass from '@components/Glass/Glass';
+import { ISIcon } from '@components/ios/ISIcon';
 import { ThemeColors } from '../../theme/types';
 
 interface AppbarProps {
@@ -44,12 +45,23 @@ const Appbar: React.FC<AppbarProps> = ({
       }
       mode={resolvedMode}
     >
-      {handleGoBack && (
-        <PaperAppbar.BackAction
-          onPress={handleGoBack}
-          iconColor={theme.onSurface}
-        />
-      )}
+      {handleGoBack &&
+        (Platform.OS === 'ios' ? (
+          <PaperAppbar.Action
+            onPress={handleGoBack}
+            iconColor={theme.onSurface}
+            accessibilityLabel="Back"
+            isLeading
+            icon={({ size, color }) => (
+              <ISIcon name="chevron-left" size={size} color={color} />
+            )}
+          />
+        ) : (
+          <PaperAppbar.BackAction
+            onPress={handleGoBack}
+            iconColor={theme.onSurface}
+          />
+        ))}
       <PaperAppbar.Content
         title={title}
         titleStyle={{ color: theme.onSurface }}

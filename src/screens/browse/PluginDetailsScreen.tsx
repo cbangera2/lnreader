@@ -21,6 +21,7 @@ import {
   usePluginActions,
   useTheme,
 } from '@hooks/persisted';
+import { ISNavBar } from '@components/ios';
 import { PluginDetailsScreenProps } from '@navigators/types';
 import { getString } from '@i18n/translations';
 import { getLocaleLanguageName } from '@utils/constants/languages';
@@ -66,12 +67,20 @@ const PluginDetailsScreen = ({
   if (!plugin) {
     return (
       <SafeAreaView excludeTop>
-        <Appbar
-          mode="small"
-          title={getString('browseScreen.pluginDetails')}
-          handleGoBack={navigation.goBack}
-          theme={theme}
-        />
+        {Platform.OS === 'ios' ? (
+          <ISNavBar
+            title={getString('browseScreen.pluginDetails')}
+            onBack={navigation.goBack}
+            theme={theme}
+          />
+        ) : (
+          <Appbar
+            mode="small"
+            title={getString('browseScreen.pluginDetails')}
+            handleGoBack={navigation.goBack}
+            theme={theme}
+          />
+        )}
         <EmptyView
           icon="(･Д･。"
           description={getString('browseScreen.pluginNotInstalled')}
@@ -83,12 +92,20 @@ const PluginDetailsScreen = ({
 
   return (
     <SafeAreaView excludeTop>
-      <Appbar
-        mode="small"
-        title={getString('browseScreen.pluginDetails')}
-        handleGoBack={navigation.goBack}
-        theme={theme}
-      />
+      {Platform.OS === 'ios' ? (
+        <ISNavBar
+          title={getString('browseScreen.pluginDetails')}
+          onBack={navigation.goBack}
+          theme={theme}
+        />
+      ) : (
+        <Appbar
+          mode="small"
+          title={getString('browseScreen.pluginDetails')}
+          handleGoBack={navigation.goBack}
+          theme={theme}
+        />
+      )}
       <ScrollView
         contentContainerStyle={styles.content}
         keyboardShouldPersistTaps="handled"

@@ -8,7 +8,7 @@ import {
   View,
 } from 'react-native';
 import { Image, type ImageContentFit, type ImageProps } from 'expo-image';
-import MaterialCommunityIcons from '@react-native-vector-icons/material-design-icons';
+import { ISIcon } from '@components/ios/ISIcon';
 
 import { defaultCover } from '@plugins/helpers/constants';
 import type { ImageRequestInit } from '@plugins/types';
@@ -79,12 +79,13 @@ const NovelCoverImage = ({
         ]}
         testID={testID}
       >
-        <MaterialCommunityIcons
-          color={theme.onSurfaceVariant}
-          name="book-open-page-variant-outline"
-          size={iconSize}
-          style={styles.icon}
-        />
+        <View style={styles.icon}>
+          <ISIcon
+            color={theme.onSurfaceVariant}
+            name="book-open-page-variant-outline"
+            size={iconSize}
+          />
+        </View>
       </View>
     );
   }

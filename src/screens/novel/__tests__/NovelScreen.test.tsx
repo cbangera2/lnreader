@@ -193,12 +193,19 @@ jest.mock('react-native-paper', () => {
   return {
     Portal,
     Appbar: {
-      Action: ({ icon, onPress }: any) =>
-        React.createElement(
+      Action: ({ icon, onPress }: any) => {
+        // iOS passes an ISIcon render fn; resolve its Material name so the
+        // testID stays stable across platforms.
+        const name =
+          typeof icon === 'function'
+            ? icon({ size: 24, color: '#000' })?.props?.name ?? 'fn'
+            : icon;
+        return React.createElement(
           Pressable,
-          { testID: `appbar-action-${icon}`, onPress },
-          React.createElement(Text, null, icon),
-        ),
+          { testID: `appbar-action-${name}`, onPress },
+          React.createElement(Text, null, name),
+        );
+      },
       Content: ({ title }: any) => React.createElement(Text, null, title),
     },
     Snackbar: ({ visible, children }: any) =>

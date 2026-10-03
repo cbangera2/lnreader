@@ -21,6 +21,7 @@ import {
   SafeAreaView,
 } from '@components';
 import { TaskQueueScreenProps } from '@navigators/types';
+import { ISIcon } from '@components/ios/ISIcon';
 import {
   BACKGROUND_TASKS_STORE_KEY,
   backgroundTasks,
@@ -60,7 +61,17 @@ const DownloadQueue = ({ navigation }: TaskQueueScreenProps) => {
           anchor={
             taskQueue?.length ? (
               <MaterialAppbar.Action
-                icon="dots-vertical"
+                icon={
+                  Platform.OS === 'ios'
+                    ? ({ color, size }) => (
+                        <ISIcon
+                          name="dots-vertical"
+                          size={size}
+                          color={color}
+                        />
+                      )
+                    : 'dots-vertical'
+                }
                 iconColor={theme.onSurface}
                 onPress={openMenu}
               />
@@ -165,7 +176,19 @@ const DownloadQueue = ({ navigation }: TaskQueueScreenProps) => {
             isRunning ? getString('common.pause') : getString('common.resume')
           }
           uppercase={false}
-          icon={isRunning ? 'pause' : 'play'}
+          icon={
+            Platform.OS === 'ios'
+              ? ({ color, size }) => (
+                  <ISIcon
+                    name={isRunning ? 'pause' : 'play'}
+                    size={size}
+                    color={color}
+                  />
+                )
+              : isRunning
+              ? 'pause'
+              : 'play'
+          }
           onPress={() => {
             if (isRunning) {
               backgroundTasks.pauseAll();

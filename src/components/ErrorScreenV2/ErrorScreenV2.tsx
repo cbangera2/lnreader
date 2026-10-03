@@ -5,6 +5,8 @@ import { useTheme } from '@hooks/persisted';
 import { getErrorMessage } from '@utils/error';
 import { MaterialDesignIconName } from '@type/icon';
 
+import ISIcon from '../ios/ISIconCompat';
+
 interface ErrorScreenProps {
   error: unknown;
   actions?: {
@@ -35,11 +37,19 @@ const ErrorScreen: React.FC<ErrorScreenProps> = ({ error, actions }) => {
                   Platform.OS === 'ios' && pressed && styles.pressed,
                 ]}
               >
-                <MaterialCommunityIcons
-                  name={action.iconName}
-                  size={24}
-                  color={theme.outline}
-                />
+                {Platform.OS === 'ios' ? (
+                  <ISIcon
+                    name={action.iconName}
+                    size={24}
+                    color={theme.outline}
+                  />
+                ) : (
+                  <MaterialCommunityIcons
+                    name={action.iconName}
+                    size={24}
+                    color={theme.outline}
+                  />
+                )}
                 <Text style={{ color: theme.outline }}>{action.title}</Text>
               </Pressable>
             </View>

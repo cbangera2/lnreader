@@ -10,6 +10,7 @@ import {
 import { IconButton } from 'react-native-paper';
 
 import { useTheme } from '@hooks/persisted';
+import { ISIcon } from '@components/ios/ISIcon';
 import {
   getAniListScoreFormatting,
   getKitsuScoreFormatting,
@@ -103,7 +104,9 @@ export const TrackedItemCard: React.FC<TrackedItemCardProps> = ({
             {trackItem.title}
           </Text>
           <IconButton
-            icon="close"
+            icon={({ size, color }) => (
+              <ISIcon name="close" size={size} color={color} />
+            )}
             iconColor={theme.onSurfaceVariant}
             size={21}
             onPress={onUntrack}

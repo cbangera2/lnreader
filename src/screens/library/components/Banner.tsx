@@ -2,6 +2,7 @@ import React from 'react';
 import { Platform, StyleSheet, Text, View } from 'react-native';
 
 import MaterialCommunityIcons from '@react-native-vector-icons/material-design-icons';
+import { ISIcon } from '@components/ios/ISIcon';
 import { ThemeColors } from '../../../theme/types';
 import { MaterialDesignIconName } from '@type/icon';
 
@@ -22,12 +23,18 @@ export const Banner: React.FC<Props> = ({
 }) => (
   <View style={[{ backgroundColor }, styles.container]}>
     {icon ? (
-      <MaterialCommunityIcons
-        name={icon}
-        color={textColor}
-        size={18}
-        style={styles.icon}
-      />
+      Platform.OS === 'ios' ? (
+        <View style={styles.icon}>
+          <ISIcon name={icon} color={textColor} size={18} />
+        </View>
+      ) : (
+        <MaterialCommunityIcons
+          name={icon}
+          color={textColor}
+          size={18}
+          style={styles.icon}
+        />
+      )
     ) : null}
     <Text style={[{ color: textColor }, styles.bannerText]}>{label}</Text>
   </View>

@@ -7,7 +7,8 @@ import {
   Pressable,
   GestureResponderEvent,
 } from 'react-native';
-import MaterialCommunityIcons from '@react-native-vector-icons/material-design-icons';
+import type MaterialCommunityIcons from '@react-native-vector-icons/material-design-icons';
+import { ISIcon } from '../ios/ISIcon';
 import { ThemeColors } from '@theme/types';
 import { iosSelection } from '@utils/haptics';
 
@@ -102,20 +103,14 @@ export function SegmentedControl<T extends string = string>({
               }}
             >
               {showCheckIcon && isSelected && (
-                <MaterialCommunityIcons
-                  name="check"
-                  size={18}
-                  color={textColor}
-                  style={styles.checkIcon}
-                />
+                <View style={styles.checkIcon}>
+                  <ISIcon name="check" size={18} color={textColor} />
+                </View>
               )}
               {option.icon && (!isSelected || !showCheckIcon) && (
-                <MaterialCommunityIcons
-                  name={option.icon}
-                  size={18}
-                  color={textColor}
-                  style={showLabels ? styles.icon : undefined}
-                />
+                <View style={showLabels ? styles.icon : undefined}>
+                  <ISIcon name={option.icon} size={18} color={textColor} />
+                </View>
               )}
               {showLabels ? (
                 <Text style={[styles.segmentText, { color: textColor }]}>

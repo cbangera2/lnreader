@@ -4,7 +4,7 @@ import { Platform, View, Text, StyleSheet, Pressable } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
 
 import { IconButton } from 'react-native-paper';
-import MaterialCommunityIcons from '@react-native-vector-icons/material-design-icons';
+import { ISIcon } from '@components/ios/ISIcon';
 
 import { showToast } from '@utils/showToast';
 
@@ -213,33 +213,36 @@ const NovelInfoHeader = ({
               <>
                 {novel.id !== 'NO_ID' && novel.author ? (
                   <Row style={styles.infoRow}>
-                    <MaterialCommunityIcons
-                      name="fountain-pen-tip"
-                      size={14}
-                      color={theme.onSurfaceVariant}
-                      style={styles.marginRight}
-                    />
+                    <View style={styles.marginRight}>
+                      <ISIcon
+                        name="fountain-pen-tip"
+                        size={14}
+                        color={theme.onSurfaceVariant}
+                      />
+                    </View>
                     <NovelInfo theme={theme}>{novel.author}</NovelInfo>
                   </Row>
                 ) : null}
                 {novel.id !== 'NO_ID' && novel.artist ? (
                   <Row style={styles.infoRow}>
-                    <MaterialCommunityIcons
-                      name="palette-outline"
-                      size={14}
-                      color={theme.onSurfaceVariant}
-                      style={styles.marginRight}
-                    />
+                    <View style={styles.marginRight}>
+                      <ISIcon
+                        name="palette-outline"
+                        size={14}
+                        color={theme.onSurfaceVariant}
+                      />
+                    </View>
                     <NovelInfo theme={theme}>{novel.artist}</NovelInfo>
                   </Row>
                 ) : null}
                 <Row style={styles.infoRow}>
-                  <MaterialCommunityIcons
-                    name={getStatusIcon(novelStatus)}
-                    size={14}
-                    color={theme.onSurfaceVariant}
-                    style={styles.marginRight}
-                  />
+                  <View style={styles.marginRight}>
+                    <ISIcon
+                      name={getStatusIcon(novelStatus)}
+                      size={14}
+                      color={theme.onSurfaceVariant}
+                    />
+                  </View>
                   <NovelInfo theme={theme}>
                     {(novelStatus
                       ? translateNovelStatus(novelStatus)
@@ -307,7 +310,17 @@ const NovelInfoHeader = ({
                 )}
               </View>
               <IconButton
-                icon="filter-variant"
+                icon={
+                  Platform.OS === 'ios'
+                    ? ({ size, color }) => (
+                        <ISIcon
+                          name="filter-variant"
+                          size={size}
+                          color={color}
+                        />
+                      )
+                    : 'filter-variant'
+                }
                 iconColor={
                   filter.length > 0
                     ? filterColor(theme.isDark)

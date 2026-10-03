@@ -1,4 +1,5 @@
 import {
+  Platform,
   View,
   Text,
   StyleSheet,
@@ -9,6 +10,7 @@ import { overlay } from 'react-native-paper';
 import color from 'color';
 import MaterialCommunityIcons from '@react-native-vector-icons/material-design-icons';
 import { ThemeColors } from '@theme/types';
+import { ISIcon } from '@components/ios/ISIcon';
 
 interface ThemePickerProps {
   theme: ThemeColors;
@@ -39,7 +41,22 @@ export const ThemePicker = ({
         ]}
       >
         <Pressable style={styles.flex1} onPress={onPress}>
-          {currentTheme.id !== theme.id ? null : (
+          {currentTheme.id !== theme.id ? null : Platform.OS === 'ios' ? (
+            <View
+              style={[
+                styles.checkIcon,
+                styles.checkIconIOS,
+                { backgroundColor: theme.primary },
+              ]}
+            >
+              <ISIcon
+                name="check"
+                color={theme.onPrimary}
+                size={12}
+                weight="semibold"
+              />
+            </View>
+          ) : (
             <MaterialCommunityIcons
               name="check"
               color={theme.onPrimary}
@@ -165,6 +182,11 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     padding: 1.6,
     zIndex: 1,
+  },
+  checkIconIOS: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 4,
   },
   topBar: {
     height: 20,

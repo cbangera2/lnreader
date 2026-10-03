@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import { FlatList, Platform, StyleSheet } from 'react-native';
 
 import { Appbar as MaterialAppbar } from 'react-native-paper';
 
@@ -17,6 +17,7 @@ import UpdatesSkeletonLoading from '@screens/updates/components/UpdatesSkeletonL
 import DownloadedNovelChapterGroup from './components/DownloadedNovelChapterGroup';
 import { getString } from '@i18n/translations';
 import { DownloadsScreenProps } from '@navigators/types';
+import { ISIcon } from '@components/ios/ISIcon';
 import { DownloadedChapter } from '@database/types';
 import { showToast } from '@utils/showToast';
 import { parseChapterNumber } from '@utils/parseChapterNumber';
@@ -82,7 +83,13 @@ const Downloads = ({ navigation }: DownloadsScreenProps) => {
       >
         {chapters.length > 0 ? (
           <MaterialAppbar.Action
-            icon="delete-sweep"
+            icon={
+              Platform.OS === 'ios'
+                ? ({ color, size }) => (
+                    <ISIcon name="delete-sweep" size={size} color={color} />
+                  )
+                : 'delete-sweep'
+            }
             iconColor={theme.onSurface}
             onPress={showDialog}
           />

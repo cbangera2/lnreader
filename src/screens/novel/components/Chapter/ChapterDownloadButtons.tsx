@@ -12,7 +12,7 @@ import { overlay } from 'react-native-paper';
 import { getString } from '@i18n/translations';
 import { useBoolean } from '@hooks/index';
 import { IconButtonV2, Menu } from '@components';
-import MaterialCommunityIcons from '@react-native-vector-icons/material-design-icons';
+import { ISIcon } from '@components/ios/ISIcon';
 
 interface DownloadButtonProps {
   isDownloaded: boolean;
@@ -88,11 +88,7 @@ export const ChapterDownloadingButton: React.FC<theme> = ({ theme }) => (
 );
 
 const DownloadIcon: React.FC<theme> = ({ theme }) => (
-  <MaterialCommunityIcons
-    name="arrow-down-circle-outline"
-    size={25}
-    color={theme.outline}
-  />
+  <ISIcon name="arrow-down-circle-outline" size={25} color={theme.outline} />
 );
 
 export const DownloadChapterButton: React.FC<buttonPropType> = ({
@@ -114,11 +110,7 @@ export const DownloadChapterButton: React.FC<buttonPropType> = ({
 );
 
 const DeleteIcon: React.FC<theme> = ({ theme }) => (
-  <MaterialCommunityIcons
-    name="check-circle"
-    size={25}
-    color={theme.onSurface}
-  />
+  <ISIcon name="check-circle" size={25} color={theme.onSurface} />
 );
 
 export const DeleteChapterButton: React.FC<buttonPropType> = ({
@@ -139,15 +131,24 @@ export const DeleteChapterButton: React.FC<buttonPropType> = ({
   </View>
 );
 
-export const ChapterBookmarkButton: React.FC<theme> = ({ theme }) => (
-  <IconButtonV2
-    name="bookmark"
-    theme={theme}
-    color={theme.primary}
-    size={18}
-    style={styles.iconButtonLeft}
-  />
-);
+export const ChapterBookmarkButton: React.FC<theme> = ({ theme }) => {
+  if (Platform.OS === 'ios') {
+    return (
+      <View style={[styles.bookmarkContainer, styles.iconButtonLeft]}>
+        <ISIcon name="bookmark" size={18} color={theme.primary} />
+      </View>
+    );
+  }
+  return (
+    <IconButtonV2
+      name="bookmark"
+      theme={theme}
+      color={theme.primary}
+      size={18}
+      style={styles.iconButtonLeft}
+    />
+  );
+};
 
 const styles = StyleSheet.create({
   pressed: {
@@ -170,4 +171,9 @@ const styles = StyleSheet.create({
   },
   iconButton: { margin: 2 },
   iconButtonLeft: { marginLeft: 2 },
+  bookmarkContainer: {
+    borderRadius: 50,
+    overflow: 'hidden',
+    padding: 8,
+  },
 });

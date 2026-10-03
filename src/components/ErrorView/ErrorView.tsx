@@ -1,7 +1,9 @@
 import { ThemeColors } from '@theme/types';
 
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import { IconButton } from 'react-native-paper';
+
+import ISIcon from '../ios/ISIconCompat';
 
 interface ErrorAction {
   name: string;
@@ -41,7 +43,13 @@ export const ErrorView = ({ errorName, actions, theme }: ErrorViewProps) => (
             style={styles.actionPressable}
           >
             <IconButton
-              icon={action.icon}
+              icon={
+                Platform.OS === 'ios'
+                  ? ({ size, color }) => (
+                      <ISIcon name={action.icon} size={size} color={color} />
+                    )
+                  : action.icon
+              }
               size={24}
               style={styles.iconButton}
             />

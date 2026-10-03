@@ -1,6 +1,6 @@
 import React from 'react';
 import { Platform, View, StyleSheet } from 'react-native';
-import MaterialCommunityIcons from '@react-native-vector-icons/material-design-icons';
+import { ISIcon } from '@components/ios/ISIcon';
 import { ThemeColors } from '../../theme/types';
 import Color from 'color';
 import { MaterialDesignIconName } from '@type/icon';
@@ -49,7 +49,7 @@ export const ToggleButton: React.FC<ToggleButtonProps> = ({
       onPress={onPress}
       disabled={disabled}
     >
-      <MaterialCommunityIcons
+      <ISIcon
         name={icon}
         color={selected ? theme.primary : color ? color : theme.onSurface}
         size={24}
@@ -94,7 +94,7 @@ export const ToggleColorButton: React.FC<ToggleColorButtonProps> = ({
         },
       ]}
     >
-      <MaterialCommunityIcons
+      <ISIcon
         name={selected ? 'check' : 'format-color-text'}
         color={textColor}
         size={24}

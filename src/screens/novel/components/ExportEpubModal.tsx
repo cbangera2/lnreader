@@ -3,6 +3,7 @@ import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { HelperText, TextInput } from 'react-native-paper';
 
 import { Dialog, SwitchItem } from '@components';
+import { ISIcon } from '@components/ios/ISIcon';
 import NativeFile from '@modules/native-file';
 
 import { useBoolean } from '@hooks';
@@ -184,7 +185,9 @@ const ExportEpubModal: React.FC<ExportEpubModalProps> = ({
                       'novelScreen.exportEpubModal.selectFolder',
                     )}
                     forceTextInputFocus={false}
-                    icon="folder-outline"
+                    icon={({ size, color }) => (
+                      <ISIcon name="folder-outline" size={size} color={color} />
+                    )}
                     onPress={() => void openFolderPicker()}
                   />
                 }

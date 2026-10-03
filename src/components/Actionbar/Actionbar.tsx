@@ -1,5 +1,6 @@
 import { useTheme } from '@hooks/persisted';
 import Glass from '@components/Glass/Glass';
+import { ISIcon } from '@components/ios/ISIcon';
 import React from 'react';
 import {
   Dimensions,
@@ -10,7 +11,6 @@ import {
   ViewStyle,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import MaterialCommunityIcons from '@react-native-vector-icons/material-design-icons';
 import { MaterialDesignIconName } from '@type/icon';
 import Animated, { SlideInDown, SlideOutDown } from 'react-native-reanimated';
 
@@ -73,11 +73,7 @@ export const Actionbar: React.FC<ActionbarProps> = ({
           style={({ pressed }) => [isIos && pressed && styles.pressed]}
           onPress={onPress}
         >
-          <MaterialCommunityIcons
-            name={icon}
-            color={theme.onSurface}
-            size={24}
-          />
+          <ISIcon name={icon} color={theme.onSurface} size={24} />
         </Pressable>
       ))}
     </Animated.View>

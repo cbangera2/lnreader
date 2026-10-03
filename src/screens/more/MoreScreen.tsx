@@ -10,6 +10,7 @@ import {
 import { getString } from '@i18n/translations';
 
 import { List, SafeAreaView } from '@components';
+import { ISRow } from '@components/ios';
 
 import { MoreHeader } from './components/MoreHeader';
 import { useLibrarySettings, useTheme } from '@hooks/persisted';
@@ -74,145 +75,262 @@ const MoreScreen = ({ navigation }: MoreStackScreenProps) => {
           />
         )}
         <List.Section>
-          <Pressable
-            android_ripple={{ color: theme.rippleColor }}
-            style={({ pressed }) => [
-              styles.pressable,
-              Platform.OS === 'ios' && pressed && styles.pressed,
-            ]}
-            onPress={enableDownloadedOnlyMode}
-          >
-            <View style={styles.row}>
-              <List.Icon theme={theme} icon="cloud-off-outline" />
-              <View style={styles.marginLeft16}>
-                <Text
-                  style={[
-                    {
-                      color: theme.onSurface,
-                    },
-                    styles.fontSize16,
-                  ]}
-                >
-                  {getString('moreScreen.downloadOnly')}
-                </Text>
-                <Text
-                  style={[
-                    styles.description,
-                    { color: theme.onSurfaceVariant },
-                  ]}
-                >
-                  {getString('moreScreen.downloadOnlyDesc')}
-                </Text>
-              </View>
-            </View>
-            <Switch
-              value={downloadedOnlyMode}
-              onValueChange={enableDownloadedOnlyMode}
+          {Platform.OS === 'ios' ? (
+            // onPress-only: ISRow fires onSwitchChange then onPress, so a
+            // single toggle handler avoids flipping the value twice.
+            <ISRow
+              title={getString('moreScreen.downloadOnly')}
+              description={getString('moreScreen.downloadOnlyDesc')}
+              icon="cloud-off-outline"
+              right="switch"
+              switchValue={downloadedOnlyMode}
+              onPress={enableDownloadedOnlyMode}
+              theme={theme}
             />
-          </Pressable>
-          <Pressable
-            android_ripple={{ color: theme.rippleColor }}
-            style={({ pressed }) => [
-              styles.pressable,
-              Platform.OS === 'ios' && pressed && styles.pressed,
-            ]}
-            onPress={enableIncognitoMode}
-          >
-            <View style={styles.row}>
-              <List.Icon theme={theme} icon="glasses" />
-              <View style={styles.marginLeft16}>
-                <Text
-                  style={[
-                    {
-                      color: theme.onSurface,
-                    },
-                    styles.fontSize16,
-                  ]}
-                >
-                  {getString('moreScreen.incognitoMode')}
-                </Text>
-                <Text
-                  style={[
-                    styles.description,
-                    { color: theme.onSurfaceVariant },
-                  ]}
-                >
-                  {getString('moreScreen.incognitoModeDesc')}
-                </Text>
+          ) : (
+            <Pressable
+              android_ripple={{ color: theme.rippleColor }}
+              style={({ pressed }) => [
+                styles.pressable,
+                Platform.OS === 'ios' && pressed && styles.pressed,
+              ]}
+              onPress={enableDownloadedOnlyMode}
+            >
+              <View style={styles.row}>
+                <List.Icon theme={theme} icon="cloud-off-outline" />
+                <View style={styles.marginLeft16}>
+                  <Text
+                    style={[
+                      {
+                        color: theme.onSurface,
+                      },
+                      styles.fontSize16,
+                    ]}
+                  >
+                    {getString('moreScreen.downloadOnly')}
+                  </Text>
+                  <Text
+                    style={[
+                      styles.description,
+                      { color: theme.onSurfaceVariant },
+                    ]}
+                  >
+                    {getString('moreScreen.downloadOnlyDesc')}
+                  </Text>
+                </View>
               </View>
-            </View>
-            <Switch value={incognitoMode} onValueChange={enableIncognitoMode} />
-          </Pressable>
+              <Switch
+                value={downloadedOnlyMode}
+                onValueChange={enableDownloadedOnlyMode}
+              />
+            </Pressable>
+          )}
+          {Platform.OS === 'ios' ? (
+            // onPress-only: ISRow fires onSwitchChange then onPress, so a
+            // single toggle handler avoids flipping the value twice.
+            <ISRow
+              title={getString('moreScreen.incognitoMode')}
+              description={getString('moreScreen.incognitoModeDesc')}
+              icon="glasses"
+              right="switch"
+              switchValue={incognitoMode}
+              onPress={enableIncognitoMode}
+              theme={theme}
+            />
+          ) : (
+            <Pressable
+              android_ripple={{ color: theme.rippleColor }}
+              style={({ pressed }) => [
+                styles.pressable,
+                Platform.OS === 'ios' && pressed && styles.pressed,
+              ]}
+              onPress={enableIncognitoMode}
+            >
+              <View style={styles.row}>
+                <List.Icon theme={theme} icon="glasses" />
+                <View style={styles.marginLeft16}>
+                  <Text
+                    style={[
+                      {
+                        color: theme.onSurface,
+                      },
+                      styles.fontSize16,
+                    ]}
+                  >
+                    {getString('moreScreen.incognitoMode')}
+                  </Text>
+                  <Text
+                    style={[
+                      styles.description,
+                      { color: theme.onSurfaceVariant },
+                    ]}
+                  >
+                    {getString('moreScreen.incognitoModeDesc')}
+                  </Text>
+                </View>
+              </View>
+              <Switch
+                value={incognitoMode}
+                onValueChange={enableIncognitoMode}
+              />
+            </Pressable>
+          )}
           <List.Divider theme={theme} />
-          <List.Item
-            title={'Task Queue'}
-            description={
-              taskQueue && taskQueue.length > 0
-                ? taskQueue.length + ' remaining'
-                : ''
-            }
-            icon="progress-download"
-            onPress={() =>
-              navigation.navigate('MoreStack', {
-                screen: 'TaskQueue',
-              })
-            }
-            theme={theme}
-          />
-          <List.Item
-            title={getString('common.downloads')}
-            icon="folder-download"
-            onPress={() =>
-              navigation.navigate('MoreStack', {
-                screen: 'Downloads',
-              })
-            }
-            theme={theme}
-          />
-          <List.Item
-            title={getString('common.categories')}
-            icon="label-outline"
-            onPress={() =>
-              navigation.navigate('MoreStack', {
-                screen: 'Categories',
-              })
-            }
-            theme={theme}
-          />
-          <List.Item
-            title={getString('statsScreen.title')}
-            icon="chart-line"
-            onPress={() =>
-              navigation.navigate('MoreStack', {
-                screen: 'Statistics',
-              })
-            }
-            theme={theme}
-          />
+          {Platform.OS === 'ios' ? (
+            <ISRow
+              title={'Task Queue'}
+              description={
+                taskQueue && taskQueue.length > 0
+                  ? taskQueue.length + ' remaining'
+                  : ''
+              }
+              icon="progress-download"
+              onPress={() =>
+                navigation.navigate('MoreStack', {
+                  screen: 'TaskQueue',
+                })
+              }
+              theme={theme}
+            />
+          ) : (
+            <List.Item
+              title={'Task Queue'}
+              description={
+                taskQueue && taskQueue.length > 0
+                  ? taskQueue.length + ' remaining'
+                  : ''
+              }
+              icon="progress-download"
+              onPress={() =>
+                navigation.navigate('MoreStack', {
+                  screen: 'TaskQueue',
+                })
+              }
+              theme={theme}
+            />
+          )}
+          {Platform.OS === 'ios' ? (
+            <ISRow
+              title={getString('common.downloads')}
+              icon="folder-download"
+              onPress={() =>
+                navigation.navigate('MoreStack', {
+                  screen: 'Downloads',
+                })
+              }
+              theme={theme}
+            />
+          ) : (
+            <List.Item
+              title={getString('common.downloads')}
+              icon="folder-download"
+              onPress={() =>
+                navigation.navigate('MoreStack', {
+                  screen: 'Downloads',
+                })
+              }
+              theme={theme}
+            />
+          )}
+          {Platform.OS === 'ios' ? (
+            <ISRow
+              title={getString('common.categories')}
+              icon="label-outline"
+              onPress={() =>
+                navigation.navigate('MoreStack', {
+                  screen: 'Categories',
+                })
+              }
+              theme={theme}
+            />
+          ) : (
+            <List.Item
+              title={getString('common.categories')}
+              icon="label-outline"
+              onPress={() =>
+                navigation.navigate('MoreStack', {
+                  screen: 'Categories',
+                })
+              }
+              theme={theme}
+            />
+          )}
+          {Platform.OS === 'ios' ? (
+            <ISRow
+              title={getString('statsScreen.title')}
+              icon="chart-line"
+              onPress={() =>
+                navigation.navigate('MoreStack', {
+                  screen: 'Statistics',
+                })
+              }
+              theme={theme}
+            />
+          ) : (
+            <List.Item
+              title={getString('statsScreen.title')}
+              icon="chart-line"
+              onPress={() =>
+                navigation.navigate('MoreStack', {
+                  screen: 'Statistics',
+                })
+              }
+              theme={theme}
+            />
+          )}
           <List.Divider theme={theme} />
-          <List.Item
-            title={getString('common.settings')}
-            icon="cog-outline"
-            onPress={() =>
-              navigation.navigate('MoreStack', {
-                screen: 'SettingsStack',
-                params: {
-                  screen: 'Settings',
-                },
-              })
-            }
-            theme={theme}
-          />
-          <List.Item
-            title={getString('common.about')}
-            icon="information-outline"
-            onPress={() =>
-              navigation.navigate('MoreStack', {
-                screen: 'About',
-              })
-            }
-            theme={theme}
-          />
+          {Platform.OS === 'ios' ? (
+            <ISRow
+              title={getString('common.settings')}
+              icon="cog-outline"
+              onPress={() =>
+                navigation.navigate('MoreStack', {
+                  screen: 'SettingsStack',
+                  params: {
+                    screen: 'Settings',
+                  },
+                })
+              }
+              theme={theme}
+            />
+          ) : (
+            <List.Item
+              title={getString('common.settings')}
+              icon="cog-outline"
+              onPress={() =>
+                navigation.navigate('MoreStack', {
+                  screen: 'SettingsStack',
+                  params: {
+                    screen: 'Settings',
+                  },
+                })
+              }
+              theme={theme}
+            />
+          )}
+          {Platform.OS === 'ios' ? (
+            <ISRow
+              title={getString('common.about')}
+              icon="information-outline"
+              onPress={() =>
+                navigation.navigate('MoreStack', {
+                  screen: 'About',
+                })
+              }
+              theme={theme}
+            />
+          ) : (
+            <List.Item
+              title={getString('common.about')}
+              icon="information-outline"
+              onPress={() =>
+                navigation.navigate('MoreStack', {
+                  screen: 'About',
+                })
+              }
+              theme={theme}
+            />
+          )}
         </List.Section>
       </ScrollView>
     </SafeAreaView>

@@ -20,6 +20,7 @@ import NovelAppbar from './components/NovelAppbar';
 import NovelScreenList from './components/NovelScreenList';
 import { ThemeColors } from '@theme/types';
 import { EmptyView, SafeAreaView } from '@components';
+import { ISIcon } from '@components/ios/ISIcon';
 import { useNovelActions, useNovelValue } from './NovelContext';
 import { LegendListRef } from '@legendapp/list/react-native';
 import { useCustomNovelCover } from './hooks/useCustomNovelCover';
@@ -157,13 +158,25 @@ const Novel = ({ route, navigation }: NovelScreenProps) => {
   const selectionBarContent = (
     <>
       <Appbar.Action
-        icon="close"
+        icon={
+          isIos
+            ? ({ size, color: iconColor }: { size: number; color: string }) => (
+                <ISIcon name="close" size={size} color={iconColor} />
+              )
+            : 'close'
+        }
         iconColor={theme.onBackground}
         onPress={clearSelection}
       />
       <Appbar.Content title={`${selected.length}`} titleStyle={titleStyle} />
       <Appbar.Action
-        icon="select-all"
+        icon={
+          isIos
+            ? ({ size, color: iconColor }: { size: number; color: string }) => (
+                <ISIcon name="select-all" size={size} color={iconColor} />
+              )
+            : 'select-all'
+        }
         iconColor={theme.onBackground}
         onPress={selectAll}
       />

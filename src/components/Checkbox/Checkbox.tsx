@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { Checkbox as PaperCheckbox } from 'react-native-paper';
 import MaterialCommunityIcons from '@react-native-vector-icons/material-design-icons';
+import { ISIcon } from '@components/ios/ISIcon';
 import { iosSelection } from '@utils/haptics';
 
 import { ThemeColors } from '../../theme/types';
@@ -112,12 +113,22 @@ export const SortItem = ({ label, status, onPress, theme }: SortItemProps) => (
     onPress={onPress}
   >
     {status ? (
-      <MaterialCommunityIcons
-        name={status === 'asc' ? 'arrow-up' : 'arrow-down'}
-        color={theme.primary}
-        size={21}
-        style={styles.icon}
-      />
+      Platform.OS === 'ios' ? (
+        <View style={styles.icon}>
+          <ISIcon
+            name={status === 'asc' ? 'arrow-up' : 'arrow-down'}
+            color={theme.primary}
+            size={21}
+          />
+        </View>
+      ) : (
+        <MaterialCommunityIcons
+          name={status === 'asc' ? 'arrow-up' : 'arrow-down'}
+          color={theme.primary}
+          size={21}
+          style={styles.icon}
+        />
+      )
     ) : null}
     <Text style={{ color: theme.onSurface }}>{label}</Text>
   </Pressable>

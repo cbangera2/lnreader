@@ -10,6 +10,7 @@ import { useTheme } from '@hooks/persisted';
 
 import ListView from '../../components/ListView';
 import { Appbar, SafeAreaView } from '@components';
+import { ISNavBar } from '@components/ios';
 import { SourceNovelsScreenProps } from '@navigators/types';
 import { NovelInfo } from '@database/types';
 import { getString } from '@i18n/translations';
@@ -36,11 +37,19 @@ const SourceNovels = ({ navigation, route }: SourceNovelsScreenProps) => {
 
   const content = (
     <>
-      <Appbar
-        title={getString('browseScreen.selectNovel')}
-        handleGoBack={navigation.goBack}
-        theme={theme}
-      />
+      {Platform.OS === 'ios' ? (
+        <ISNavBar
+          title={getString('browseScreen.selectNovel')}
+          onBack={navigation.goBack}
+          theme={theme}
+        />
+      ) : (
+        <Appbar
+          title={getString('browseScreen.selectNovel')}
+          handleGoBack={navigation.goBack}
+          theme={theme}
+        />
+      )}
       <FlatList
         data={sourceNovels}
         keyExtractor={item => 'migrateFrom' + item.id}

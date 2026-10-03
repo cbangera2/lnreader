@@ -1,6 +1,7 @@
 import { IconButtonV2 } from '@components';
 import { useTheme } from '@hooks/persisted';
 import { getString } from '@i18n/translations';
+import { ISIcon } from '@components/ios/ISIcon';
 import Icon from '@react-native-vector-icons/material-design-icons';
 import { memo, useMemo } from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
@@ -60,12 +61,20 @@ const RuleCard = memo(
             </Text>
             {replacement !== undefined ? (
               <>
-                <Icon
-                  accessible={false}
-                  name="arrow-right"
-                  size={20}
-                  color={theme.onSurfaceVariant}
-                />
+                {Platform.OS === 'ios' ? (
+                  <ISIcon
+                    name="arrow-right"
+                    size={20}
+                    color={theme.onSurfaceVariant}
+                  />
+                ) : (
+                  <Icon
+                    accessible={false}
+                    name="arrow-right"
+                    size={20}
+                    color={theme.onSurfaceVariant}
+                  />
+                )}
                 <Text
                   numberOfLines={2}
                   style={[

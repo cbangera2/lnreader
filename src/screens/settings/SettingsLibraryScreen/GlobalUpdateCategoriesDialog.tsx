@@ -7,7 +7,8 @@ import {
   StyleSheet,
   Text,
 } from 'react-native';
-import MaterialCommunityIcons from '@react-native-vector-icons/material-design-icons';
+
+import { ISIcon } from '@components/ios/ISIcon';
 
 import { Dialog } from '@components';
 import type { Category } from '@database/types';
@@ -79,7 +80,7 @@ const GlobalUpdateCategoriesDialog = ({
             Platform.OS === 'ios' && pressed && styles.pressed,
           ]}
         >
-          <MaterialCommunityIcons
+          <ISIcon
             color={
               isIncluded || isExcluded ? theme.primary : theme.onSurfaceVariant
             }

@@ -5,6 +5,7 @@ import * as Clipboard from 'expo-clipboard';
 import * as Linking from 'expo-linking';
 
 import { ConfirmationDialog, IconButtonV2 } from '@components';
+import { ISIcon } from '@components/ios/ISIcon';
 import Switch from '@components/Switch/Switch';
 
 import { Repository } from '@database/types';
@@ -80,12 +81,16 @@ const RepositoryCard: FC<RepositoryCardProps> = ({
           ]}
           onPress={showRepositoryModal}
         >
-          <MaterialCommunityIcons
-            accessible={false}
-            name="label-outline"
-            color={theme.onSurface}
-            size={24}
-          />
+          {Platform.OS === 'ios' ? (
+            <ISIcon name="label-outline" color={theme.onSurface} size={24} />
+          ) : (
+            <MaterialCommunityIcons
+              accessible={false}
+              name="label-outline"
+              color={theme.onSurface}
+              size={24}
+            />
+          )}
           <Text
             ellipsizeMode="middle"
             numberOfLines={1}

@@ -14,13 +14,20 @@ import { useBrowseSource, useSearchSource } from './useBrowseSource';
 import { NovelItem } from '@plugins/types';
 import { getPlugin } from '@plugins/pluginManager';
 import { getString } from '@i18n/translations';
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
+import { ISIcon } from '@components/ios/ISIcon';
 import { NovelInfo } from '@database/types';
 import SourceScreenSkeletonLoading from '@screens/browse/loadingAnimation/SourceScreenSkeletonLoading';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BrowseSourceScreenProps } from '@navigators/types';
 import { useLibraryContext } from '@components/Context/LibraryContext';
 import { iosSelection } from '@utils/haptics';
+
+// iOS renders the filter glyph as an SF Symbol; Android keeps the Paper
+// Material icon (pixel-identical).
+const renderFilterIcon = ({ color, size }: { color: string; size: number }) => (
+  <ISIcon name="filter-variant" size={size} color={color} />
+);
 
 const BrowseSourceScreen = ({ route, navigation }: BrowseSourceScreenProps) => {
   const theme = useTheme();
@@ -207,7 +214,7 @@ const BrowseSourceScreen = ({ route, navigation }: BrowseSourceScreenProps) => {
       {!showLatestNovels && filterValues && !searchText ? (
         <>
           <FAB
-            icon={'filter-variant'}
+            icon={Platform.OS === 'ios' ? renderFilterIcon : 'filter-variant'}
             style={[
               styles.filterFab,
               {

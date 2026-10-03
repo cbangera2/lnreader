@@ -12,6 +12,7 @@ import color from 'color';
 import { IconButton, Portal } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Chip, NovelCoverImage } from '../../../../components';
+import { ISIcon } from '@components/ios/ISIcon';
 import { isMissingNovelCover } from '../../../../components/NovelCoverImage';
 import { ThemeColors } from '@theme/types';
 import { getString } from '@i18n/translations';
@@ -131,7 +132,13 @@ const NovelThumbnail = ({
       ) : (
         <Portal>
           <IconButton
-            icon="content-save"
+            icon={
+              Platform.OS === 'ios'
+                ? ({ size, color: iconColor }) => (
+                    <ISIcon name="content-save" size={size} color={iconColor} />
+                  )
+                : 'content-save'
+            }
             style={[
               styles.absoluteIcon,
               styles.zIndex,
@@ -141,7 +148,17 @@ const NovelThumbnail = ({
             onPress={saveNovelCover}
           />
           <IconButton
-            icon="pencil-outline"
+            icon={
+              Platform.OS === 'ios'
+                ? ({ size, color: iconColor }) => (
+                    <ISIcon
+                      name="pencil-outline"
+                      size={size}
+                      color={iconColor}
+                    />
+                  )
+                : 'pencil-outline'
+            }
             style={[
               styles.absoluteIcon,
               styles.zIndex,
@@ -221,7 +238,19 @@ const FollowButton = ({
       ]}
     >
       <IconButton
-        icon={followed ? 'heart' : 'heart-outline'}
+        icon={
+          Platform.OS === 'ios'
+            ? ({ size, color: iconColor }) => (
+                <ISIcon
+                  name={followed ? 'heart' : 'heart-outline'}
+                  size={size}
+                  color={iconColor}
+                />
+              )
+            : followed
+            ? 'heart'
+            : 'heart-outline'
+        }
         iconColor={followed ? theme.primary : theme.outline}
         size={24}
         style={styles.iconButton}
@@ -262,7 +291,19 @@ const TrackerButton = ({
       ]}
     >
       <IconButton
-        icon={isTracked ? 'check' : 'sync'}
+        icon={
+          Platform.OS === 'ios'
+            ? ({ size, color: iconColor }) => (
+                <ISIcon
+                  name={isTracked ? 'check' : 'sync'}
+                  size={size}
+                  color={iconColor}
+                />
+              )
+            : isTracked
+            ? 'check'
+            : 'sync'
+        }
         iconColor={isTracked ? theme.primary : theme.outline}
         size={24}
         style={styles.iconButton}

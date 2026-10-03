@@ -4,7 +4,7 @@ import { BottomSheetModalMethods } from '@gorhom/bottom-sheet/lib/typescript/typ
 import { useNavigation } from '@react-navigation/native';
 import { FAB } from 'react-native-paper';
 import Color from 'color';
-import MaterialCommunityIcons from '@react-native-vector-icons/material-design-icons';
+import { ISIcon } from '@components/ios/ISIcon';
 import {
   TabView,
   type TabBarProps,
@@ -26,7 +26,7 @@ import AccessibilityTab from './tabs/AccessibilityTab';
 type ReaderSettingsRoute = {
   key: 'display' | 'theme' | 'navigation' | 'accessibility';
   title: string;
-  icon: React.ComponentProps<typeof MaterialCommunityIcons>['name'];
+  icon: string;
 };
 
 const routes: ReaderSettingsRoute[] = [
@@ -38,7 +38,7 @@ const routes: ReaderSettingsRoute[] = [
 
 const tabOptions: TabDescriptor<ReaderSettingsRoute> = {
   icon: ({ route, color: iconColor }) => (
-    <MaterialCommunityIcons name={route.icon} size={20} color={iconColor} />
+    <ISIcon name={route.icon} size={20} color={iconColor} />
   ),
   label: () => null,
 };

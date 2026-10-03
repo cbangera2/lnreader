@@ -8,7 +8,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import MaterialIcon from '@react-native-vector-icons/material-design-icons';
+import { ISIcon } from '@components/ios/ISIcon';
 
 import { List as PaperList, Divider as PaperDivider } from 'react-native-paper';
 import Glass from '@components/Glass/Glass';
@@ -157,11 +157,7 @@ const InfoItem = ({
   style?: StyleProp<ViewStyle>;
 }) => (
   <View style={[styles.infoCtn, style]}>
-    <MaterialIcon
-      size={20}
-      color={theme.primary}
-      name={'information-outline'}
-    />
+    <ISIcon size={20} color={theme.primary} name={'information-outline'} />
     <Text style={[styles.infoMsg, { color: theme.onSurfaceVariant }]}>
       {title}
     </Text>

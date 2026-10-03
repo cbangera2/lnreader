@@ -12,6 +12,17 @@ jest.mock('@react-native-vector-icons/material-design-icons', () => {
   return { __esModule: true, default: MockIcon };
 });
 
+// ISIcon renders expo-symbols on iOS test platform; mock it to expose the
+// same testID/color contract as the Material icon.
+jest.mock('@components/ios/ISIcon', () => {
+  const React = require('react');
+  const { View } = require('react-native');
+  const MockISIcon = ({ name, color }: { name: string; color?: string }) =>
+    React.createElement(View, { testID: 'icon', color, name });
+  MockISIcon.displayName = 'ISIcon';
+  return { __esModule: true, default: MockISIcon, ISIcon: MockISIcon };
+});
+
 const mockTheme = {
   id: 0,
   name: 'test',
@@ -54,14 +65,24 @@ const mockTheme = {
 describe('ToggleButton', () => {
   it('renders icon via MaterialCommunityIcons', () => {
     render(
-      <ToggleButton icon="cog" selected={false} theme={mockTheme} onPress={() => { }} />,
+      <ToggleButton
+        icon="cog"
+        selected={false}
+        theme={mockTheme}
+        onPress={() => {}}
+      />,
     );
     expect(screen.getByTestId('icon')).toBeTruthy();
   });
 
   it('selected state: icon color is theme.primary', () => {
     render(
-      <ToggleButton icon="cog" selected={true} theme={mockTheme} onPress={() => { }} />,
+      <ToggleButton
+        icon="cog"
+        selected={true}
+        theme={mockTheme}
+        onPress={() => {}}
+      />,
     );
     const icon = screen.getByTestId('icon');
     expect(icon.props.color).toBe(mockTheme.primary);
@@ -69,7 +90,12 @@ describe('ToggleButton', () => {
 
   it('unselected state: icon color is theme.onSurface', () => {
     render(
-      <ToggleButton icon="cog" selected={false} theme={mockTheme} onPress={() => { }} />,
+      <ToggleButton
+        icon="cog"
+        selected={false}
+        theme={mockTheme}
+        onPress={() => {}}
+      />,
     );
     const icon = screen.getByTestId('icon');
     expect(icon.props.color).toBe(mockTheme.onSurface);
@@ -78,7 +104,12 @@ describe('ToggleButton', () => {
   it('calls onPress on press', () => {
     const onPress = jest.fn();
     render(
-      <ToggleButton icon="cog" selected={false} theme={mockTheme} onPress={onPress} />,
+      <ToggleButton
+        icon="cog"
+        selected={false}
+        theme={mockTheme}
+        onPress={onPress}
+      />,
     );
     fireEvent.press(screen.getByTestId('icon'));
     expect(onPress).toHaveBeenCalledTimes(1);
@@ -87,7 +118,13 @@ describe('ToggleButton', () => {
   it('disabled: press does not call onPress', () => {
     const onPress = jest.fn();
     render(
-      <ToggleButton icon="cog" selected={false} theme={mockTheme} onPress={onPress} disabled={true} />,
+      <ToggleButton
+        icon="cog"
+        selected={false}
+        theme={mockTheme}
+        onPress={onPress}
+        disabled={true}
+      />,
     );
 
     fireEvent.press(screen.getByTestId('icon'));

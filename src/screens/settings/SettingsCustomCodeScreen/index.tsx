@@ -3,8 +3,9 @@ import { useChapterReaderSettings, useTheme } from '@hooks/persisted';
 import { getString } from '@i18n/translations';
 import { CustomCodeSettingsScreenProps } from '@navigators/types';
 import Icon from '@react-native-vector-icons/material-design-icons';
+import { ISIcon } from '@components/ios/ISIcon';
 import React from 'react';
-import { Keyboard, ScrollView, StyleSheet, View } from 'react-native';
+import { Keyboard, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';
 import { ThemeColors } from '@theme/types';
 import Snippet from './Components/Snippet';
@@ -182,12 +183,20 @@ const SettingsCustomCode = ({ navigation }: CustomCodeSettingsScreenProps) => {
 
           {totalSnippets === 0 ? (
             <View style={styles.emptyState}>
-              <Icon
-                accessible={false}
-                name="code-tags"
-                size={24}
-                color={theme.onSurfaceVariant}
-              />
+              {Platform.OS === 'ios' ? (
+                <ISIcon
+                  name="code-tags"
+                  size={24}
+                  color={theme.onSurfaceVariant}
+                />
+              ) : (
+                <Icon
+                  accessible={false}
+                  name="code-tags"
+                  size={24}
+                  color={theme.onSurfaceVariant}
+                />
+              )}
               <Text
                 style={[styles.emptyText, { color: theme.onSurfaceVariant }]}
               >

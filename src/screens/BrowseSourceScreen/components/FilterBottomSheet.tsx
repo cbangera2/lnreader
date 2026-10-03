@@ -19,7 +19,7 @@ import {
 } from '@plugins/types/filterTypes';
 import { Button, Menu } from '@components/index';
 import { Checkbox } from '@components/Checkbox/Checkbox';
-import MaterialCommunityIcons from '@react-native-vector-icons/material-design-icons';
+import { ISIcon } from '@components/ios/ISIcon';
 import { useBoolean } from '@hooks';
 import { TextInput, overlay } from 'react-native-paper';
 import { getValueFor } from './filterUtils';
@@ -167,7 +167,7 @@ const FilterItem: React.FC<FilterItemProps> = ({
           <Text style={[{ color: theme.onSurfaceVariant }]}>
             {filter.label}
           </Text>
-          <MaterialCommunityIcons
+          <ISIcon
             name={isVisible ? 'chevron-up' : 'chevron-down'}
             color={theme.onSurface}
             size={24}
@@ -247,7 +247,7 @@ const FilterItem: React.FC<FilterItemProps> = ({
           <Text style={[{ color: theme.onSurfaceVariant }]}>
             {filter.label}
           </Text>
-          <MaterialCommunityIcons
+          <ISIcon
             name={isVisible ? 'chevron-up' : 'chevron-down'}
             color={theme.onSurface}
             size={24}

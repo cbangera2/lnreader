@@ -1,8 +1,10 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { Platform, StyleSheet, View, Text } from 'react-native';
 
 import { ThemeColors } from '../../theme/types';
 import { Button } from 'react-native-paper';
+
+import ISIcon from '../ios/ISIconCompat';
 
 interface EmptyViewProps {
   icon?: string;
@@ -33,7 +35,17 @@ const EmptyView: React.FC<EmptyViewProps> = ({
             <Button
               rippleColor={theme.rippleColor}
               onPress={action.onPress}
-              icon={action.iconName}
+              icon={
+                Platform.OS === 'ios'
+                  ? ({ size, color }) => (
+                      <ISIcon
+                        name={action.iconName}
+                        size={size}
+                        color={color}
+                      />
+                    )
+                  : action.iconName
+              }
               textColor={theme.outline}
               mode="outlined"
             >

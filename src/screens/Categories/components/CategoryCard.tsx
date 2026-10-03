@@ -1,4 +1,11 @@
-import { StyleSheet, Text, View } from 'react-native';
+import {
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  ViewStyle,
+} from 'react-native';
 import React from 'react';
 
 import { Category } from '@database/types';
@@ -7,6 +14,8 @@ import AddCategoryModal from './AddCategoryModal';
 import { useBoolean } from '@hooks';
 import { Badge, Portal } from 'react-native-paper';
 import IconButton from '@components/IconButtonV2/IconButtonV2';
+import { ISIcon } from '@components/ios/ISIcon';
+import { ThemeColors } from '@theme/types';
 import DeleteCategoryModal from './DeleteCategoryModal';
 
 interface CategoryCardProps {
@@ -15,6 +24,43 @@ interface CategoryCardProps {
   drag: () => void;
   isActive: boolean;
 }
+
+interface CategoryIOSIconButtonProps {
+  name: string;
+  color?: string;
+  disabled?: boolean;
+  onPress?: () => void;
+  onPressIn?: () => void;
+  style?: ViewStyle;
+  theme: ThemeColors;
+}
+
+// iOS-only SF Symbol equivalent of IconButtonV2 (same 24px glyph, 8px
+// padding, circular container). Android keeps IconButtonV2, pixel-identical.
+const CategoryIOSIconButton: React.FC<CategoryIOSIconButtonProps> = ({
+  name,
+  color,
+  disabled,
+  onPress,
+  onPressIn,
+  style,
+  theme,
+}) => (
+  <View style={[styles.iconButtonCtn, style]}>
+    <Pressable
+      accessibilityRole="button"
+      disabled={disabled}
+      onPress={onPress}
+      onPressIn={onPressIn}
+      style={({ pressed }) => [
+        styles.iconButtonPressable,
+        pressed && !disabled && styles.pressed,
+      ]}
+    >
+      <ISIcon name={name} size={24} color={color ?? theme.onSurface} />
+    </Pressable>
+  </View>
+);
 
 const CategoryCard: React.FC<CategoryCardProps> = ({
   category,
@@ -50,14 +96,24 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
         ]}
       >
         <View style={styles.buttonsCtn}>
-          <IconButton
-            name="drag-horizontal-variant"
-            color={theme.onSurface}
-            theme={theme}
-            padding={8}
-            onPressIn={drag}
-            style={styles.dragHandle}
-          />
+          {Platform.OS === 'ios' ? (
+            <CategoryIOSIconButton
+              name="drag-horizontal-variant"
+              color={theme.onSurface}
+              onPressIn={drag}
+              style={styles.dragHandle}
+              theme={theme}
+            />
+          ) : (
+            <IconButton
+              name="drag-horizontal-variant"
+              color={theme.onSurface}
+              theme={theme}
+              padding={8}
+              onPressIn={drag}
+              style={styles.dragHandle}
+            />
+          )}
           <View style={styles.nameCtn}>
             <Text
               style={[
@@ -88,25 +144,47 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
           )}
 
           <View style={{ opacity }}>
-            <IconButton
-              name="pencil-outline"
-              color={category.id <= 2 ? theme.outline : theme.onSurface}
-              style={styles.manageBtn}
-              onPress={showCategoryModal}
-              theme={theme}
-              disabled={category.id <= 2}
-            />
+            {Platform.OS === 'ios' ? (
+              <CategoryIOSIconButton
+                name="pencil-outline"
+                color={category.id <= 2 ? theme.outline : theme.onSurface}
+                onPress={showCategoryModal}
+                disabled={category.id <= 2}
+                style={styles.manageBtn}
+                theme={theme}
+              />
+            ) : (
+              <IconButton
+                name="pencil-outline"
+                color={category.id <= 2 ? theme.outline : theme.onSurface}
+                style={styles.manageBtn}
+                onPress={showCategoryModal}
+                theme={theme}
+                disabled={category.id <= 2}
+              />
+            )}
           </View>
 
           <View style={{ opacity }}>
-            <IconButton
-              name="delete-outline"
-              color={category.id <= 2 ? theme.outline : theme.onSurface}
-              style={styles.manageBtn}
-              onPress={showDeleteCategoryModal}
-              theme={theme}
-              disabled={category.id <= 2}
-            />
+            {Platform.OS === 'ios' ? (
+              <CategoryIOSIconButton
+                name="delete-outline"
+                color={category.id <= 2 ? theme.outline : theme.onSurface}
+                onPress={showDeleteCategoryModal}
+                disabled={category.id <= 2}
+                style={styles.manageBtn}
+                theme={theme}
+              />
+            ) : (
+              <IconButton
+                name="delete-outline"
+                color={category.id <= 2 ? theme.outline : theme.onSurface}
+                style={styles.manageBtn}
+                onPress={showDeleteCategoryModal}
+                theme={theme}
+                disabled={category.id <= 2}
+              />
+            )}
           </View>
         </View>
       </View>
@@ -135,6 +213,16 @@ const styles = StyleSheet.create({
   buttonsCtn: {
     alignItems: 'center',
     flexDirection: 'row',
+  },
+  iconButtonCtn: {
+    borderRadius: 50,
+    overflow: 'hidden',
+  },
+  iconButtonPressable: {
+    padding: 8,
+  },
+  pressed: {
+    opacity: 0.6,
   },
   cardCtn: {
     borderRadius: 12,

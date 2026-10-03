@@ -6,7 +6,7 @@ import {
 } from './Chapter/ChapterDownloadButtons';
 import { ThemeColors } from '@theme/types';
 import { ChapterInfo } from '@database/types';
-import MaterialCommunityIcons from '@react-native-vector-icons/material-design-icons';
+import { ISIcon } from '@components/ios/ISIcon';
 import { getString } from '@i18n/translations';
 import { DateFormat, formatDate } from '@utils/dateFormat';
 
@@ -144,12 +144,9 @@ const ChapterItem: React.FC<ChapterItemProps> = ({
             ) : null}
             <View style={styles.titleRow}>
               {unread ? (
-                <MaterialCommunityIcons
-                  name="circle"
-                  color={theme.primary}
-                  size={8}
-                  style={styles.unreadIcon}
-                />
+                <View style={styles.unreadIcon}>
+                  <ISIcon name="circle" color={theme.primary} size={8} />
+                </View>
               ) : null}
 
               <Text

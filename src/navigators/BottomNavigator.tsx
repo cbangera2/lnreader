@@ -14,7 +14,7 @@ import {
   useTheme,
 } from '@hooks/persisted';
 import { BottomNavigatorParamList } from './types';
-import Icon from '@react-native-vector-icons/material-design-icons';
+import { ISIcon } from '@components/ios/ISIcon';
 import { MaterialDesignIconName } from '@type/icon';
 import { BottomTabBar } from '@components';
 
@@ -58,7 +58,7 @@ const BottomNavigator = () => {
           iconName = 'circle';
       }
 
-      return <Icon name={iconName} color={color} size={24} />;
+      return <ISIcon name={iconName} color={color} size={24} />;
     },
     [],
   );

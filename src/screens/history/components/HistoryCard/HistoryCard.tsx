@@ -1,10 +1,11 @@
 import React from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import dayjs from 'dayjs';
 
 import { IconButtonV2, NovelCoverImage } from '@components';
+import { ISIcon } from '@components/ios/ISIcon';
 import { getString } from '@i18n/translations';
 import { useTheme } from '@hooks/persisted';
 
@@ -86,12 +87,26 @@ const HistoryCard: React.FC<HistoryCardProps> = ({ history, onRemove }) => {
         <View style={styles.buttonSpacer} />
       </Pressable>
       <View style={styles.buttonContainer}>
-        <IconButtonV2
-          accessibilityLabel={getString('common.remove')}
-          name="delete-outline"
-          theme={theme}
-          onPress={() => onRemove(history)}
-        />
+        {Platform.OS === 'ios' ? (
+          <Pressable
+            accessibilityLabel={getString('common.remove')}
+            accessibilityRole="button"
+            style={({ pressed }) => [
+              styles.iosButton,
+              pressed && { opacity: 0.6 },
+            ]}
+            onPress={() => onRemove(history)}
+          >
+            <ISIcon name="delete-outline" size={24} color={theme.onSurface} />
+          </Pressable>
+        ) : (
+          <IconButtonV2
+            accessibilityLabel={getString('common.remove')}
+            name="delete-outline"
+            theme={theme}
+            onPress={() => onRemove(history)}
+          />
+        )}
       </View>
     </View>
   );
@@ -109,6 +124,9 @@ const styles = StyleSheet.create({
   },
   buttonSpacer: {
     width: 40,
+  },
+  iosButton: {
+    padding: 8,
   },
   row: {
     alignItems: 'center',

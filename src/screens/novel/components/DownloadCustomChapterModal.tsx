@@ -6,6 +6,7 @@ import { ThemeColors } from '@theme/types';
 import { ChapterInfo, NovelInfo } from '@database/types';
 import { getString } from '@i18n/translations';
 import { Dialog } from '@components';
+import { ISIcon } from '@components/ios/ISIcon';
 
 interface DownloadCustomChapterModalProps {
   theme: ThemeColors;
@@ -55,7 +56,9 @@ const DownloadCustomChapterModal = ({
       <Dialog.Content>
         <View style={styles.row}>
           <IconButton
-            icon="chevron-double-left"
+            icon={({ size, color }) => (
+              <ISIcon name="chevron-double-left" size={size} color={color} />
+            )}
             animated
             size={24}
             iconColor={theme.primary}
@@ -66,7 +69,9 @@ const DownloadCustomChapterModal = ({
             }}
           />
           <IconButton
-            icon="chevron-left"
+            icon={({ size, color }) => (
+              <ISIcon name="chevron-left" size={size} color={color} />
+            )}
             animated
             size={24}
             iconColor={theme.primary}
@@ -84,14 +89,18 @@ const DownloadCustomChapterModal = ({
             onSubmitEditing={onSubmit}
           />
           <IconButton
-            icon="chevron-right"
+            icon={({ size, color }) => (
+              <ISIcon name="chevron-right" size={size} color={color} />
+            )}
             animated
             size={24}
             iconColor={theme.primary}
             onPress={() => setText(prevState => prevState + 1)}
           />
           <IconButton
-            icon="chevron-double-right"
+            icon={({ size, color }) => (
+              <ISIcon name="chevron-double-right" size={size} color={color} />
+            )}
             animated
             size={24}
             iconColor={theme.primary}

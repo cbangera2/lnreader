@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { Platform, View, Text, StyleSheet, Pressable } from 'react-native';
 import { IconButton } from 'react-native-paper';
 import color from 'color';
+import { ISIcon } from '@components/ios/ISIcon';
 import { ThemeColors } from '@theme/types';
 import { Row } from '@components/Common';
 import { borderColor } from '@theme/colors';
@@ -100,12 +101,22 @@ const PagePaginationControl: React.FC<PagePaginationControlProps> = ({
         disabled={!canGoPrevious}
         android_ripple={{ color: theme.rippleColor }}
       >
-        <IconButton
-          icon="chevron-left"
-          iconColor={canGoPrevious ? theme.onSurface : theme.onSurfaceDisabled}
-          size={20}
-          style={styles.iconButton}
-        />
+        {Platform.OS === 'ios' ? (
+          <ISIcon
+            name="chevron-left"
+            size={20}
+            color={canGoPrevious ? theme.onSurface : theme.onSurfaceDisabled}
+          />
+        ) : (
+          <IconButton
+            icon="chevron-left"
+            iconColor={
+              canGoPrevious ? theme.onSurface : theme.onSurfaceDisabled
+            }
+            size={20}
+            style={styles.iconButton}
+          />
+        )}
       </Pressable>
 
       <Row style={styles.pageNumbersRow}>
@@ -183,12 +194,20 @@ const PagePaginationControl: React.FC<PagePaginationControlProps> = ({
         disabled={!canGoNext}
         android_ripple={{ color: theme.rippleColor }}
       >
-        <IconButton
-          icon="chevron-right"
-          iconColor={canGoNext ? theme.onSurface : theme.onSurfaceDisabled}
-          size={20}
-          style={styles.iconButton}
-        />
+        {Platform.OS === 'ios' ? (
+          <ISIcon
+            name="chevron-right"
+            size={20}
+            color={canGoNext ? theme.onSurface : theme.onSurfaceDisabled}
+          />
+        ) : (
+          <IconButton
+            icon="chevron-right"
+            iconColor={canGoNext ? theme.onSurface : theme.onSurfaceDisabled}
+            size={20}
+            style={styles.iconButton}
+          />
+        )}
       </Pressable>
     </View>
   );

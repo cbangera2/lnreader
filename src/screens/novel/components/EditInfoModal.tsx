@@ -9,12 +9,12 @@ import {
   View,
 } from 'react-native';
 
-import MaterialCommunityIcons from '@react-native-vector-icons/material-design-icons';
 import { TextInput } from 'react-native-paper';
 import { updateNovelInfo } from '@database/queries/NovelQueries';
 
 import { getString } from '@i18n/translations';
 import { Dialog } from '@components';
+import { ISIcon } from '@components/ios/ISIcon';
 import { ThemeColors } from '@theme/types';
 import { NovelInfo } from '@database/types';
 import { NovelStatus } from '@plugins/types';
@@ -270,9 +270,6 @@ const getGenreChipContainer = (theme: ThemeColors) => ({
 const getGenreChipText = (theme: ThemeColors) => ({
   color: theme.onSecondaryContainer,
 });
-const getGenreChipIcon = (theme: ThemeColors) => ({
-  color: theme.onSecondaryContainer,
-});
 
 const GenreChip = ({
   children,
@@ -287,13 +284,13 @@ const GenreChip = ({
     <Text style={[styles.genreChipText, getGenreChipText(theme)]}>
       {children}
     </Text>
-    <MaterialCommunityIcons
-      name="close"
-      size={18}
+    <Pressable
+      accessibilityRole="button"
       onPress={onPress}
       style={styles.genreChipIcon}
-      {...getGenreChipIcon(theme)}
-    />
+    >
+      <ISIcon name="close" size={18} color={theme.onSecondaryContainer} />
+    </Pressable>
   </View>
 );
 
