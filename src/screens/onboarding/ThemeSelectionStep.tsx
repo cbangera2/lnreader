@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { Platform, View, Text, Pressable, StyleSheet } from 'react-native';
 import {
   useMMKVBoolean,
   useMMKVNumber,
@@ -36,9 +36,10 @@ const AmoledToggle: React.FC<AmoledToggleProps> = ({ theme }) => {
 
   return (
     <Pressable
-      style={[
+      style={({ pressed }) => [
         styles.amoledContainer,
         { backgroundColor: theme.surfaceVariant },
+        Platform.OS === 'ios' && pressed && styles.pressed,
       ]}
       onPress={toggle}
     >
@@ -133,6 +134,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 16,
+  },
+  pressed: {
+    opacity: 0.7,
   },
   segmentedControlContainer: {
     marginBottom: 24,

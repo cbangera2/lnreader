@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, ViewStyle } from 'react-native';
+import { Platform, StyleSheet, View, ViewStyle } from 'react-native';
 import MaterialCommunityIcons from '@react-native-vector-icons/material-design-icons';
 import Color from 'color';
 
@@ -37,7 +37,11 @@ const IconButton: React.FC<Props> = ({
     <Pressable
       accessibilityLabel={accessibilityLabel}
       accessibilityRole="button"
-      style={[styles.pressable, { padding }]}
+      style={({ pressed }) => [
+        styles.pressable,
+        { padding },
+        Platform.OS === 'ios' && pressed && styles.pressed,
+      ]}
       onPress={onPress}
       onPressIn={onPressIn}
       disabled={disabled}
@@ -69,5 +73,8 @@ const styles = StyleSheet.create({
   },
   pressable: {
     padding: 8,
+  },
+  pressed: {
+    opacity: 0.6,
   },
 });
