@@ -4,7 +4,7 @@ import { Portal, Snackbar } from 'react-native-paper';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 
 import Glass from '@components/Glass/Glass';
-import { useTheme } from '@hooks/persisted';
+import { useTheme } from '@hooks/persisted/useTheme';
 
 import { subscribeToast } from './toastBus';
 
