@@ -288,11 +288,15 @@ const ChaptersSettingsSheet = ({
           <View style={styles.modalBackdrop}>
             <Glass
               glassEffectStyle="regular"
-              fallbackBackgroundColor={theme.surface}
+              fallbackBackgroundColor={color(theme.surface)
+                .alpha(0.92)
+                .string()}
               isDark={theme.isDark}
               style={[
                 styles.scanlatorModalContent,
-                { backgroundColor: theme.surface },
+                {
+                  backgroundColor: color(theme.surface).alpha(0.92).string(),
+                },
               ]}
             >
               <Text style={[styles.modalTitle, { color: theme.onSurface }]}>

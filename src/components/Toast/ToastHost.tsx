@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import { Appearance, Platform, StyleSheet, Text } from 'react-native';
+import { Platform, StyleSheet, Text } from 'react-native';
 import { Portal, Snackbar } from 'react-native-paper';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 
 import Glass from '@components/Glass/Glass';
+import { useTheme } from '@hooks/persisted';
 
 import { subscribeToast } from './toastBus';
 
@@ -19,7 +20,7 @@ const IOS_LIGHT_TEXT = '#FFFFFF';
 const IOS_DARK_TEXT = '#1D1B20';
 
 const IosToastPill = ({ message }: { message: string }) => {
-  const isDark = Appearance.getColorScheme() === 'dark';
+  const { isDark } = useTheme();
   return (
     <Animated.View
       entering={FadeIn.duration(150)}

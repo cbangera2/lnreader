@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Platform, StatusBar } from 'react-native';
+import Color from 'color';
 
 import { Appbar as PaperAppbar } from 'react-native-paper';
 import Glass from '@components/Glass/Glass';
@@ -28,6 +29,11 @@ const Appbar: React.FC<AppbarProps> = ({
     } as const) ??
     'large';
 
+  const fallbackBackgroundColor = useMemo(
+    () => Color(theme.surface).alpha(0.85).string(),
+    [theme.surface],
+  );
+
   const header = (
     <PaperAppbar.Header
       style={{
@@ -54,7 +60,11 @@ const Appbar: React.FC<AppbarProps> = ({
 
   if (Platform.OS === 'ios') {
     return (
-      <Glass fallbackBackgroundColor={theme.surface} isDark={theme.isDark}>
+      <Glass
+        fallbackBackgroundColor={fallbackBackgroundColor}
+        isDark={theme.isDark}
+        style={{ backgroundColor: fallbackBackgroundColor }}
+      >
         {header}
       </Glass>
     );

@@ -2,6 +2,15 @@ html {
   scroll-behavior: smooth;
   overflow-x: hidden;
   word-wrap: break-word;
+  font-family: -apple-system, system-ui, 'SF Pro Text', 'Helvetica Neue',
+    Helvetica, Arial, sans-serif;
+}
+
+@supports (-webkit-touch-callout: none) {
+  html {
+    -webkit-text-size-adjust: none;
+    text-size-adjust: none;
+  }
 }
 
 ::selection {
@@ -59,8 +68,9 @@ body {
   background-color: var(--readerSettings-theme);
   color: var(--readerSettings-textColor);
   text-align: var(--readerSettings-textAlign);
-  line-height: var(--readerSettings-lineHeight);
+  line-height: var(--readerSettings-lineHeight, 1.7);
   font-family: var(--readerSettings-fontFamily);
+  -webkit-tap-highlight-color: transparent;
 }
 
 #LNReader-chapter {
@@ -86,6 +96,20 @@ img {
   width: auto;
   height: auto;
   max-width: 100%;
+}
+
+figure {
+  margin-inline: 0;
+  max-width: 100%;
+}
+
+#LNReader-chapter p {
+  margin-top: 0;
+  margin-bottom: 0.9em;
+}
+
+#LNReader-chapter p:last-child {
+  margin-bottom: 0;
 }
 
 div:has(> table):not(#LNReader-chapter) {

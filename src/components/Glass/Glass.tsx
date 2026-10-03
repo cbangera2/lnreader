@@ -33,7 +33,7 @@ const splitBackgroundColor = (
   const { backgroundColor, ...rest } = flat;
   return {
     backgroundColor: backgroundColor as string | undefined,
-    rest: Object.keys(rest).length > 0 ? rest : style,
+    rest,
   };
 };
 
