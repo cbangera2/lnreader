@@ -112,5 +112,6 @@ android/
 release-artifacts/
 !modules/**/android/
 !plugins/android/
-ios/
+/ios/
+!src/**/ios/
 !modules/**/ios/
