@@ -33,7 +33,7 @@ import { LibraryView } from './components/LibraryListView';
 import LibraryBottomSheet from './components/LibraryBottomSheet/LibraryBottomSheet';
 import { Banner } from './components/Banner';
 import { Actionbar } from '@components/Actionbar/Actionbar';
-import { IOS_TAB_CLEARANCE } from '@components/ios';
+import { IOS_TAB_CLEARANCE, paperIcon } from '@components/ios';
 
 import { useAppSettings, useHistory, useTheme } from '@hooks/persisted';
 import { useSearch, useBackHandler, useBoolean } from '@hooks';
@@ -591,7 +591,7 @@ const LibraryScreen = ({ navigation }: LibraryScreenProps) => {
           color={theme.onPrimary}
           uppercase={false}
           label={getString('common.resume')}
-          icon="play"
+          icon={paperIcon('play')}
           onPress={handleFABPress}
         />
       ) : null}

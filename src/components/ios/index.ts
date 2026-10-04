@@ -1,6 +1,7 @@
 export { default as ISNavBar } from './ISNavBar';
 export type { ISNavBarAction, ISNavBarProps } from './ISNavBar';
 export { default as ISIcon } from './ISIcon';
+export { paperIcon } from './ISIcon';
 export type { ISIconProps, ISIconWeight } from './ISIcon';
 export { default as ISGroupedList } from './ISGroupedList';
 export type { ISGroupedListProps } from './ISGroupedList';

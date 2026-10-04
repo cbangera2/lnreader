@@ -8,6 +8,7 @@ import DraggableFlatList, {
 } from 'react-native-draggable-flatlist';
 
 import { Appbar, EmptyView, SafeAreaView } from '@components/index';
+import { paperIcon } from '@components/ios';
 import AddCategoryModal from './components/AddCategoryModal';
 
 import { updateCategoryOrderInDb } from '@database/queries/CategoryQueries';
@@ -117,7 +118,7 @@ const CategoriesScreen = () => {
         label={getString('common.add')}
         uppercase={false}
         onPress={showCategoryModal}
-        icon={'plus'}
+        icon={paperIcon('plus')}
       />
 
       <AddCategoryModal

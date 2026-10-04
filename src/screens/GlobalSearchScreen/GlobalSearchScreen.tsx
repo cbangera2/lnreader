@@ -18,6 +18,7 @@ import {
   SearchbarV2,
   SelectableChip,
 } from '@components/index';
+import { paperIcon } from '@components/ios';
 import GlobalSearchResultsList from './components/GlobalSearchResultsList';
 
 import { useSearch } from '@hooks';
@@ -193,7 +194,7 @@ const GlobalSearchScreen = (props: Props) => {
             },
           ]}
           testID="open-novel-button"
-          icon={openNovelOffer.icon}
+          icon={paperIcon(openNovelOffer.icon)}
           label={openNovelOffer.label}
           uppercase={false}
           color={theme.onPrimary}

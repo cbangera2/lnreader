@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { ISIcon } from '@components/ios/ISIcon';
+import { paperIcon } from '@components/ios';
 import { FAB, TextInput } from 'react-native-paper';
 import Color from 'color';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -257,7 +258,7 @@ const SettingsTaxonomyScreen = ({ navigation }: GenreTaxonomyScreenProps) => {
           },
         ]}
         color={theme.onPrimary}
-        icon="plus"
+        icon={paperIcon('plus')}
         label={getString('genreStats.newGroup')}
         uppercase={false}
         onPress={() => openDialog({ type: 'addParent' })}

@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { FAB } from 'react-native-paper';
 import Color from 'color';
 import { ISIcon } from '@components/ios/ISIcon';
+import { paperIcon } from '@components/ios';
 import {
   TabView,
   type TabBarProps,
@@ -146,7 +147,7 @@ const SettingsReaderScreen = () => {
             }),
           },
         ]}
-        icon="cog"
+        icon={paperIcon('cog')}
         color={theme.onPrimary}
         onPress={openBottomSheet}
       />

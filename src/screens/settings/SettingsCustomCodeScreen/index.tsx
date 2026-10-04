@@ -1,4 +1,5 @@
 import { Appbar, Button, Dialog, SafeAreaView } from '@components';
+import { paperIcon } from '@components/ios';
 import { useChapterReaderSettings, useTheme } from '@hooks/persisted';
 import { getString } from '@i18n/translations';
 import { CustomCodeSettingsScreenProps } from '@navigators/types';
@@ -207,7 +208,7 @@ const SettingsCustomCode = ({ navigation }: CustomCodeSettingsScreenProps) => {
 
           <View style={styles.snippetActions}>
             <Button
-              icon="plus"
+              icon={paperIcon('plus')}
               mode="outlined"
               onPress={() => handleEditSnippet(-1, false)}
               style={styles.snippetButton}
@@ -215,7 +216,7 @@ const SettingsCustomCode = ({ navigation }: CustomCodeSettingsScreenProps) => {
               CSS
             </Button>
             <Button
-              icon="plus"
+              icon={paperIcon('plus')}
               mode="outlined"
               onPress={() => handleEditSnippet(-1, true)}
               style={styles.snippetButton}

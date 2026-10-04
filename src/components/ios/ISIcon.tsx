@@ -217,3 +217,15 @@ export const ISIcon: React.FC<ISIconProps> = ({
 };
 
 export default ISIcon;
+
+// Paper (v5) `icon` prop helper: SF Symbol on iOS via render fn, Material
+// string on Android (pixel-identical). Pass the result straight to
+// `icon={...}` on FAB / Button / IconButton / TextInput.Icon.
+export const paperIcon = (
+  name: string,
+):
+  | string
+  | (({ color, size }: { color: string; size: number }) => React.ReactNode) =>
+  Platform.OS === 'ios'
+    ? ({ color, size }) => <ISIcon name={name} size={size} color={color} />
+    : name;

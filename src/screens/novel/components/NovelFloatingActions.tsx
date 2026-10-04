@@ -3,6 +3,7 @@ import { Platform, StyleSheet } from 'react-native';
 import { AnimatedFAB } from 'react-native-paper';
 import color from 'color';
 import { ThemeColors } from '@theme/types';
+import { paperIcon } from '@components/ios';
 
 interface NovelFloatingActionsProps {
   bottomInset: number;
@@ -70,7 +71,7 @@ const NovelFloatingActions = ({
         <AnimatedFAB
           style={scrollToTopStyle}
           color={theme.primary}
-          icon="arrow-up"
+          icon={paperIcon('arrow-up')}
           label=""
           extended={false}
           onPress={onScrollToTop}
@@ -84,7 +85,7 @@ const NovelFloatingActions = ({
           color={theme.onPrimary}
           uppercase={false}
           label={continueLabel}
-          icon="play"
+          icon={paperIcon('play')}
           onPress={onContinue}
         />
       ) : null}

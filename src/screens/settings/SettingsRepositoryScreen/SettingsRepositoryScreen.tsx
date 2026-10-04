@@ -9,6 +9,7 @@ import { FAB, Portal } from 'react-native-paper';
 import Color from 'color';
 
 import { Appbar, EmptyView, SafeAreaView } from '@components';
+import { paperIcon } from '@components/ios';
 
 import {
   createRepository,
@@ -149,7 +150,7 @@ const SettingsBrowseScreen = ({
         label={getString('common.add')}
         uppercase={false}
         onPress={showAddRepositoryModal}
-        icon={'plus'}
+        icon={paperIcon('plus')}
       />
       <Portal>
         <AddRepositoryModal
