@@ -10,7 +10,7 @@ import {
 import { getString } from '@i18n/translations';
 
 import { List, SafeAreaView } from '@components';
-import { ISRow } from '@components/ios';
+import { IOS_TAB_CLEARANCE, ISRow } from '@components/ios';
 
 import { MoreHeader } from './components/MoreHeader';
 import { useLibrarySettings, useTheme } from '@hooks/persisted';
@@ -58,7 +58,7 @@ const MoreScreen = ({ navigation }: MoreStackScreenProps) => {
 
   return (
     <SafeAreaView excludeTop excludeBottom>
-      <ScrollView>
+      <ScrollView contentContainerStyle={{ paddingBottom: IOS_TAB_CLEARANCE }}>
         {Platform.OS === 'ios' ? (
           <Text
             style={[styles.iosLargeTitle, { color: theme.onSurface }]}

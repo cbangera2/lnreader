@@ -4,6 +4,7 @@ import { RefreshControl, StyleSheet, View } from 'react-native';
 import { EmptyView } from '@components/index';
 import NovelList, { NovelListRenderItem } from '@components/NovelList';
 import LibraryNovelItem from './LibraryNovelItem';
+import { IOS_TAB_CLEARANCE } from '@components/ios';
 
 import { History, NovelInfo } from '@database/types';
 
@@ -156,6 +157,7 @@ export const LibraryView: React.FC<Props> = ({
         renderItem={renderItem as NovelListRenderItem}
         ListEmptyComponent={listEmptyComponent}
         refreshControl={refreshControl}
+        contentContainerStyle={{ paddingBottom: IOS_TAB_CLEARANCE }}
       />
     </View>
   );

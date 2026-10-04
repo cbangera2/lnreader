@@ -14,3 +14,4 @@ export type {
 } from './ISActionSheet';
 export { ISSegmented } from './ISSegmented';
 export type { ISSegmentedOption, ISSegmentedProps } from './ISSegmented';
+export { IOS_TAB_CLEARANCE } from './tabClearance';

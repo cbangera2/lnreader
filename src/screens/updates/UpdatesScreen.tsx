@@ -14,6 +14,7 @@ import {
   SearchbarV2,
   SafeAreaView,
 } from '@components';
+import { IOS_TAB_CLEARANCE } from '@components/ios';
 
 import { useSearch } from '@hooks';
 import { useAppSettings, useTheme } from '@hooks/persisted';
@@ -250,5 +251,6 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     flexGrow: 1,
+    paddingBottom: IOS_TAB_CLEARANCE,
   },
 });

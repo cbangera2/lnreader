@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   SearchbarV2,
 } from '@components';
+import { IOS_TAB_CLEARANCE } from '@components/ios';
 import HistoryCard from './components/HistoryCard/HistoryCard';
 
 import { useSearch, useBoolean } from '@hooks';
@@ -188,5 +189,6 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     flexGrow: 1,
+    paddingBottom: IOS_TAB_CLEARANCE,
   },
 });

@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import {
   LegendList,
   type LegendListProps,
@@ -61,7 +61,7 @@ const NovelList: React.FC<NovelListProps> = props => {
   const layout = useNovelCoverLayoutValue();
   const { displayMode, numColumns } = layout;
   const isListView = displayMode === DisplayModes.List;
-  const { data, inSource, ...listProps } = props;
+  const { data, inSource, contentContainerStyle, ...listProps } = props;
 
   const extendedNovelList = useMemo(
     () => extendNovelList(data, inSource, numColumns),
@@ -74,6 +74,7 @@ const NovelList: React.FC<NovelListProps> = props => {
         contentContainerStyle={[
           !isListView && styles.listView,
           styles.flatListCont,
+          contentContainerStyle,
         ]}
         numColumns={numColumns}
         key={numColumns}
@@ -91,7 +92,10 @@ export default NovelList;
 const styles = StyleSheet.create({
   flatListCont: {
     flexGrow: 1,
-    paddingBottom: 56,
+    ...Platform.select({
+      ios: { paddingBottom: 0 },
+      default: { paddingBottom: 56 },
+    }),
   },
   listView: {
     paddingHorizontal: 4,

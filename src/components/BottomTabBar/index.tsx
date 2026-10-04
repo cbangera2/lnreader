@@ -69,8 +69,17 @@ function CustomBottomTabBar({
           paddingBottom: 16 + (insets?.bottom || 0),
           ...(isIos
             ? {
-                borderTopWidth: StyleSheet.hairlineWidth,
-                borderTopColor: theme.outlineVariant,
+                position: 'absolute',
+                left: 16,
+                right: 16,
+                bottom: (insets?.bottom || 0) + 8,
+                borderRadius: 26,
+                borderTopWidth: 0,
+                shadowColor: '#000',
+                shadowOffset: { width: 0, height: 8 },
+                shadowOpacity: theme.isDark ? 0.4 : 0.15,
+                shadowRadius: 24,
+                elevation: 8,
               }
             : null),
         },

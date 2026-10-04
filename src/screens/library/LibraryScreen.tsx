@@ -33,6 +33,7 @@ import { LibraryView } from './components/LibraryListView';
 import LibraryBottomSheet from './components/LibraryBottomSheet/LibraryBottomSheet';
 import { Banner } from './components/Banner';
 import { Actionbar } from '@components/Actionbar/Actionbar';
+import { IOS_TAB_CLEARANCE } from '@components/ios';
 
 import { useAppSettings, useHistory, useTheme } from '@hooks/persisted';
 import { useSearch, useBackHandler, useBoolean } from '@hooks';
@@ -434,7 +435,11 @@ const LibraryScreen = ({ navigation }: LibraryScreenProps) => {
   );
 
   const actionbarViewStyle = useMemo(
-    () => ({ paddingStart: leftInset, paddingEnd: rightInset }),
+    () => ({
+      paddingStart: leftInset,
+      paddingEnd: rightInset,
+      paddingBottom: IOS_TAB_CLEARANCE,
+    }),
     [leftInset, rightInset],
   );
 
@@ -577,6 +582,7 @@ const LibraryScreen = ({ navigation }: LibraryScreenProps) => {
                   backgroundColor: Color(theme.primary).alpha(0.72).string(),
                   borderColor: Color(theme.onPrimary).alpha(0.4).string(),
                   borderWidth: StyleSheet.hairlineWidth,
+                  bottom: IOS_TAB_CLEARANCE,
                 },
                 default: undefined,
               }),

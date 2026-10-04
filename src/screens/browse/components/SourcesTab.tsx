@@ -13,6 +13,7 @@ import {
 } from '@legendapp/list/react-native';
 
 import { EmptyView, IconButtonV2 } from '@components';
+import { IOS_TAB_CLEARANCE } from '@components/ios';
 import {
   useBrowseSettings,
   useFilteredInstalledPlugins,
@@ -254,7 +255,10 @@ export const SourcesTab = memo(
             theme={theme}
           />
         }
-        contentContainerStyle={!entries.length ? styles.emptyList : undefined}
+        contentContainerStyle={[
+          !entries.length ? styles.emptyList : undefined,
+          { paddingBottom: IOS_TAB_CLEARANCE },
+        ]}
         recycleItems
         renderItem={renderItem}
         showsVerticalScrollIndicator={false}
