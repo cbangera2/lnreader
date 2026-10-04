@@ -66,7 +66,7 @@ function CustomBottomTabBar({
           backgroundColor: isIos
             ? iosTranslucentSurface
             : theme.surface2 || theme.surface,
-          paddingBottom: 16 + (insets?.bottom || 0),
+          paddingBottom: 10 + (insets?.bottom || 0),
           ...(isIos
             ? {
                 position: 'absolute',
