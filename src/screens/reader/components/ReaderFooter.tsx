@@ -12,7 +12,7 @@ import { useTheme } from '@hooks/persisted';
 import { useNovelLayout } from '@screens/novel/NovelContext';
 import { iosSelection } from '@utils/haptics';
 import Glass from '@components/Glass/Glass';
-import { ISIcon } from '@components/ios/ISIcon';
+import { ISIcon } from '@components/ios';
 
 interface ChapterFooterProps {
   openReaderSheet: () => void;

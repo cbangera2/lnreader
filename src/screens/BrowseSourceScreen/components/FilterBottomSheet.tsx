@@ -19,7 +19,7 @@ import {
 } from '@plugins/types/filterTypes';
 import { Button, Menu } from '@components/index';
 import { Checkbox } from '@components/Checkbox/Checkbox';
-import { ISIcon } from '@components/ios/ISIcon';
+import { ISIcon } from '@components/ios';
 import { useBoolean } from '@hooks';
 import { TextInput, overlay } from 'react-native-paper';
 import { getValueFor } from './filterUtils';

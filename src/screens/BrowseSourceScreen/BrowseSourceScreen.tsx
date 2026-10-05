@@ -15,7 +15,7 @@ import { NovelItem } from '@plugins/types';
 import { getPlugin } from '@plugins/pluginManager';
 import { getString } from '@i18n/translations';
 import { Platform, StyleSheet } from 'react-native';
-import { ISIcon } from '@components/ios/ISIcon';
+import { ISIcon } from '@components/ios';
 import { NovelInfo } from '@database/types';
 import SourceScreenSkeletonLoading from '@screens/browse/loadingAnimation/SourceScreenSkeletonLoading';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
