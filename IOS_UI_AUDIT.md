@@ -55,6 +55,10 @@ Branch: `ios-settings-isrow`. Goal: 10/10 native iOS feel, no dead space, consis
 | 2026-10-05 | Browse→global shortcut   | /tmp/browse_shortcut.png  | PASS grouped "Search all sources for villain" card on no local match  |
 | 2026-10-05 | Shortcut landing         | /tmp/browse_to_global.png | PASS GlobalSearch prefilled, grouped results                          |
 | 2026-10-05 | GS after key fix         | /tmp/gs_fixed.png         | PASS no duplicate-key toast, real covers                              |
+| 2026-10-05 | GS back button           | /tmp/gs_back.png          | PASS Back returns to Browse, list restored                            |
+| 2026-10-05 | Appearance light         | /tmp/appearance_light.png | PASS grouped cards/switches legible                                   |
+| 2026-10-05 | Browse light             | /tmp/browse_light.png     | PASS title/search/rows/dock contrast                                  |
+| 2026-10-05 | Appearance dark restore  | /tmp/dark_restored.png    | PASS device left as found                                             |
 
 ## Round 1 findings → fixes
 
@@ -69,7 +73,7 @@ Branch: `ios-settings-isrow`. Goal: 10/10 native iOS feel, no dead space, consis
 
 - [x] R2-1 Central Browse: iOS global-search shortcut row (`browseScreen.globalSearchFor`) under searchbar when query non-empty → navigates to GlobalSearch prefilled. Verified live: /tmp/browse_shortcut.png shows grouped card w/ chevron on "No matching results"; tap → /tmp/browse_to_global.png prefilled results. Android unchanged (no row).
 - [x] R2-2 Duplicate-key dev toast in global results: inner horizontal `keyExtractor` now `plugin.id + path + index` (sources return duplicate/junk cards sharing path). Re-verified: /tmp/gs_fixed.png renders clean, no red toast, real covers. Plus ISIcon barrel import in same file.
-- [x] R2-3 Reader light-mode contrast: code-verified — WebViewReader injects full theme (surface/onSurface vars) + `readerSettings.theme` bg; chrome bars use onSurface-on-translucent-surface (same pair as Appbar, visible dark). No change.
+- [x] R2-3 Reader light-mode contrast: verified live both modes — /tmp/appearance_light.png (light grouped cards, all rows legible) and /tmp/browse_light.png (large title, search, rows, dock); dark restored /tmp/dark_restored.png (device left as found). Reader WebView uses theme vars + readerSettings bg. No change.
 - [ ] R2-4 Library/Updates/History empty states consistency — DEFERRED to lead (owns grouped bgs there; zero-overlap rule).
 
 ## Round 3 (navigation trap found by live testing)
