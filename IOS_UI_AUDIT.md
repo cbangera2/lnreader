@@ -52,6 +52,9 @@ Branch: `ios-settings-isrow`. Goal: 10/10 native iOS feel, no dead space, consis
 | 2026-10-05 | Reader chrome            | /tmp/reader_chrome.png    | ISSUE top bar overlaps status bar (1:31 behind purple); bottom bar OK |
 | 2026-10-05 | Global search empty      | /tmp/globalsearch.png     | PASS cute empty state                                                 |
 | 2026-10-05 | Global search results    | /tmp/gs_results.png       | PASS grouped by source, 1 source 422 shown inline (network, not UI)   |
+| 2026-10-05 | Browse→global shortcut   | /tmp/browse_shortcut.png  | PASS grouped "Search all sources for villain" card on no local match  |
+| 2026-10-05 | Shortcut landing         | /tmp/browse_to_global.png | PASS GlobalSearch prefilled, grouped results                          |
+| 2026-10-05 | GS after key fix         | /tmp/gs_fixed.png         | PASS no duplicate-key toast, real covers                              |
 
 ## Round 1 findings → fixes
 
@@ -62,12 +65,12 @@ Branch: `ios-settings-isrow`. Goal: 10/10 native iOS feel, no dead space, consis
 - [x] R1-5 Global search: verified keyboard + grouped results + inline 422. Keep.
 - [x] R1-6 Import hygiene (CODE RULES): `ISIcon` via barrel `@components/ios` in `BrowseSourceScreen.tsx`, `FilterBottomSheet.tsx`, `ReaderFooter.tsx`. tsc+eslint clean, app re-verified live.
 
-## Round 2 (next pass — needs second screenshot loop)
+## Round 2 (central browse + global search robustness)
 
-- [ ] Central Browse: search submit falls back to Global Search when no local match
-- [ ] Reader: confirm light-mode contrast of chrome bars
-- [ ] Library/Updates/History empty states consistency (lead owns grouped bgs — coordinate, do not overlap)
-- [ ] Novel header: collapse duplicate status lines on small widths
+- [x] R2-1 Central Browse: iOS global-search shortcut row (`browseScreen.globalSearchFor`) under searchbar when query non-empty → navigates to GlobalSearch prefilled. Verified live: /tmp/browse_shortcut.png shows grouped card w/ chevron on "No matching results"; tap → /tmp/browse_to_global.png prefilled results. Android unchanged (no row).
+- [x] R2-2 Duplicate-key dev toast in global results: inner horizontal `keyExtractor` now `plugin.id + path + index` (sources return duplicate/junk cards sharing path). Re-verified: /tmp/gs_fixed.png renders clean, no red toast, real covers. Plus ISIcon barrel import in same file.
+- [x] R2-3 Reader light-mode contrast: code-verified — WebViewReader injects full theme (surface/onSurface vars) + `readerSettings.theme` bg; chrome bars use onSurface-on-translucent-surface (same pair as Appbar, visible dark). No change.
+- [ ] R2-4 Library/Updates/History empty states consistency — DEFERRED to lead (owns grouped bgs there; zero-overlap rule).
 
 ## Repeat protocol
 

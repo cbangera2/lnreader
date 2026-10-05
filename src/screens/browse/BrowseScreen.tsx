@@ -7,6 +7,7 @@ import { useTheme } from '@hooks/persisted';
 import { getString } from '@i18n/translations';
 
 import { SafeAreaView, SearchbarV2, TopTabBar } from '@components';
+import { ISGroupedList, ISRow } from '@components/ios';
 import { BrowseScreenProps } from '@navigators/types';
 import { PluginsTab } from './components/PluginsTab';
 import { SourcesTab } from './components/SourcesTab';
@@ -150,6 +151,22 @@ const BrowseScreen = ({ navigation }: BrowseScreenProps) => {
         rightIcons={searchbarActions}
         menuButtons={menuButtons}
       />
+      {Platform.OS === 'ios' && searchText.trim() ? (
+        <ISGroupedList theme={theme}>
+          <ISRow
+            title={getString('browseScreen.globalSearchFor', {
+              query: searchText.trim(),
+            })}
+            icon="book-search"
+            onPress={() =>
+              navigation.navigate('GlobalSearchScreen', {
+                searchText: searchText.trim(),
+              })
+            }
+            theme={theme}
+          />
+        </ISGroupedList>
+      ) : null}
       <TabView<BrowseRoute>
         navigationState={navigationState}
         initialLayout={initialLayout}

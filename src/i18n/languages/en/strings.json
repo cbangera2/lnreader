@@ -211,6 +211,7 @@
     "discover": "Discover",
     "editPluginSetting": "Edit %{name}",
     "globalSearch": "Global search",
+    "globalSearchFor": "Search all sources for \"%{query}\"",
     "installPlugin": "Install %{name}",
     "installFailed": "Installation failed: %{name}",
     "installed": "Installed",

@@ -182,6 +182,7 @@ export interface StringMap {
   'browseScreen.discover': 'string';
   'browseScreen.editPluginSetting': 'string';
   'browseScreen.globalSearch': 'string';
+  'browseScreen.globalSearchFor': 'string';
   'browseScreen.installPlugin': 'string';
   'browseScreen.installFailed': 'string';
   'browseScreen.installed': 'string';

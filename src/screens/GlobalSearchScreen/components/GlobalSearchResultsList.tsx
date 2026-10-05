@@ -12,7 +12,7 @@ import color from 'color';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
 import MaterialCommunityIcons from '@react-native-vector-icons/material-design-icons';
-import { ISIcon } from '@components/ios/ISIcon';
+import { ISIcon } from '@components/ios';
 
 import { getPlugin } from '@plugins/pluginManager';
 import { getString } from '@i18n/translations';
@@ -134,7 +134,9 @@ const GlobalSearchSourceResults: React.FC<{ item: GlobalSearchResult }> = ({
             <FlatList
               horizontal
               contentContainerStyle={styles.novelsContainer}
-              keyExtractor={novelItem => item.plugin.id + '_' + novelItem.path}
+              keyExtractor={(novelItem, index) =>
+                item.plugin.id + '_' + novelItem.path + '_' + index
+              }
               data={item.novels}
               extraData={inActivity}
               ListEmptyComponent={
