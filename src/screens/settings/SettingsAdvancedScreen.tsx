@@ -15,6 +15,7 @@ import {
 } from '@database/queries/ChapterQueries';
 
 import { Appbar, Dialog, List, SafeAreaView } from '@components';
+import { ISGroupedList, ISRow } from '@components/ios';
 import { AdvancedSettingsScreenProps } from '@navigators/types';
 import { getUserAgentSync } from 'react-native-device-info';
 import CookieManager from '@preeternal/react-native-cookie-manager';
@@ -90,77 +91,162 @@ const AdvancedSettings = ({ navigation }: AdvancedSettingsScreenProps) => {
     DOH_PROVIDERS[0].label;
 
   return (
-    <SafeAreaView excludeTop>
+    <SafeAreaView
+      excludeTop
+      style={
+        Platform.OS === 'ios'
+          ? { backgroundColor: theme.surfaceVariant }
+          : undefined
+      }
+    >
       <Appbar
         title={getString('advancedSettings')}
         handleGoBack={() => navigation.goBack()}
         theme={theme}
       />
-      <ScrollView>
-        <List.Section>
-          <List.SubHeader theme={theme}>
-            {getString('advancedSettingsScreen.diagnostics')}
-          </List.SubHeader>
-          <List.Item
-            title={getString('advancedSettingsScreen.shareCrashLogs')}
-            description={getString(
-              'advancedSettingsScreen.shareCrashLogsDescription',
-            )}
-            disabled={isSharingCrashLogs}
-            onPress={handleShareCrashLogs}
-            theme={theme}
-          />
-        </List.Section>
-        <List.Section>
-          <List.SubHeader theme={theme}>
-            {getString('advancedSettingsScreen.dataManagement')}
-          </List.SubHeader>
-          <List.Item
-            title={getString('advancedSettingsScreen.clearCachedNovels')}
-            description={getString(
-              'advancedSettingsScreen.clearCachedNovelsDesc',
-            )}
-            onPress={showClearDatabaseDialog}
-            theme={theme}
-          />
-          <List.Item
-            title={getString('advancedSettingsScreen.clearUpdatesTab')}
-            description={getString(
-              'advancedSettingsScreen.clearupdatesTabDesc',
-            )}
-            onPress={showClearUpdatesDialog}
-            theme={theme}
-          />
-          <List.Item
-            title={getString('advancedSettingsScreen.deleteReadChapters')}
-            onPress={showDeleteReadChaptersDialog}
-            theme={theme}
-          />
-        </List.Section>
-        <List.Section>
-          <List.SubHeader theme={theme}>
-            {getString('advancedSettingsScreen.networking')}
-          </List.SubHeader>
-          <List.Item
-            title={getString('webview.clearCookies')}
-            onPress={clearCookies}
-            theme={theme}
-          />
-          {Platform.OS === 'android' && NativeDoh ? (
-            <List.Item
-              title={getString('advancedSettingsScreen.dnsOverHttps')}
-              description={dohProviderLabel}
-              onPress={showDohProviderDialog}
+      <ScrollView
+        style={
+          Platform.OS === 'ios'
+            ? { backgroundColor: theme.surfaceVariant }
+            : undefined
+        }
+      >
+        {Platform.OS === 'ios' ? (
+          <>
+            <ISGroupedList
+              title={getString('advancedSettingsScreen.diagnostics')}
               theme={theme}
-            />
-          ) : null}
-          <List.Item
-            title={getString('advancedSettingsScreen.userAgent')}
-            description={userAgent}
-            onPress={showUserAgentModal}
-            theme={theme}
-          />
-        </List.Section>
+            >
+              <ISRow
+                title={getString('advancedSettingsScreen.shareCrashLogs')}
+                description={getString(
+                  'advancedSettingsScreen.shareCrashLogsDescription',
+                )}
+                disabled={isSharingCrashLogs}
+                onPress={handleShareCrashLogs}
+                right={null}
+                theme={theme}
+              />
+            </ISGroupedList>
+            <ISGroupedList
+              title={getString('advancedSettingsScreen.dataManagement')}
+              theme={theme}
+            >
+              <ISRow
+                title={getString('advancedSettingsScreen.clearCachedNovels')}
+                description={getString(
+                  'advancedSettingsScreen.clearCachedNovelsDesc',
+                )}
+                onPress={showClearDatabaseDialog}
+                destructive
+                right={null}
+                theme={theme}
+              />
+              <ISRow
+                title={getString('advancedSettingsScreen.clearUpdatesTab')}
+                description={getString(
+                  'advancedSettingsScreen.clearupdatesTabDesc',
+                )}
+                onPress={showClearUpdatesDialog}
+                destructive
+                right={null}
+                theme={theme}
+              />
+              <ISRow
+                title={getString('advancedSettingsScreen.deleteReadChapters')}
+                onPress={showDeleteReadChaptersDialog}
+                destructive
+                right={null}
+                theme={theme}
+              />
+            </ISGroupedList>
+            <ISGroupedList
+              title={getString('advancedSettingsScreen.networking')}
+              theme={theme}
+            >
+              <ISRow
+                title={getString('webview.clearCookies')}
+                onPress={clearCookies}
+                destructive
+                right={null}
+                theme={theme}
+              />
+              <ISRow
+                title={getString('advancedSettingsScreen.userAgent')}
+                description={userAgent}
+                onPress={showUserAgentModal}
+                theme={theme}
+              />
+            </ISGroupedList>
+          </>
+        ) : (
+          <>
+            <List.Section>
+              <List.SubHeader theme={theme}>
+                {getString('advancedSettingsScreen.diagnostics')}
+              </List.SubHeader>
+              <List.Item
+                title={getString('advancedSettingsScreen.shareCrashLogs')}
+                description={getString(
+                  'advancedSettingsScreen.shareCrashLogsDescription',
+                )}
+                disabled={isSharingCrashLogs}
+                onPress={handleShareCrashLogs}
+                theme={theme}
+              />
+            </List.Section>
+            <List.Section>
+              <List.SubHeader theme={theme}>
+                {getString('advancedSettingsScreen.dataManagement')}
+              </List.SubHeader>
+              <List.Item
+                title={getString('advancedSettingsScreen.clearCachedNovels')}
+                description={getString(
+                  'advancedSettingsScreen.clearCachedNovelsDesc',
+                )}
+                onPress={showClearDatabaseDialog}
+                theme={theme}
+              />
+              <List.Item
+                title={getString('advancedSettingsScreen.clearUpdatesTab')}
+                description={getString(
+                  'advancedSettingsScreen.clearupdatesTabDesc',
+                )}
+                onPress={showClearUpdatesDialog}
+                theme={theme}
+              />
+              <List.Item
+                title={getString('advancedSettingsScreen.deleteReadChapters')}
+                onPress={showDeleteReadChaptersDialog}
+                theme={theme}
+              />
+            </List.Section>
+            <List.Section>
+              <List.SubHeader theme={theme}>
+                {getString('advancedSettingsScreen.networking')}
+              </List.SubHeader>
+              <List.Item
+                title={getString('webview.clearCookies')}
+                onPress={clearCookies}
+                theme={theme}
+              />
+              {Platform.OS === 'android' && NativeDoh ? (
+                <List.Item
+                  title={getString('advancedSettingsScreen.dnsOverHttps')}
+                  description={dohProviderLabel}
+                  onPress={showDohProviderDialog}
+                  theme={theme}
+                />
+              ) : null}
+              <List.Item
+                title={getString('advancedSettingsScreen.userAgent')}
+                description={userAgent}
+                onPress={showUserAgentModal}
+                theme={theme}
+              />
+            </List.Section>
+          </>
+        )}
       </ScrollView>
       <ConfirmationDialog
         title={getString('advancedSettingsScreen.deleteReadChapters')}
