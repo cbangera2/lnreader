@@ -72,6 +72,10 @@ Branch: `ios-settings-isrow`. Goal: 10/10 native iOS feel, no dead space, consis
 - [x] R2-3 Reader light-mode contrast: code-verified — WebViewReader injects full theme (surface/onSurface vars) + `readerSettings.theme` bg; chrome bars use onSurface-on-translucent-surface (same pair as Appbar, visible dark). No change.
 - [ ] R2-4 Library/Updates/History empty states consistency — DEFERRED to lead (owns grouped bgs there; zero-overlap rule).
 
+## Round 3 (navigation trap found by live testing)
+
+- [x] R3-1 GlobalSearch had no back affordance (SearchbarV2 without `handleBackAction`; in-app back unavailable, tab bar hidden on push). Added iOS-only `handleBackAction={goBack}` (Android keeps system-back, pixel-identical). Verified live: Back appears, tap returns to Browse. Screenshots: pre-fix trapped state (no Back node), /tmp/gs_back.png shows Browse restored.
+
 ## Repeat protocol
 
 After each fix round: `npx tsc --noEmit`, eslint on touched files, `pnpm run test:rn` relevant, terminate+relaunch, re-screenshot all flows above, append rows here, check off boxes. Repeat until all boxes checked twice with no new issues.

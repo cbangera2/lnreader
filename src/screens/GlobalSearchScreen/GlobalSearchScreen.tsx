@@ -9,7 +9,7 @@ import {
   useAnimatedStyle,
 } from 'react-native-reanimated';
 import { getStringAsync } from 'expo-clipboard';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useReanimatedKeyboardAnimation } from 'react-native-keyboard-controller';
 
 import {
@@ -42,6 +42,7 @@ interface Props {
 
 const GlobalSearchScreen = (props: Props) => {
   const theme = useTheme();
+  const navigation = useNavigation();
   const { searchText, setSearchText, clearSearchbar } = useSearch(
     props?.route?.params?.searchText,
     false,
@@ -141,6 +142,9 @@ const GlobalSearchScreen = (props: Props) => {
         onChangeText={onChangeText}
         onSubmitEditing={handleSubmit}
         clearSearchbar={clearSearchbar}
+        // iOS pushed screens need an explicit back affordance (Android
+        // keeps system-back behavior, pixel-identical).
+        handleBackAction={Platform.OS === 'ios' ? navigation.goBack : undefined}
         theme={theme}
       />
       {progress ? (
