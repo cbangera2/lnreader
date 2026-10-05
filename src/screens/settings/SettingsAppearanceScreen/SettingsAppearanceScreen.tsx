@@ -1,5 +1,11 @@
 import { useMemo, useState } from 'react';
-import { ScrollView, StyleSheet, View, Appearance } from 'react-native';
+import {
+  Platform,
+  ScrollView,
+  StyleSheet,
+  View,
+  Appearance,
+} from 'react-native';
 
 import { ThemePicker } from '@components/ThemePicker/ThemePicker';
 import type { SegmentedControlOption } from '@components/SegmentedControl';
@@ -7,6 +13,7 @@ import SettingSwitch from '../components/SettingSwitch';
 import ColorPickerModal from '@components/ColorPickerModal/ColorPickerModal';
 import LanguagePickerModal from './LanguagePickerModal';
 import DateFormatModal from './DateFormatModal';
+import { ISGroupedList, ISIcon, ISRow } from '@components/ios';
 
 import { useAppSettings, useTheme } from '@hooks/persisted';
 import {
@@ -166,138 +173,315 @@ const AppearanceSettings = ({ navigation }: AppearanceSettingsScreenProps) => {
   };
 
   return (
-    <SafeAreaView excludeTop>
+    <SafeAreaView
+      excludeTop
+      style={
+        Platform.OS === 'ios'
+          ? { backgroundColor: theme.surfaceVariant }
+          : undefined
+      }
+    >
       <Appbar
         title={getString('appearance')}
         handleGoBack={navigation.goBack}
         theme={theme}
       />
       <ScrollView
-        style={styles.flex1}
+        style={[
+          {
+            backgroundColor:
+              Platform.OS === 'ios' ? theme.surfaceVariant : undefined,
+          },
+          styles.flex1,
+        ]}
         contentContainerStyle={styles.scrollContent}
       >
-        <List.Section>
-          <List.SubHeader theme={theme}>
-            {getString('appearanceScreen.appTheme')}
-          </List.SubHeader>
+        {Platform.OS === 'ios' ? (
+          <>
+            {/* Theme Mode Selector */}
+            <View style={styles.segmentedControlContainer}>
+              <SegmentedControl
+                options={themeModeOptions}
+                value={themeMode}
+                onChange={handleModeChange}
+                theme={theme}
+              />
+            </View>
 
-          {/* Theme Mode Selector */}
-          <View style={styles.segmentedControlContainer}>
-            <SegmentedControl
-              options={themeModeOptions}
-              value={themeMode}
-              onChange={handleModeChange}
+            <View style={styles.scrollViewContainer}>
+              <ScrollView
+                contentContainerStyle={styles.themePickerRow}
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+              >
+                {availableThemes.map(item => (
+                  <ThemePicker
+                    horizontal
+                    key={item.id}
+                    currentTheme={theme}
+                    theme={item}
+                    onPress={() => handleThemeSelect(item)}
+                  />
+                ))}
+              </ScrollView>
+            </View>
+            {theme.isDark || theme.id !== DYNAMIC_THEME_ID ? (
+              <ISGroupedList
+                title={getString('appearanceScreen.appTheme')}
+                theme={theme}
+              >
+                {theme.isDark ? (
+                  <ISRow
+                    title={getString('appearanceScreen.pureBlackDarkMode')}
+                    right="switch"
+                    switchValue={isAmoledBlack}
+                    onPress={() => setAmoledBlack(prevVal => !prevVal)}
+                    theme={theme}
+                  />
+                ) : null}
+                {theme.id === DYNAMIC_THEME_ID ? null : (
+                  <ISRow
+                    title={getString('appearanceScreen.accentColor')}
+                    description={Color(theme.primary)
+                      .rgb()
+                      .toString()
+                      .toUpperCase()}
+                    onPress={showAccentColorModal}
+                    right={
+                      <View style={styles.accentRight}>
+                        <View
+                          style={[
+                            styles.accentDot,
+                            { backgroundColor: theme.primary },
+                          ]}
+                        />
+                        <ISIcon
+                          name="chevron-right"
+                          size={20}
+                          color={theme.onSurfaceVariant}
+                        />
+                      </View>
+                    }
+                    theme={theme}
+                  />
+                )}
+              </ISGroupedList>
+            ) : null}
+            <ISGroupedList title={getString('common.display')} theme={theme}>
+              <ISRow
+                title={getString('appearanceScreen.appLanguage')}
+                description={getCurrentLanguageName()}
+                onPress={showLanguageModal}
+                theme={theme}
+              />
+              <ISRow
+                title={getString('appearanceScreen.dateFormat')}
+                description={getDateFormatLabel(dateFormat)}
+                onPress={showDateFormatModal}
+                theme={theme}
+              />
+              <ISRow
+                title={getString('appearanceScreen.relativeTimestamps')}
+                description={getString(
+                  'appearanceScreen.relativeTimestampsDescription',
+                  {
+                    date: formatDate(new Date(), dateFormat, false),
+                  },
+                )}
+                right="switch"
+                switchValue={relativeTimestamps}
+                onPress={() =>
+                  setAppSettings({
+                    relativeTimestamps: !relativeTimestamps,
+                  })
+                }
+                theme={theme}
+              />
+            </ISGroupedList>
+            <ISGroupedList
+              title={getString('appearanceScreen.novelInfo')}
               theme={theme}
-            />
-          </View>
-
-          <View style={styles.scrollViewContainer}>
-            <ScrollView
-              contentContainerStyle={styles.themePickerRow}
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
             >
-              {availableThemes.map(item => (
-                <ThemePicker
-                  horizontal
-                  key={item.id}
-                  currentTheme={theme}
-                  theme={item}
-                  onPress={() => handleThemeSelect(item)}
-                />
-              ))}
-            </ScrollView>
-          </View>
-          {theme.isDark ? (
-            <SettingSwitch
-              label={getString('appearanceScreen.pureBlackDarkMode')}
-              value={isAmoledBlack}
-              onPress={() => setAmoledBlack(prevVal => !prevVal)}
+              <ISRow
+                title={getString('appearanceScreen.hideBackdrop')}
+                right="switch"
+                switchValue={hideBackdrop}
+                onPress={() => setAppSettings({ hideBackdrop: !hideBackdrop })}
+                theme={theme}
+              />
+              <ISRow
+                title={getString('advancedSettingsScreen.useFAB')}
+                right="switch"
+                switchValue={useFabForContinueReading}
+                onPress={() =>
+                  setAppSettings({
+                    useFabForContinueReading: !useFabForContinueReading,
+                  })
+                }
+                theme={theme}
+              />
+            </ISGroupedList>
+            <ISGroupedList
+              title={getString('appearanceScreen.navbar')}
               theme={theme}
-            />
-          ) : null}
-          {theme.id === DYNAMIC_THEME_ID ? null : (
-            <List.ColorItem
-              title={getString('appearanceScreen.accentColor')}
-              color={Color(theme.primary)}
-              onPress={showAccentColorModal}
-              theme={theme}
-            />
-          )}
-          <List.SubHeader theme={theme}>
-            {getString('common.display')}
-          </List.SubHeader>
-          <List.Item
-            title={getString('appearanceScreen.appLanguage')}
-            description={getCurrentLanguageName()}
-            onPress={showLanguageModal}
-            theme={theme}
-          />
-          <List.Item
-            title={getString('appearanceScreen.dateFormat')}
-            description={getDateFormatLabel(dateFormat)}
-            onPress={showDateFormatModal}
-            theme={theme}
-          />
-          <SettingSwitch
-            label={getString('appearanceScreen.relativeTimestamps')}
-            description={getString(
-              'appearanceScreen.relativeTimestampsDescription',
-              {
-                date: formatDate(new Date(), dateFormat, false),
-              },
+            >
+              <ISRow
+                title={getString('appearanceScreen.showUpdatesInTheNav')}
+                right="switch"
+                switchValue={showUpdatesTab}
+                onPress={() =>
+                  setAppSettings({ showUpdatesTab: !showUpdatesTab })
+                }
+                theme={theme}
+              />
+              <ISRow
+                title={getString('appearanceScreen.showHistoryInTheNav')}
+                right="switch"
+                switchValue={showHistoryTab}
+                onPress={() =>
+                  setAppSettings({ showHistoryTab: !showHistoryTab })
+                }
+                theme={theme}
+              />
+              <ISRow
+                title={getString('appearanceScreen.alwaysShowNavLabels')}
+                right="switch"
+                switchValue={showLabelsInNav}
+                onPress={() =>
+                  setAppSettings({ showLabelsInNav: !showLabelsInNav })
+                }
+                theme={theme}
+              />
+            </ISGroupedList>
+          </>
+        ) : (
+          <List.Section>
+            <List.SubHeader theme={theme}>
+              {getString('appearanceScreen.appTheme')}
+            </List.SubHeader>
+
+            {/* Theme Mode Selector */}
+            <View style={styles.segmentedControlContainer}>
+              <SegmentedControl
+                options={themeModeOptions}
+                value={themeMode}
+                onChange={handleModeChange}
+                theme={theme}
+              />
+            </View>
+
+            <View style={styles.scrollViewContainer}>
+              <ScrollView
+                contentContainerStyle={styles.themePickerRow}
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+              >
+                {availableThemes.map(item => (
+                  <ThemePicker
+                    horizontal
+                    key={item.id}
+                    currentTheme={theme}
+                    theme={item}
+                    onPress={() => handleThemeSelect(item)}
+                  />
+                ))}
+              </ScrollView>
+            </View>
+            {theme.isDark ? (
+              <SettingSwitch
+                label={getString('appearanceScreen.pureBlackDarkMode')}
+                value={isAmoledBlack}
+                onPress={() => setAmoledBlack(prevVal => !prevVal)}
+                theme={theme}
+              />
+            ) : null}
+            {theme.id === DYNAMIC_THEME_ID ? null : (
+              <List.ColorItem
+                title={getString('appearanceScreen.accentColor')}
+                color={Color(theme.primary)}
+                onPress={showAccentColorModal}
+                theme={theme}
+              />
             )}
-            value={relativeTimestamps}
-            onPress={() =>
-              setAppSettings({
-                relativeTimestamps: !relativeTimestamps,
-              })
-            }
-            theme={theme}
-          />
-          <List.SubHeader theme={theme}>
-            {getString('appearanceScreen.novelInfo')}
-          </List.SubHeader>
-          <SettingSwitch
-            label={getString('appearanceScreen.hideBackdrop')}
-            value={hideBackdrop}
-            onPress={() => setAppSettings({ hideBackdrop: !hideBackdrop })}
-            theme={theme}
-          />
-          <SettingSwitch
-            label={getString('advancedSettingsScreen.useFAB')}
-            value={useFabForContinueReading}
-            onPress={() =>
-              setAppSettings({
-                useFabForContinueReading: !useFabForContinueReading,
-              })
-            }
-            theme={theme}
-          />
-          <List.SubHeader theme={theme}>
-            {getString('appearanceScreen.navbar')}
-          </List.SubHeader>
-          <SettingSwitch
-            label={getString('appearanceScreen.showUpdatesInTheNav')}
-            value={showUpdatesTab}
-            onPress={() => setAppSettings({ showUpdatesTab: !showUpdatesTab })}
-            theme={theme}
-          />
-          <SettingSwitch
-            label={getString('appearanceScreen.showHistoryInTheNav')}
-            value={showHistoryTab}
-            onPress={() => setAppSettings({ showHistoryTab: !showHistoryTab })}
-            theme={theme}
-          />
-          <SettingSwitch
-            label={getString('appearanceScreen.alwaysShowNavLabels')}
-            value={showLabelsInNav}
-            onPress={() =>
-              setAppSettings({ showLabelsInNav: !showLabelsInNav })
-            }
-            theme={theme}
-          />
-        </List.Section>
+            <List.SubHeader theme={theme}>
+              {getString('common.display')}
+            </List.SubHeader>
+            <List.Item
+              title={getString('appearanceScreen.appLanguage')}
+              description={getCurrentLanguageName()}
+              onPress={showLanguageModal}
+              theme={theme}
+            />
+            <List.Item
+              title={getString('appearanceScreen.dateFormat')}
+              description={getDateFormatLabel(dateFormat)}
+              onPress={showDateFormatModal}
+              theme={theme}
+            />
+            <SettingSwitch
+              label={getString('appearanceScreen.relativeTimestamps')}
+              description={getString(
+                'appearanceScreen.relativeTimestampsDescription',
+                {
+                  date: formatDate(new Date(), dateFormat, false),
+                },
+              )}
+              value={relativeTimestamps}
+              onPress={() =>
+                setAppSettings({
+                  relativeTimestamps: !relativeTimestamps,
+                })
+              }
+              theme={theme}
+            />
+            <List.SubHeader theme={theme}>
+              {getString('appearanceScreen.novelInfo')}
+            </List.SubHeader>
+            <SettingSwitch
+              label={getString('appearanceScreen.hideBackdrop')}
+              value={hideBackdrop}
+              onPress={() => setAppSettings({ hideBackdrop: !hideBackdrop })}
+              theme={theme}
+            />
+            <SettingSwitch
+              label={getString('advancedSettingsScreen.useFAB')}
+              value={useFabForContinueReading}
+              onPress={() =>
+                setAppSettings({
+                  useFabForContinueReading: !useFabForContinueReading,
+                })
+              }
+              theme={theme}
+            />
+            <List.SubHeader theme={theme}>
+              {getString('appearanceScreen.navbar')}
+            </List.SubHeader>
+            <SettingSwitch
+              label={getString('appearanceScreen.showUpdatesInTheNav')}
+              value={showUpdatesTab}
+              onPress={() =>
+                setAppSettings({ showUpdatesTab: !showUpdatesTab })
+              }
+              theme={theme}
+            />
+            <SettingSwitch
+              label={getString('appearanceScreen.showHistoryInTheNav')}
+              value={showHistoryTab}
+              onPress={() =>
+                setAppSettings({ showHistoryTab: !showHistoryTab })
+              }
+              theme={theme}
+            />
+            <SettingSwitch
+              label={getString('appearanceScreen.alwaysShowNavLabels')}
+              value={showLabelsInNav}
+              onPress={() =>
+                setAppSettings({ showLabelsInNav: !showLabelsInNav })
+              }
+              theme={theme}
+            />
+          </List.Section>
+        )}
       </ScrollView>
 
       <ColorPickerModal
@@ -342,5 +526,15 @@ const styles = StyleSheet.create({
   segmentedControlContainer: {
     paddingHorizontal: 16,
     paddingTop: 12,
+  },
+  accentRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  accentDot: {
+    height: 24,
+    width: 24,
+    borderRadius: 12,
   },
 });
