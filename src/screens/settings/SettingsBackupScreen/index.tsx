@@ -1,5 +1,6 @@
 import { useAppSettings, useTheme } from '@hooks/persisted';
 import { Appbar, List, SafeAreaView } from '@components';
+import { ISGroupedList, ISRow } from '@components/ios';
 import { useBoolean } from '@hooks';
 import { BackupSettingsScreenProps } from '@navigators/types';
 import GoogleDriveModal from './Components/GoogleDriveModal';
@@ -133,80 +134,134 @@ const BackupSettings = ({ navigation }: BackupSettingsScreenProps) => {
   } = useBoolean();
 
   return (
-    <SafeAreaView excludeTop>
+    <SafeAreaView
+      excludeTop
+      style={
+        Platform.OS === 'ios'
+          ? { backgroundColor: theme.surfaceVariant }
+          : undefined
+      }
+    >
       <Appbar
         title={getString('common.backup')}
         handleGoBack={() => navigation.goBack()}
         theme={theme}
       />
-      <ScrollView style={styles.paddingBottom}>
-        <List.Section>
-          <List.SubHeader theme={theme}>
-            {getString('backupScreen.remoteBackup')}
-          </List.SubHeader>
-          <List.Item
-            title={getString('backupScreen.selfHost')}
-            description={getString('backupScreen.selfHostDesc')}
-            theme={theme}
-            onPress={openSelfHostModal}
-          />
-
-          {/* Google Drive backup needs GoogleService-Info.plist and the
-              reversed-client-id URL scheme in the iOS project before it can
-              sign in on iOS. Hidden until that native config exists. */}
-          {Platform.OS === 'android' && (
+      <ScrollView
+        style={[
+          Platform.OS === 'ios'
+            ? { backgroundColor: theme.surfaceVariant }
+            : undefined,
+          styles.paddingBottom,
+        ]}
+      >
+        {Platform.OS === 'ios' ? (
+          <>
+            <ISGroupedList
+              title={getString('backupScreen.remoteBackup')}
+              theme={theme}
+            >
+              <ISRow
+                title={getString('backupScreen.selfHost')}
+                description={getString('backupScreen.selfHostDesc')}
+                theme={theme}
+                onPress={openSelfHostModal}
+              />
+            </ISGroupedList>
+            <ISGroupedList
+              title={getString('backupScreen.localBackup')}
+              footer={
+                lastAutomaticBackupAt
+                  ? getString('backupScreen.lastAutomaticBackup', {
+                      time: dayjs(lastAutomaticBackupAt).fromNow(),
+                    })
+                  : undefined
+              }
+              theme={theme}
+            >
+              <ISRow
+                title={getString('backupScreen.createBackup')}
+                description={getString('backupScreen.createBackupDesc')}
+                onPress={createLocalBackup}
+                theme={theme}
+              />
+              <ISRow
+                title={getString('backupScreen.restoreBackup')}
+                description={getString('backupScreen.restoreBackupDesc')}
+                onPress={restoreLocalBackup}
+                theme={theme}
+              />
+            </ISGroupedList>
+          </>
+        ) : (
+          <List.Section>
+            <List.SubHeader theme={theme}>
+              {getString('backupScreen.remoteBackup')}
+            </List.SubHeader>
             <List.Item
-              title={getString('backupScreen.googeDrive')}
-              description={getString('backupScreen.googeDriveDesc')}
+              title={getString('backupScreen.selfHost')}
+              description={getString('backupScreen.selfHostDesc')}
               theme={theme}
-              onPress={openGoogleDriveModal}
+              onPress={openSelfHostModal}
             />
-          )}
-          <List.SubHeader theme={theme}>
-            {getString('backupScreen.localBackup')}
-          </List.SubHeader>
-          <List.Item
-            title={getString('backupScreen.createBackup')}
-            description={getString('backupScreen.createBackupDesc')}
-            onPress={createLocalBackup}
-            theme={theme}
-          />
-          <List.Item
-            title={getString('backupScreen.restoreBackup')}
-            description={getString('backupScreen.restoreBackupDesc')}
-            onPress={restoreLocalBackup}
-            theme={theme}
-          />
-          {Platform.OS === 'android' && (
-            <>
+
+            {/* Google Drive backup needs GoogleService-Info.plist and the
+                reversed-client-id URL scheme in the iOS project before it can
+                sign in on iOS. Hidden until that native config exists. */}
+            {Platform.OS === 'android' && (
               <List.Item
-                title={getString('backupScreen.automaticBackupFrequency')}
-                description={getString(
-                  AUTOMATIC_BACKUP_LABELS[automaticBackupIntervalHours],
-                )}
-                onPress={automaticBackupDialog.setTrue}
+                title={getString('backupScreen.googeDrive')}
+                description={getString('backupScreen.googeDriveDesc')}
                 theme={theme}
+                onPress={openGoogleDriveModal}
               />
-              <List.Item
-                title={getString('backupScreen.automaticBackupLocation')}
-                description={
-                  automaticBackupDirectoryName ??
-                  `${NativeFile.ExternalDirectoryPath}/Backups`
-                }
-                onPress={selectAutomaticBackupDirectory}
-                theme={theme}
-              />
-            </>
-          )}
-          {lastAutomaticBackupAt ? (
-            <List.InfoItem
-              title={getString('backupScreen.lastAutomaticBackup', {
-                time: dayjs(lastAutomaticBackupAt).fromNow(),
-              })}
+            )}
+            <List.SubHeader theme={theme}>
+              {getString('backupScreen.localBackup')}
+            </List.SubHeader>
+            <List.Item
+              title={getString('backupScreen.createBackup')}
+              description={getString('backupScreen.createBackupDesc')}
+              onPress={createLocalBackup}
               theme={theme}
             />
-          ) : null}
-        </List.Section>
+            <List.Item
+              title={getString('backupScreen.restoreBackup')}
+              description={getString('backupScreen.restoreBackupDesc')}
+              onPress={restoreLocalBackup}
+              theme={theme}
+            />
+            {Platform.OS === 'android' && (
+              <>
+                <List.Item
+                  title={getString('backupScreen.automaticBackupFrequency')}
+                  description={getString(
+                    AUTOMATIC_BACKUP_LABELS[automaticBackupIntervalHours],
+                  )}
+                  onPress={automaticBackupDialog.setTrue}
+                  theme={theme}
+                />
+                <List.Item
+                  title={getString('backupScreen.automaticBackupLocation')}
+                  description={
+                    automaticBackupDirectoryName ??
+                    `${NativeFile.ExternalDirectoryPath}/Backups`
+                  }
+                  onPress={selectAutomaticBackupDirectory}
+                  theme={theme}
+                />
+              </>
+            )}
+            {lastAutomaticBackupAt ? (
+              <List.InfoItem
+                title={getString('backupScreen.lastAutomaticBackup', {
+                  time: dayjs(lastAutomaticBackupAt).fromNow(),
+                })}
+                theme={theme}
+              />
+            ) : null}
+          </List.Section>
+        )}
       </ScrollView>
       <GoogleDriveModal
         visible={googleDriveModalVisible}
