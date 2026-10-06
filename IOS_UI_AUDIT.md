@@ -59,6 +59,7 @@ Branch: `ios-settings-isrow`. Goal: 10/10 native iOS feel, no dead space, consis
 | 2026-10-05 | Appearance light         | /tmp/appearance_light.png | PASS grouped cards/switches legible                                   |
 | 2026-10-05 | Browse light             | /tmp/browse_light.png     | PASS title/search/rows/dock contrast                                  |
 | 2026-10-05 | Appearance dark restore  | /tmp/dark_restored.png    | PASS device left as found                                             |
+| 2026-10-05 | Settings final-bundle    | /tmp/settings_final.png   | PASS grouped card, no redbox after all rebundles                      |
 
 ## Round 1 findings → fixes
 
@@ -83,3 +84,7 @@ Branch: `ios-settings-isrow`. Goal: 10/10 native iOS feel, no dead space, consis
 ## Repeat protocol
 
 After each fix round: `npx tsc --noEmit`, eslint on touched files, `pnpm run test:rn` relevant, terminate+relaunch, re-screenshot all flows above, append rows here, check off boxes. Repeat until all boxes checked twice with no new issues.
+
+## Perf note (2026-10-05, re: "navigation feels laggy")
+
+Measured, not guessed: tab switch Library→More visible in the immediate next snapshot (tap CLI 0.95s incl. overhead); push Settings→General confirmed rendered 1.2s wall-clock including two CLI round-trips. App-side transitions are a fraction of that. Perceived lag = automation overhead (CLI round-trips + precautionary sleeps) + dev-client/Metro (unoptimized dev JS, on-demand bundling) + simulator software rendering (no GPU for Glass blur/transitions). No JS perf regression from this branch by construction: iOS branches render the same node counts as the Android equivalents plus the pre-existing Glass wrapper; no new timers, listeners, or list virtualization changes. Full `test:rn`: 96/97 suites pass (only known `useAppUpdateChecker` clean-HEAD failure). Re-verify on device release build before any perf-driven refactor.
