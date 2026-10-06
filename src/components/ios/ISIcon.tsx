@@ -53,7 +53,7 @@ const MATERIAL_TO_SF: Record<string, string> = {
   'book-search': 'text.magnifyingglass',
   'book-search-outline': 'magnifyingglass',
   'filter-variant': 'line.3.horizontal.decrease.circle',
-  tune: 'sliders.horizontal.3',
+  tune: 'slider.horizontal.3',
   'select-all': 'checkmark.square.fill',
   'delete-sweep-outline': 'trash',
   'delete-sweep': 'trash',

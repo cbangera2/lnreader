@@ -77,6 +77,10 @@ Branch: `ios-settings-isrow`. Goal: 10/10 native iOS feel, no dead space, consis
 - [x] R2-3 Reader light-mode contrast: verified live both modes — /tmp/appearance_light.png (light grouped cards, all rows legible) and /tmp/browse_light.png (large title, search, rows, dock); dark restored /tmp/dark_restored.png (device left as found). Reader WebView uses theme vars + readerSettings bg. No change.
 - [ ] R2-4 Library/Updates/History empty states consistency — DEFERRED to lead (owns grouped bgs there; zero-overlap rule).
 
+## Round 4 (user-reported Settings gap)
+
+- [x] R4-1 Gap after General row + missing General icon: root cause was a typo in the shared SF map — `tune` pointed at `sliders.horizontal.3` (plural, nonexistent; SymbolView renders blank/abnormal and broke the first row's layout, pushing its divider down into a visible band). Fixed to Apple's real `slider.horizontal.3` (singular) in `src/components/ios/ISIcon.tsx`. Verified live: /tmp/settings_iconfix.png shows sliders icon + single uniform card, gap gone. NOTE FOR LEAD: this touches your SF map file — one-word typo fix only, no API change.
+
 ## Round 3 (navigation trap found by live testing)
 
 - [x] R3-1 GlobalSearch had no back affordance (SearchbarV2 without `handleBackAction`; in-app back unavailable, tab bar hidden on push). Added iOS-only `handleBackAction={goBack}` (Android keeps system-back, pixel-identical). Verified live: Back appears, tap returns to Browse. Screenshots: pre-fix trapped state (no Back node), /tmp/gs_back.png shows Browse restored.
