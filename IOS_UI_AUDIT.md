@@ -104,6 +104,16 @@ Branch: `ios-settings-isrow`. Goal: 10/10 native iOS feel, no dead space, consis
 - [x] R6-2 Measurements: `IOS_TAB_CLEARANCE` = 132pt, but dock footprint on this sim ≈ 150pt (offset 42 = inset 34 + 8, height ≈ 108 = 12 top + 52 content + 10 + 34 inset). So clearance is ~18pt SHORT — long lists can tuck slightly under the dock — while short/empty lists display the clearance as dead gray. Browse mid-list gap looks like LegendList initial render window (transient, fills on scroll).
 - [ ] R6-3 Recommendation for lead: bump clearance to ~150–160 or compute from live insets; consider top-aligning Updates/History empty states; alternatively accept as inherent floating-dock tradeoff. No action on this branch to avoid merge conflicts.
 
+## Round 7 (user-reported "saving to library doesn't work" — could NOT reproduce)
+
+Tested every save flow live, all PASS with screenshots:
+
+- Novel screen Add → lands in Library immediately, survives full terminate+relaunch (`/tmp/restart_lib.png`).
+- Source-grid long-press → "Added to library" toast (`/tmp/lp_toast.png`), "In library" badge on cover, present in Library.
+- Chapter download → checkmark badge on Ch 1, Task Queue drains to "No running tasks" (`/tmp/taskqueue.png`).
+- Earlier "empty library" sightings were partial snapshots/scroll position, not data loss (full screenshot shows 4 novels).
+- NOT yet tested: bulk "download all" queue on iOS, "Always ask" category flow. If the failure is there, say which screen and I'll dig in.
+
 ## Repeat protocol
 
 After each fix round: `npx tsc --noEmit`, eslint on touched files, `pnpm run test:rn` relevant, terminate+relaunch, re-screenshot all flows above, append rows here, check off boxes. Repeat until all boxes checked twice with no new issues.
