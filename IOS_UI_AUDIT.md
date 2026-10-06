@@ -60,6 +60,13 @@ Branch: `ios-settings-isrow`. Goal: 10/10 native iOS feel, no dead space, consis
 | 2026-10-05 | Browse light             | /tmp/browse_light.png     | PASS title/search/rows/dock contrast                                  |
 | 2026-10-05 | Appearance dark restore  | /tmp/dark_restored.png    | PASS device left as found                                             |
 | 2026-10-05 | Settings final-bundle    | /tmp/settings_final.png   | PASS grouped card, no redbox after all rebundles                      |
+| 2026-10-05 | Settings post-icon-fix   | /tmp/settings_iconfix.png | PASS sliders icon renders, gap gone, uniform card                     |
+| 2026-10-05 | General final-bundle     | /tmp/general_final.png    | PASS uniform groups                                                   |
+| 2026-10-05 | Advanced final-bundle    | /tmp/advanced_final.png   | PASS destructive red intact, no gaps                                  |
+| 2026-10-05 | Backup final-bundle      | /tmp/backup_final.png     | PASS groups clean (pre-existing GoogleSignin toast only)              |
+| 2026-10-05 | Tracker final-bundle     | /tmp/tracker_final.png    | PASS logo rows + footer, no gaps                                      |
+| 2026-10-05 | About final-bundle       | /tmp/about_final.png      | PASS two groups, no gap (gap was icon-specific)                       |
+| 2026-10-05 | Library final-bundle     | /tmp/library_final.png    | PASS DISPLAY/LIBRARY groups, no gaps                                  |
 
 ## Round 1 findings → fixes
 
