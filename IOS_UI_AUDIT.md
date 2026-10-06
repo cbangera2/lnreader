@@ -82,6 +82,12 @@ Branch: `ios-settings-isrow`. Goal: 10/10 native iOS feel, no dead space, consis
 - [x] R2-1 Central Browse: iOS global-search shortcut row (`browseScreen.globalSearchFor`) under searchbar when query non-empty → navigates to GlobalSearch prefilled. Verified live: /tmp/browse_shortcut.png shows grouped card w/ chevron on "No matching results"; tap → /tmp/browse_to_global.png prefilled results. Android unchanged (no row).
 - [x] R2-2 Duplicate-key dev toast in global results: inner horizontal `keyExtractor` now `plugin.id + path + index` (sources return duplicate/junk cards sharing path). Re-verified: /tmp/gs_fixed.png renders clean, no red toast, real covers. Plus ISIcon barrel import in same file.
 - [x] R2-3 Reader light-mode contrast: verified live both modes — /tmp/appearance_light.png (light grouped cards, all rows legible) and /tmp/browse_light.png (large title, search, rows, dock); dark restored /tmp/dark_restored.png (device left as found). Reader WebView uses theme vars + readerSettings bg. No change.
+
+## Round 5 (parity self-review + scope decisions)
+
+- [x] R5-1 Android parity: `List.*`/`SettingSwitch`/`PaperList.Item` JSX occurrence counts HEAD-vs-worktree identical in all 8 scope files (Tracker's +1 and SettingsScreen's -1 are comment text, verified by grep). Every original row/section/switch/divider preserved verbatim in Android branches; all visual changes iOS-gated. Prettier `--check` clean on all 19 touched files.
+- [x] R5-2 i18n safety: `i18n.enableFallback = true`, default `en` — new `browseScreen.globalSearchFor` falls back to English in all locales. No other-locale edits.
+- [x] R5-3 Reader settings tabs (Display/Theme/Navigation/Accessibility) reviewed: bottom-sheet content dominated by custom controls (sliders, swatch pickers); grouped-card pattern does not apply inside sheets. Deliberately NOT converting — risk outweighs benefit, no owner assigned. Only genuine List use is the font-picker row.
 - [ ] R2-4 Library/Updates/History empty states consistency — DEFERRED to lead (owns grouped bgs there; zero-overlap rule).
 
 ## Round 4 (user-reported Settings gap)
