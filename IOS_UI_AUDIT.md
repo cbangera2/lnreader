@@ -98,6 +98,12 @@ Branch: `ios-settings-isrow`. Goal: 10/10 native iOS feel, no dead space, consis
 
 - [x] R3-1 GlobalSearch had no back affordance (SearchbarV2 without `handleBackAction`; in-app back unavailable, tab bar hidden on push). Added iOS-only `handleBackAction={goBack}` (Android keeps system-back, pixel-identical). Verified live: Back appears, tap returns to Browse. Screenshots: pre-fix trapped state (no Back node), /tmp/gs_back.png shows Browse restored.
 
+## Round 6 (user-reported dead space under Library/Updates/History/Browse)
+
+- [x] R6-1 Diagnosed, NOT fixed here (lead owns all involved files — zero-overlap rule). Exonerated own branch: `git diff` shows zero touches to Library/Updates/History/BottomTabBar/tabClearance/SourcesTab/PluginsTab, and the Browse shortcut renders null on empty search. Gaps come from base-branch floating-dock design (`74ecc480`, `43346758`).
+- [x] R6-2 Measurements: `IOS_TAB_CLEARANCE` = 132pt, but dock footprint on this sim ≈ 150pt (offset 42 = inset 34 + 8, height ≈ 108 = 12 top + 52 content + 10 + 34 inset). So clearance is ~18pt SHORT — long lists can tuck slightly under the dock — while short/empty lists display the clearance as dead gray. Browse mid-list gap looks like LegendList initial render window (transient, fills on scroll).
+- [ ] R6-3 Recommendation for lead: bump clearance to ~150–160 or compute from live insets; consider top-aligning Updates/History empty states; alternatively accept as inherent floating-dock tradeoff. No action on this branch to avoid merge conflicts.
+
 ## Repeat protocol
 
 After each fix round: `npx tsc --noEmit`, eslint on touched files, `pnpm run test:rn` relevant, terminate+relaunch, re-screenshot all flows above, append rows here, check off boxes. Repeat until all boxes checked twice with no new issues.
