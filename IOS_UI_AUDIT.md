@@ -114,6 +114,12 @@ Tested every save flow live, all PASS with screenshots:
 - Earlier "empty library" sightings were partial snapshots/scroll position, not data loss (full screenshot shows 4 novels).
 - NOT yet tested: bulk "download all" queue on iOS, "Always ask" category flow. If the failure is there, say which screen and I'll dig in.
 
+## Round 8 (user: "make sure filtering works / is newest really the best default?")
+
+- [x] R8-1 Filtering verified live on Novel Fire: sheet opens w/ plugin-declared filters (Language picker, Genres AND/OR picker, expandable Genres w/ checkboxes, Chapters picker, Rating min/max). Picker menus open, checkbox selects w/ checkmark, expandables expand, Filter applies → sheet closes → grid refetches clean. Screenshots: /tmp/nf_filter.png, /tmp/nf_menu.png, /tmp/nf_english.png, /tmp/nf_applied2.png.
+- [x] R8-2 Default sort finding: the app requests `popularNovels()` unfiltered — the default IS Popular, not newest. Per-source ranking is plugin-defined (separate lnreader-plugins repo); "Latest" buttons explicitly pass `showLatestNovels`. Novel Fire's popular skews toward trending-new titles, which reads as "newest" but isn't an app default. No app change made: re-ranking would be cross-platform behavior change needing real data, not sim vibes. Standard across reader apps (Mihon/Tachiyomi default to Popular/Latest per source).
+- [x] R8-3 Test-harness note: Paper Menu dropdowns swallow taps aimed outside them (expected); backdrop tap closes sheet discarding unapplied picks (standard cancel semantics, Reset exists for explicit restore). Not bugs.
+
 ## Repeat protocol
 
 After each fix round: `npx tsc --noEmit`, eslint on touched files, `pnpm run test:rn` relevant, terminate+relaunch, re-screenshot all flows above, append rows here, check off boxes. Repeat until all boxes checked twice with no new issues.
